@@ -8,7 +8,7 @@ import SiderMenu from 'components/SiderMenu'
 import { getMenuData } from '../common/menu'
 import { getRoutes } from '../utils/router'
 
-//import styles from './BasicLayout.less';
+import styles from './BasicLayout.less';
 
 class BasicLayout extends Component {
 	render() {
@@ -20,7 +20,7 @@ class BasicLayout extends Component {
                   menuData={getMenuData()}
                   {...this.props}
                 />
-                <div>
+                <div className={styles.content}>
                 	<Switch>
                 		{
                 			getRoutes(match.path, routerData).map(item => (

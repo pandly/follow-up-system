@@ -41,7 +41,6 @@ export default class CollapseTransition extends Component {
   beforeEnter() {
     const el = this.selfRef;
     //prepare
-    el.dataset.oldOverflow = el.style.overflow;
     el.style.height = '0';
   }
 
@@ -49,14 +48,12 @@ export default class CollapseTransition extends Component {
     const el = this.selfRef;
     //start
     el.style.display = 'block';
-    console.log(el.scrollHeight)
+    console.log(el.style.display)
     if (el.scrollHeight !== 0) {
       el.style.height = el.scrollHeight + 'px';
     } else {
       el.style.height = '';
     }
-
-    el.style.overflow = 'hidden';
 
     this.enterTimer = setTimeout(() => this.afterEnter(), ANIMATION_DURATION);
   }
@@ -65,18 +62,14 @@ export default class CollapseTransition extends Component {
     const el = this.selfRef;
     el.style.display = 'block';
     el.style.height = '';
-    el.style.overflow = el.dataset.oldOverflow;
   }
 
   beforeLeave() {
     const el = this.selfRef;
-    el.dataset.oldOverflow = el.style.overflow;
-
     el.style.display = 'block';
     if (el.scrollHeight !== 0) {
       el.style.height = el.scrollHeight + 'px';
     }
-    el.style.overflow = 'hidden';
   }
 
   leave() {
@@ -90,10 +83,8 @@ export default class CollapseTransition extends Component {
   afterLeave() {
     const el = this.selfRef;
     if (!el) return ;
-
     el.style.display = 'none';
     el.style.height = '';
-    el.style.overflow = el.dataset.oldOverflow;
   }
 
   render() {

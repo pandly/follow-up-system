@@ -1,25 +1,25 @@
 * {
 	box-sizing: border-box;
-	font-family: 'PingFangSC-Regular' !important;
+	font-family: 'PingFangSC-Regular';
 }
 html, body, :global(#root) {
-  height: 100%;
-  width: 100%;
-  padding: 0;
-  margin: 0;
+  color: #333;
 }
 ul {
 	list-style: none;
 	padding: 0;
 	margin: 0;
 }
-a {
+li a {
 	display: inline-block;
 	height: 100%;
 	width: 100%;
-	text-decoration: none;
+	text-decoration: none !important;
 	color: #333;
-	&.actived {
-		color: #06AEA6;
+}
+:global {
+	.bold {
+		font-family: 'PingFangSC-Medium' !important;
 	}
 }
+

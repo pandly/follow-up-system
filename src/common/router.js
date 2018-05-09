@@ -21,7 +21,7 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, ['specialDisease'], () => import('../routes/FollowUpManage/SpecialDisease')),
     },
     '/followUpManage/satisfaction': {
-      component: dynamicWrapper(app, ['satisfaction'], () => import('../routes/FollowUpManage/Satisfaction')),
+      component: dynamicWrapper(app, ['satisfaction'], () => import('../routes/Satisfaction/Satisfaction')),
     },
     '/followUpTemplate/scale': {
       component: dynamicWrapper(app, ['scale'], () => import('../routes/FollowUpTemplate/Scale')),

@@ -151,66 +151,72 @@ class TodayMission extends PureComponent {
 		const { missionType, dataSource, columns } = this.state
 		return (
 			<div>
-				<div className={styles.content}>
+				<div className={styles.contentWrap}>
 					<div className={styles.title}>
-						<i className={`iconfont icon-tianjiaicon ${styles.titleIcon}`}></i>今日任务
+						<i className={`iconfont icon-tianjiaicon ${styles.titleIcon}`}></i><span>今日任务</span>
 					</div>
-					<div className={styles.tabBtn}>
-						<div className={`${styles.tabItem} ${missionType==='wait'?styles.tabItemChoosed:''}`} onClick={() => this.changeTab('wait')}>
-							<i className={`iconfont icon-daisuifang-icon-green ${styles.tabIcon}`}></i>
-							<span className={styles.text}>待随访</span>
-							<span className={styles.number}>30</span>
+					<div className={styles.content}>
+						<div className={styles.tabBtn}>
+							<div className={`${styles.tabItem} ${missionType==='wait'?styles.tabItemChoosed:''}`} onClick={() => this.changeTab('wait')}>
+								<i className={`iconfont icon-daisuifang-icon-green ${styles.tabIcon}`}></i>
+								<span className={styles.text}>待随访</span>
+								<span className={styles.number}>30</span>
+							</div>
+							<div className={`${styles.tabItem} ${missionType==='already'?styles.tabItemChoosed:''}`} onClick={() => this.changeTab('already')}>
+								<i className={`iconfont icon-yisuifang-icon-green ${styles.tabIcon}`}></i>
+								<span className={styles.text}>已随访</span>
+								<span className={styles.number}>8</span>
+							</div>
 						</div>
-						<div className={`${styles.tabItem} ${missionType==='already'?styles.tabItemChoosed:''}`} onClick={() => this.changeTab('already')}>
-							<i className={`iconfont icon-yisuifang-icon-green ${styles.tabIcon}`}></i>
-							<span className={styles.text}>已随访</span>
-							<span className={styles.number}>8</span>
+						<div className={styles.selectWrap}>
+							<span className={styles.text}>主管医生</span>
+							<Select defaultValue="lucy" style={{ width: 250 }} onChange={this.handleChange}
+								allowClear>
+						      	<Option value="lucy">Lucy</Option>
+						      	<Option value="111">111</Option>
+						      	<Option value="222">222</Option>
+						      	<Option value="333">333</Option>
+						    </Select>
+						    <span className={styles.text}>随访状态</span>
+							<Select defaultValue="lucy" style={{ width: 250 }} onChange={this.handleChange}
+								allowClear>
+						      	<Option value="lucy">Lucy</Option>
+						      	<Option value="111">111</Option>
+						      	<Option value="222">222</Option>
+						      	<Option value="333">333</Option>
+						    </Select>
+						    <div className={styles.selectTag}>
+						    	<span className={styles.text}>出院诊断</span>
+								<Select
+									allowClear
+									className={styles.select}
+						          	mode="tags"
+						          	placeholder="请输入出院诊断（多填项）"
+						          	defaultValue={['1', '2']}
+						          	onChange={this.handleChange}
+						          	style={{ width: 250 }}
+						        >
+						          	<Option key='111'>11111111111111111111111111111111111111111111</Option>
+						          	<Option key='222'>222</Option>
+						          	<Option key='333'>333</Option>
+						          	<Option key='444'>444</Option>
+						          	<Option key='555'>555</Option>
+						          	<Option key='666'>666</Option>
+						          	<Option key='777'>777</Option>
+						        </Select>
+						    </div>
+						    
+						</div>
+						<div className={styles.table}>
+							<Table dataSource={dataSource} columns={columns} pagination={{
+								current: 1,
+								pageSize: 12,
+								total: 200,
+								showQuickJumper: true
+							}}/>
 						</div>
 					</div>
-					<div className={styles.selectWrap}>
-						<span className={styles.text}>主管医生</span>
-						<Select defaultValue="lucy" style={{ width: 250 }} onChange={this.handleChange}>
-					      	<Option value="lucy">Lucy</Option>
-					      	<Option value="111">111</Option>
-					      	<Option value="222">222</Option>
-					      	<Option value="333">333</Option>
-					    </Select>
-					    <span className={styles.text}>随访状态</span>
-						<Select defaultValue="lucy" style={{ width: 250 }} onChange={this.handleChange}>
-					      	<Option value="lucy">Lucy</Option>
-					      	<Option value="111">111</Option>
-					      	<Option value="222">222</Option>
-					      	<Option value="333">333</Option>
-					    </Select>
-					    <div className={styles.selectTag}>
-					    	<span className={styles.text}>出院诊断</span>
-							<Select
-								className={styles.select}
-					          	mode="tags"
-					          	placeholder="请输入出院诊断（多填项）"
-					          	defaultValue={['1', '2']}
-					          	onChange={this.handleChange}
-					          	style={{ width: 250 }}
-					        >
-					          	<Option key='111'>11111111111111111111111111111111111111111111</Option>
-					          	<Option key='222'>222</Option>
-					          	<Option key='333'>333</Option>
-					          	<Option key='444'>444</Option>
-					          	<Option key='555'>555</Option>
-					          	<Option key='666'>666</Option>
-					          	<Option key='777'>777</Option>
-					        </Select>
-					    </div>
-					    
-					</div>
-					<div className={styles.table}>
-						<Table dataSource={dataSource} columns={columns} pagination={{
-							current: 1,
-							pageSize: 12,
-							total: 200,
-							showQuickJumper: true
-						}}/>
-					</div>
+					
 				</div>
 			</div>
 		)

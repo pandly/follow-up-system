@@ -1,168 +1,152 @@
 import { PureComponent } from 'react'
-import styles from './OutPatient.less'
-import { Tabs, Select, DatePicker, Table, Input } from 'antd';
+import styles from './Satisfaction.less'
+import { Input, Tabs, Select, DatePicker, Table, Tooltip } from 'antd';
 
+const Search = Input.Search;
 const TabPane = Tabs.TabPane;
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
-const Search = Input.Search;
 
 const statusDom = (text, record) => {
 	console.log(typeof text.status)
 	switch(text.status){
 		case false:
 			return (
-				<span className={styles.green}>未结案</span>
+				<span className={styles.red}>未随访</span>
 			)
 		case true:
 			return (
-				<span >已结案</span>
+				<span >已随访</span>
 			)
 		default :
 			return (
-				<span >已结案</span>
+				<span >已随访</span>
 			)
 	}
 		
-}
+} 
 
-class OutPatient extends PureComponent {
+class Satisfaction extends PureComponent {
 	state = {
-    	dataSource: [{
+		rate: 40,
+		rate2: 60,
+		dataSource: [{
 			key: '1',
 			name: '小玫瑰',
-			sex: '女',
-			age: '18',
 			dept: '骨科',
 			zhenduan: '小腿骨折',
 			doctor: '黄浩杰',
 			chuyuanDate: '2018-04-10',
-			days: '10',
-			daisuifangDate: '2018-04-10'
+			suifangDate: '2018-04-10',
+			callTime: '2分30秒',
+			status: false
 		},{
 			key: '2',
 			name: '小玫瑰',
-			sex: '女',
-			age: '18',
 			dept: '骨科',
 			zhenduan: '小腿骨折',
 			doctor: '黄浩杰',
 			chuyuanDate: '2018-04-10',
-			days: '10',
-			daisuifangDate: '2018-04-10'
+			suifangDate: '2018-04-10',
+			callTime: '2分30秒',
+			status: false
 		},{
 			key: '3',
 			name: '小玫瑰',
-			sex: '女',
-			age: '18',
 			dept: '骨科',
 			zhenduan: '小腿骨折',
 			doctor: '黄浩杰',
 			chuyuanDate: '2018-04-10',
-			days: '10',
-			daisuifangDate: '2018-04-10'
+			suifangDate: '2018-04-10',
+			callTime: '2分30秒',
+			status: true
 		},{
 			key: '4',
 			name: '小玫瑰',
-			sex: '女',
-			age: '18',
 			dept: '骨科',
 			zhenduan: '小腿骨折',
 			doctor: '黄浩杰',
 			chuyuanDate: '2018-04-10',
-			days: '10',
-			daisuifangDate: '2018-04-10'
+			suifangDate: '2018-04-10',
+			callTime: '2分30秒',
+			status: false
 		}],
 		columns: [{
 			title: '姓名',
 			dataIndex: 'name',
 			key: 'name'
 		},{
-			title: '基本信息',
-			key: 'info',
-			render: (text, record) => (
-				<span>{record.sex}/{record.age}岁</span>
-			)
-		},{
-			title: '科室',
+			title: '出院科室',
 			dataIndex: 'dept',
 			key: 'dept'
+		},{
+			title: '随访人员',
+			dataIndex: 'doctor',
+			key: 'doctor'
 		},{
 			title: '出院诊断',
 			dataIndex: 'zhenduan',
 			key: 'zhenduan'
 		},{
-			title: '主管医生',
-			dataIndex: 'doctor',
-			key: 'doctor'
-		},{
 			title: '出院日期',
 			dataIndex: 'chuyuanDate',
 			key: 'chuyuanDate'
 		},{
-			title: '离院天数',
-			dataIndex: 'days',
-			key: 'days'
+			title: '状态',
+			key: 'status',
+			render: (text, record) => statusDom(text, record)
 		},{
-			title: '待随访日期',
-			dataIndex: 'daisuifangDate',
-			key: 'daisuifangDate'
+			title: '随访日期',
+			dataIndex: 'suifangDate',
+			key: 'suifangDate'
+		},{
+			title: '随访时长',
+			dataIndex: 'callTime',
+			key: 'callTime'
 		},{
 			title: '操作',
 			key: 'action',
 			render: (text, record) => (
-				<a className="aLink" href="javascript:;">开始随访</a>
+				<a className="aLink" href="javascript:;">开始回访</a>
 			)
 		}],
 		dataSource2: [{
 			key: '1',
 			name: '小玫瑰',
-			sex: '女',
-			age: '18',
 			dept: '骨科',
 			zhenduan: '小腿骨折',
 			doctor: '黄浩杰',
 			chuyuanDate: '2018-04-10',
-			days: '10',
 			suifangDate: '2018-04-10',
 			callTime: '2分30秒',
 			status: false
 		},{
 			key: '2',
 			name: '小玫瑰',
-			sex: '女',
-			age: '18',
 			dept: '骨科',
 			zhenduan: '小腿骨折',
 			doctor: '黄浩杰',
 			chuyuanDate: '2018-04-10',
-			days: '10',
 			suifangDate: '2018-04-10',
 			callTime: '2分30秒',
 			status: false
 		},{
 			key: '3',
 			name: '小玫瑰',
-			sex: '女',
-			age: '18',
 			dept: '骨科',
 			zhenduan: '小腿骨折',
 			doctor: '黄浩杰',
 			chuyuanDate: '2018-04-10',
-			days: '10',
 			suifangDate: '2018-04-10',
 			callTime: '2分30秒',
-			status: false
+			status: true
 		},{
 			key: '4',
 			name: '小玫瑰',
-			sex: '女',
-			age: '18',
 			dept: '骨科',
 			zhenduan: '小腿骨折',
 			doctor: '黄浩杰',
 			chuyuanDate: '2018-04-10',
-			days: '10',
 			suifangDate: '2018-04-10',
 			callTime: '2分30秒',
 			status: false
@@ -172,65 +156,49 @@ class OutPatient extends PureComponent {
 			dataIndex: 'name',
 			key: 'name'
 		},{
-			title: '基本信息',
-			key: 'info',
-			render: (text, record) => (
-				<span>{record.sex}/{record.age}岁</span>
-			)
-		},{
-			title: '科室',
+			title: '出院科室',
 			dataIndex: 'dept',
 			key: 'dept'
+		},{
+			title: '回访人员',
+			dataIndex: 'doctor',
+			key: 'doctor'
+		},{
+			title: '回访日期',
+			dataIndex: 'suifangDate',
+			key: 'suifangDate'
 		},{
 			title: '出院诊断',
 			dataIndex: 'zhenduan',
 			key: 'zhenduan'
 		},{
-			title: '主管医生',
-			dataIndex: 'doctor',
-			key: 'doctor'
-		},{
 			title: '出院日期',
 			dataIndex: 'chuyuanDate',
 			key: 'chuyuanDate'
 		},{
-			title: '离院天数',
-			dataIndex: 'days',
-			key: 'days'
-		},{
-			title: '随访日期',
-			dataIndex: 'suifangDate',
-			key: 'suifangDate'
-		},{
-			title: '通话时长',
-			dataIndex: 'callTime',
-			key: 'callTime'
-		},{
-			title: '状态',
+			title: '随访状态',
 			key: 'status',
 			render: (text, record) => statusDom(text, record)
+		},{
+			title: '随访时长',
+			dataIndex: 'callTime',
+			key: 'callTime'
 		},{
 			title: '操作',
 			key: 'action',
 			render: (text, record) => (
-				<a className="aLink" href="javascript:;">开始随访</a>
+				<a className="aLink" href="javascript:;">查看回访</a>
 			)
 		}]
-  	}
-  	callback(key) {
-	  	console.log(key);
-	}
-	onChange(date, dateString) {
-	  	console.log(date, dateString);
 	}
 	render() {
-		const { dataSource, columns, dataSource2, columns2 } = this.state
+		const { rate, rate2, dataSource, columns, dataSource2, columns2 } = this.state
 		return (
 			<div>
 				<div className={styles.contentWrap}>
 					<div className={`${styles.title} clearfix`}>
 						<div className={styles.titleText}>
-							<i className={`iconfont icon-tianjiaicon ${styles.titleIcon}`}></i><span>出院随访</span>
+							<i className={`iconfont icon-tianjiaicon ${styles.titleIcon}`}></i><span>满意度回访</span>
 						</div>
 						<div className={styles.titleBtn}>
 							<Search
@@ -243,7 +211,7 @@ class OutPatient extends PureComponent {
 					</div>
 					<div className={styles.content}>
 						<Tabs defaultActiveKey="1" onChange={this.callback}>
-						    <TabPane tab="待随访" key="1">
+						    <TabPane tab="待回访" key="1">
 						    	<div className={styles.selectWrap}>
 						    		<div className={styles.selectItem}>
 						    			<span className={styles.text}>科室</span>
@@ -276,6 +244,25 @@ class OutPatient extends PureComponent {
 											style={{ width: 250 }}/>
 						    		</div>
 						    	</div>
+						    	<div className={styles.infoWrap}>
+						    		<div className={styles.infoItem}>
+						    			<span className={styles.label}>已回访</span>
+						    			<span className={styles.text}>100</span>
+						    		</div>
+						    		<div className={styles.infoItem}>
+						    			<span className={styles.label}>出院患者</span>
+						    			<span className={styles.text}>150</span>
+						    		</div>
+						    		<div className={styles.infoItem}>
+						    			<span className={styles.label}>回访率</span>
+						    			<span className={`${styles.text} ${rate>50?styles.green:styles.red}`}>{rate}%</span>
+						    		</div>
+						    		<Tooltip placement="top" title={`${rate>50?'您已完成回访率指标':'您尚未达到回访率指标，请尽快完成'}`}
+				        				overlayClassName="signTooltip">
+						        		<i className={`iconfont icon-jinggaotanhaoicon ${styles.infoIcon}`}></i>
+						    		</Tooltip>
+						    		
+						    	</div>
 						    	<div className={styles.table}>
 									<Table dataSource={dataSource} columns={columns} pagination={{
 										current: 1,
@@ -285,7 +272,7 @@ class OutPatient extends PureComponent {
 									}}/>
 								</div>
 						    </TabPane>
-						    <TabPane tab="已随访" key="2">
+						    <TabPane tab="已回访" key="2">
 						    	<div className={styles.selectWrap}>
 						    		<div className={styles.selectItem}>
 						    			<span className={styles.text}>科室</span>
@@ -317,6 +304,25 @@ class OutPatient extends PureComponent {
 										<RangePicker onChange={this.onChange} placeholder={['yyyy-mm-dd', 'yyyy-mm-dd']}
 											style={{ width: 250 }}/>
 						    		</div>
+						    	</div>
+						    	<div className={styles.infoWrap}>
+						    		<div className={styles.infoItem}>
+						    			<span className={styles.label}>已回访</span>
+						    			<span className={styles.text}>100</span>
+						    		</div>
+						    		<div className={styles.infoItem}>
+						    			<span className={styles.label}>出院患者</span>
+						    			<span className={styles.text}>150</span>
+						    		</div>
+						    		<div className={styles.infoItem}>
+						    			<span className={styles.label}>回访率</span>
+						    			<span className={`${styles.text} ${rate2>50?styles.green:styles.red}`}>{rate2}%</span>
+						    		</div>
+						    		<Tooltip placement="top" title={`${rate2>50?'您已完成回访率指标':'您尚未达到回访率指标，请尽快完成'}`}
+				        				overlayClassName="signTooltip">
+						        		<i className={`iconfont icon-jinggaotanhaoicon ${styles.infoIcon}`}></i>
+						    		</Tooltip>
+						    		
 						    	</div>
 						    	<div className={styles.table}>
 									<Table dataSource={dataSource2} columns={columns2} pagination={{
@@ -335,4 +341,4 @@ class OutPatient extends PureComponent {
 	}
 }
 
-export default OutPatient
+export default Satisfaction

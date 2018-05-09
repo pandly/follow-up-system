@@ -17,9 +17,273 @@ li a {
 	text-decoration: none !important;
 	color: #333;
 }
-:global {
+
+:global{
 	.bold {
 		font-family: 'PingFangSC-Medium' !important;
 	}
-}
+	//操作色
+	.aLink{
+		color:  #45A8E6;
+	}
 
+	/* ----------------------------------表格-------------------------------------------*/
+	.ant-table{
+		font-size: 12px!important;
+		color: #666!important;
+	}
+	.ant-table-thead > tr > th{
+		background-color: #eee!important;
+		
+		color: #333!important;
+	}
+	.ant-table-thead > tr > th, .ant-table-tbody > tr > td{
+		padding: 10px!important;
+		border-bottom: none!important;
+	}
+	.ant-table-thead > tr.ant-table-row-hover > td, .ant-table-tbody > tr.ant-table-row-hover > td, .ant-table-thead > tr:hover > td, .ant-table-tbody > tr:hover > td{
+		background: #FFFBE0!important;
+	}
+	.ant-table-tbody tr:nth-child(2n) > td{
+		background: #F5F5F5;
+	}
+	
+	/*----------------------------------选择器-------------------------------------------*/
+	.ant-select{
+		color: #333!important;
+		height: 34px;
+		overflow: hidden;
+		vertical-align: middle;
+		border: 1px solid #ccc;
+	} 
+	.ant-select-focused{
+		height: auto;
+		overflow: visible;
+	}
+	.ant-select-selection{
+		border-radius: 0!important;
+		border: none!important;
+	}
+	.ant-select-selection__rendered{
+		line-height: 32px!important;
+		margin: 0 10px!important;
+	}
+	.ant-select-dropdown-menu-item{
+		color: #666!important;
+	}
+
+	.ant-select-selection--multiple{
+		padding-bottom: 0!important;
+		& > ul > li{
+			margin-top: 4px!important;
+		}
+		.ant-select-selection__choice__remove{
+			color: #999!important;
+		}
+		.ant-select-selection__choice{
+			background-color: #f5f5f5!important;
+			border-radius: 3px!important;
+			border-color: #f5f5f5!important;
+			font-size: 12px;
+		}
+		.ant-select-selection__rendered{
+			margin-left: 10px!important;
+			& > ul > li{
+				margin-top: 4px!important;
+			}
+		}
+		.ant-select-selection__placeholder{
+			margin-left: 0!important;
+		}
+	}
+	.ant-select-focused{
+		.ant-select-selection{
+			box-shadow: none!important;
+		}
+	}
+	.ant-select-open{
+		.ant-select-selection{
+			box-shadow: none!important;
+		}
+		.ant-select-arrow:before{
+			transform: rotate(180deg) scale(.7)!important;
+		}
+	}
+	//箭头
+	.ant-select-arrow{
+		right: 6.5px!important;
+		&:before{
+			content: '\E606'!important;
+			color: #999!important;
+			transform: scale(.7);
+		}
+	}
+	//下拉框
+	.ant-select-dropdown{
+		&.ant-select-dropdown--multiple{
+			.ant-select-dropdown-menu-item-selected{
+				&:after,&:hover:after{
+					color: #06AEA6!important;
+				}
+			}
+		}
+		.ant-select-dropdown-menu-item{
+			&:after{
+				font-family: 'anticon';
+			    text-rendering: optimizeLegibility;
+			    -webkit-font-smoothing: antialiased;
+			    -moz-osx-font-smoothing: grayscale;
+			    content: "\E632";
+			    color: transparent;
+			    display: inline-block;
+			    font-size: 12px;
+			    font-size: 10px \9;
+			    -webkit-transform: scale(0.83333333) rotate(0deg);
+			    transform: scale(0.83333333) rotate(0deg);
+			    -webkit-transition: all 0.2s ease;
+			    transition: all 0.2s ease;
+			    position: absolute;
+			    top: 50%;
+			    -webkit-transform: translateY(-50%);
+			    transform: translateY(-50%);
+			    right: 12px;
+			    font-weight: bold;
+			    text-shadow: 0 0.1px 0, 0.1px 0 0, 0 -0.1px 0, -0.1px 0;
+			}
+			&:hover{
+				background-color: #FFFBE0!important;
+			}
+			&:hover:after{
+				color: #ddd;
+			}
+		}
+		.ant-select-dropdown-menu-item-active{
+			background-color: #FFFBE0!important;
+		}
+		.ant-select-dropdown-menu-item-selected{
+			background-color: #fff!important;
+			color: #06AEA6!important;
+			font-weight: normal!important;
+			&:hover{
+				background-color: #fff!important;
+				color: #06AEA6!important;
+				font-weight: normal!important;
+			}
+			&:after, &:hover:after{
+				color: #06AEA6;
+		    	display: inline-block;
+		    	font-size: 12px;
+			}
+		}
+	}
+	/*-----------------------------分页器--------------------------------*/
+	.ant-pagination{
+		color: #999!important;
+		a{
+			display: inline;
+			height: auto;
+			width: auto;
+		}
+	}
+
+	.ant-pagination-item{
+		border-radius: 0!important;
+		border: none!important;
+		margin-right: 0!important;
+		line-height: 32px!important;
+		a{
+			color: #999!important;
+		}
+		&:focus, &:hover{
+			background-color: #DEF7F3!important;
+			border-color: #DEF7F3!important;
+		}
+	}
+	.ant-pagination-item-active{
+		a{
+			color: #06AEA6!important;
+		}
+	}
+	
+	.ant-pagination-options-quick-jumper input{
+		border-radius: 0!important;
+		width: 32px!important;
+		padding: 4px 5px!important;
+		&:hover{
+			border-color: #dbdbdb!important;
+		}
+		&:focus{
+			border-color: #ccc!important;
+			box-shadow: none!important;
+		}
+	}
+
+	.ant-pagination-jump-prev, .ant-pagination-jump-next{
+		color: #ccc!important;
+		margin-right: 0!important;
+		&:after{
+			content: '...'!important;
+			color: #999!important;
+			font-size: 12px!important;
+		}
+	}
+
+	.ant-pagination-jump-next:focus:after, .ant-pagination-jump-next:hover:after{
+		content: '\E61F\E61F'!important;
+	}
+	.ant-pagination-prev{
+		margin-right: 0!important;
+	}
+	.ant-pagination-prev, .ant-pagination-next{
+		color: #ccc!important;
+		.ant-pagination-item-link{
+			border-radius: 0!important;
+			background: #F5F5F5!important;
+			border: 1px solid #DBDBDB!important;
+			&:after{
+				transform: scale(.7);
+			}
+			&:hover{
+				background-color: #fff!important;
+				border-color: #ccc!important;
+			}
+		}
+		a{
+			color: #ccc!important;
+		}
+		&:focus, &:hover{
+			.ant-pagination-item-link{
+				border-color: #DBDBDB!important;
+    			color: #ccc!important;
+			}
+		}
+	}
+	.ant-pagination-prev .ant-pagination-item-link:after{
+		content: '\E605'!important;
+	}
+	.ant-pagination-next .ant-pagination-item-link:after{
+		content: '\E604'!important;
+	}
+	
+	.ant-pagination-disabled{
+		background-color: #e8e8e8!important;
+		a{
+			color: #ccc!important;
+		}
+		.ant-pagination-item-link{
+			background-color: #e8e8e8!important;
+			&:hover{
+				background-color: #e8e8e8!important;
+				border-color: #dbdbdb!important;
+			}
+		}
+		&:hover, &:focus{
+			background-color: #e8e8e8!important;
+			.ant-pagination-item-link:hover{
+				background-color: #e8e8e8!important;
+				border-color: #dbdbdb!important;
+			}
+		}
+	}
+
+}

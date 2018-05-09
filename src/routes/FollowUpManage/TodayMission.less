@@ -1,0 +1,110 @@
+.content{
+	margin: 20px;
+	background-color: #fff;
+	box-shadow: 0 1px 4px 0 rgba(202,202,202,0.50);
+	padding: 20px;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	.title{
+		font-size: 14px;
+		color: #4A4A4A;
+		line-height: 14px;
+	}
+	.titleIcon{
+		color: #28BEA3;
+		font-size: 16px;
+		margin-right: 10px;
+	}
+	.tabBtn{
+		margin-top: 20px;
+	}
+	.tabItem{
+		line-height: 40px;
+		display: inline-block;
+		border: 1px solid #32A6A0;
+		box-shadow: 0 1px 4px 0 rgba(202,202,202,0.50);
+		padding: 0 26px 0 15px;
+		color: #28BEA3;
+		margin-right: 10px;
+		cursor: pointer;
+		.tabIcon{
+			font-size: 16px;
+			margin-right: 10px;
+			display: inline-block;
+			vertical-align: top;
+		}
+		.text{
+			font-size: 14px;
+			line-height: 40px;
+			margin-right: 26px;
+			display: inline-block;
+			vertical-align: top;
+		}
+		.number{
+			font-size: 22px;
+		}
+	}
+	.tabItemChoosed{
+		color: #fff;
+		background-color: #32A6A0;
+		border: 1px solid #32A6A0;
+		box-shadow: 0 1px 4px 0 rgba(0,169,161,0.50);
+	}
+	.selectWrap{
+		margin-top: 20px;
+		font-size: 14px;
+		color: #666;
+		.text{
+			margin-right: 10px;
+			margin-left: 20px;
+			vertical-align: middle;
+			&:first-child{
+				margin-left: 0;
+			}
+		}
+		.selectTag{
+			position: relative;
+			display: inline-block;
+			margin-left: 20px;
+			.text{
+				line-height: 34px;
+			}
+			.select{
+				position: absolute;
+				top: 0;
+				z-index: 2000;
+			}
+		}
+		
+	}
+	.table{
+		margin-top: 20px;
+		.status{
+			width: 6px;
+			height: 6px;
+			border-radius: 3px;
+			background-color: red;
+			display: inline-block;
+			margin-right: 6px;
+		}
+		.grey{
+			background-color: #ccc;
+		}
+		.red{
+			background-color: #F36969;
+		}
+		.yellow{
+			background-color: #FFBF47;
+		}
+		.green{
+			background-color: #32A6A0;
+		}
+
+		.statusText{
+			vertical-align: middle;
+		}
+	}
+}

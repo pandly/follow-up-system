@@ -11,10 +11,15 @@ const menuData = [{
   }, {
     name: '专病随访',
     path: 'specialDisease',
-  }, {
+  }],
+},{
+  name: '满意度回访',
+  icon: 'icon-huanzheguanliicon',
+  path: 'interview',
+  children: [{
     name: '满意度回访',
     path: 'satisfaction'
-  }],
+  }]
 }, {
   name: '随访模板',
   icon: 'icon-suifangmobanicon',

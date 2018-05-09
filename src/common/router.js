@@ -20,8 +20,11 @@ export const getRouterData = (app) => {
     '/followUpManage/specialDisease': {
       component: dynamicWrapper(app, ['specialDisease'], () => import('../routes/FollowUpManage/SpecialDisease')),
     },
-    '/followUpManage/satisfaction': {
+    '/interview/satisfaction': {
       component: dynamicWrapper(app, ['satisfaction'], () => import('../routes/Satisfaction/Satisfaction')),
+    },
+    '/interview/satisfactionDetail': {
+      component: dynamicWrapper(app, ['satisfactionDetail'], () => import('../routes/Satisfaction/SatisfactionDetail')),
     },
     '/followUpTemplate/scale': {
       component: dynamicWrapper(app, ['scale'], () => import('../routes/FollowUpTemplate/Scale')),

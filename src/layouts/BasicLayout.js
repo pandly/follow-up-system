@@ -17,7 +17,7 @@ class BasicLayout extends Component {
 			<Fragment>
 				<Header />
                 <SiderMenu 
-                  menuData={getMenuData()}
+                  menuData={ getMenuData() }
                   {...this.props}
                 />
                 <div className={styles.content}>

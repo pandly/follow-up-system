@@ -1,6 +1,6 @@
 const menuData = [{
   name: '随访管理',
-  icon: 'suifangguanliicon',
+  icon: 'icon-suifangguanliicon',
   path: 'followUpManage',
   children: [{
     name: '今日任务',
@@ -17,7 +17,7 @@ const menuData = [{
   }],
 }, {
   name: '随访模板',
-  icon: 'suifangmobanicon',
+  icon: 'icon-suifangmobanicon',
   path: 'followUpTemplate',
   children: [{
     name: '随访量表',
@@ -25,6 +25,17 @@ const menuData = [{
   }, {
     name: '随访计划',
     path: 'plan',
+    children: [{
+      name: '哈哈哈哈',
+      path: 'hahah',
+    },{
+      name: '呵呵呵呵',
+      path: 'heheh',
+      children: [{
+        name: '嘿嘿嘿',
+        path: 'heihei'
+      }]
+    }]
   }],
 }];
 

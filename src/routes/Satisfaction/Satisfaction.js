@@ -8,7 +8,6 @@ const Option = Select.Option;
 const { RangePicker } = DatePicker;
 
 const statusDom = (text, record) => {
-	console.log(typeof text.status)
 	switch(text.status){
 		case false:
 			return (
@@ -215,7 +214,7 @@ class Satisfaction extends PureComponent {
 						    	<div className={styles.selectWrap}>
 						    		<div className={styles.selectItem}>
 						    			<span className={styles.text}>科室</span>
-										<Select defaultValue="lucy" style={{ width: 250 }} onChange={this.handleChange}
+										<Select defaultValue="lucy" style={{ width: 150 }} onChange={this.handleChange}
 											allowClear>
 									      	<Option value="lucy">Lucy</Option>
 									      	<Option value="111">111</Option>
@@ -225,7 +224,7 @@ class Satisfaction extends PureComponent {
 						    		</div>
 						    		<div className={styles.selectItem}>
 						    			<span className={styles.text}>主管医生</span>
-										<Select defaultValue="lucy" style={{ width: 250 }} onChange={this.handleChange}
+										<Select defaultValue="lucy" style={{ width: 150 }} onChange={this.handleChange}
 											allowClear>
 									      	<Option value="lucy">Lucy</Option>
 									      	<Option value="111">111</Option>
@@ -276,7 +275,7 @@ class Satisfaction extends PureComponent {
 						    	<div className={styles.selectWrap}>
 						    		<div className={styles.selectItem}>
 						    			<span className={styles.text}>科室</span>
-										<Select defaultValue="lucy" style={{ width: 250 }} onChange={this.handleChange}
+										<Select defaultValue="lucy" style={{ width: 150 }} onChange={this.handleChange}
 											allowClear>
 									      	<Option value="lucy">Lucy</Option>
 									      	<Option value="111">111</Option>
@@ -286,7 +285,7 @@ class Satisfaction extends PureComponent {
 						    		</div>
 						    		<div className={styles.selectItem}>
 						    			<span className={styles.text}>主管医生</span>
-										<Select defaultValue="lucy" style={{ width: 250 }} onChange={this.handleChange}
+										<Select defaultValue="lucy" style={{ width: 150 }} onChange={this.handleChange}
 											allowClear>
 									      	<Option value="lucy">Lucy</Option>
 									      	<Option value="111">111</Option>

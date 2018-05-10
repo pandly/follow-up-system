@@ -13,7 +13,7 @@ const menuData = [{
     path: 'specialDisease',
   }],
 },{
-  name: '满意度回访',
+  name: '满意度',
   icon: 'icon-huanzheguanliicon',
   path: 'interview',
   children: [{

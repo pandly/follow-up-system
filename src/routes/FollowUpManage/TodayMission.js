@@ -285,7 +285,7 @@ class TodayMission extends PureComponent {
 						<div style={{display: missionType==='already'?'block':'none'}}>
 							<div className={styles.selectWrap}>
 								<span className={styles.text}>主管医生</span>
-								<Select defaultValue="lucy" style={{ width: 250 }} onChange={this.handleChange}
+								<Select defaultValue="lucy" style={{ width: 150 }} onChange={this.handleChange}
 									allowClear>
 							      	<Option value="lucy">Lucy</Option>
 							      	<Option value="111">111</Option>
@@ -293,7 +293,7 @@ class TodayMission extends PureComponent {
 							      	<Option value="333">333</Option>
 							    </Select>
 							    <span className={styles.text}>随访状态</span>
-								<Select defaultValue="lucy" style={{ width: 250 }} onChange={this.handleChange}
+								<Select defaultValue="lucy" style={{ width: 150 }} onChange={this.handleChange}
 									allowClear>
 							      	<Option value="lucy">Lucy</Option>
 							      	<Option value="111">111</Option>

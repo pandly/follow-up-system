@@ -48,7 +48,6 @@ export default class CollapseTransition extends Component {
     const el = this.selfRef;
     //start
     el.style.display = 'block';
-    console.log(el.style.display)
     if (el.scrollHeight !== 0) {
       el.style.height = el.scrollHeight + 'px';
     } else {

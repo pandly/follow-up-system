@@ -1,7 +1,7 @@
 const menuData = [{
   name: '随访管理',
   icon: 'icon-suifangguanliicon',
-  path: 'followUpManage',
+  path: 'manage',
   children: [{
     name: '今日任务',
     path: 'todayMission',
@@ -23,7 +23,7 @@ const menuData = [{
 }, {
   name: '随访模板',
   icon: 'icon-suifangmobanicon',
-  path: 'followUpTemplate',
+  path: 'template',
   children: [{
     name: '随访量表',
     path: 'scale',

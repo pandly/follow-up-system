@@ -1,5 +1,5 @@
 import { PureComponent } from 'react'
-import styles from './OutPatient.less'
+import styles from './List.less'
 import { Tabs, Select, DatePicker, Table, Input } from 'antd';
 
 const TabPane = Tabs.TabPane;

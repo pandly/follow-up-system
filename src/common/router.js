@@ -11,14 +11,32 @@ export const getRouterData = (app) => {
     '/': {
       component: dynamicWrapper(app, [], () => import('../layouts/BasicLayout')),
     },
-    '/followUpManage/todayMission': {
-      component: dynamicWrapper(app, ['todayMission'], () => import('../routes/FollowUpManage/TodayMission')),
+    '/manage/todayMission': {
+      component: dynamicWrapper(app, ['todayMission'], () => import('../routes/Manage/TodayMission')),
     },
-    '/followUpManage/outPatient': {
-      component: dynamicWrapper(app, ['outPatient'], () => import('../routes/FollowUpManage/OutPatient')),
+    '/manage/todayMission/list': {
+      component: dynamicWrapper(app, ['todayMission'], () => import('../routes/Manage/TodayMission/List')),
     },
-    '/followUpManage/specialDisease': {
-      component: dynamicWrapper(app, ['specialDisease'], () => import('../routes/FollowUpManage/SpecialDisease')),
+    '/manage/todayMission/profile': {
+      component: dynamicWrapper(app, ['todayMission'], () => import('../routes/Manage/TodayMission/Profile')),
+    },
+    '/manage/outPatient': {
+      component: dynamicWrapper(app, ['outPatient'], () => import('../routes/Manage/OutPatient')),
+    },
+    '/manage/outPatient/list': {
+      component: dynamicWrapper(app, ['outPatient'], () => import('../routes/Manage/OutPatient/List')),
+    },
+    '/manage/outPatient/profile': {
+      component: dynamicWrapper(app, ['outPatient'], () => import('../routes/Manage/OutPatient/Profile')),
+    },
+    '/manage/specialDisease': {
+      component: dynamicWrapper(app, ['specialDisease'], () => import('../routes/Manage/SpecialDisease')),
+    },
+    '/manage/specialDisease/list': {
+      component: dynamicWrapper(app, ['specialDisease'], () => import('../routes/Manage/SpecialDisease/List')),
+    },
+    '/manage/specialDisease/profile': {
+      component: dynamicWrapper(app, ['specialDisease'], () => import('../routes/Manage/SpecialDisease/Profile')),
     },
     '/interview/satisfaction': {
       component: dynamicWrapper(app, ['satisfaction'], () => import('../routes/Satisfaction/Satisfaction')),
@@ -26,11 +44,11 @@ export const getRouterData = (app) => {
     '/interview/satisfactionDetail': {
       component: dynamicWrapper(app, ['satisfactionDetail'], () => import('../routes/Satisfaction/SatisfactionDetail')),
     },
-    '/followUpTemplate/scale': {
-      component: dynamicWrapper(app, ['scale'], () => import('../routes/FollowUpTemplate/Scale')),
+    '/template/scale': {
+      component: dynamicWrapper(app, ['scale'], () => import('../routes/Template/Scale')),
     },
-    '/followUpTemplate/plan': {
-      component: dynamicWrapper(app, ['plan'], () => import('../routes/FollowUpTemplate/Plan')),
+    '/template/plan': {
+      component: dynamicWrapper(app, ['plan'], () => import('../routes/Template/Plan')),
     },
   };
   return routerConfig;

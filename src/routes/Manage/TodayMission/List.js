@@ -1,6 +1,8 @@
 import { PureComponent } from 'react'
 import { Select, Table } from 'antd'
-import styles from './TodayMission.less'
+import { routerRedux } from 'dva/router'
+import { connect } from 'dva'
+import styles from './List.less'
 
 const Option = Select.Option;
 
@@ -124,7 +126,7 @@ class TodayMission extends PureComponent {
 			title: '操作',
 			key: 'action',
 			render: (text, record) => (
-				<a className="aLink" href="javascript:;">查看随访</a>
+				<a className="aLink" href="javascript:;" onClick={this.checkProfile}>查看随访</a>
 			)
 		}],
 		dataSource2: [{
@@ -202,11 +204,15 @@ class TodayMission extends PureComponent {
 			title: '操作',
 			key: 'action',
 			render: (text, record) => (
-				<a className="aLink" href="javascript:;">查看随访</a>
+				<a className="aLink" href="javascript:;" onClick={this.checkProfile}>查看随访</a>
 			)
 		}]
 	}
 	
+	checkProfile = () => {
+		this.props.dispatch(routerRedux.push('/manage/todayMission/profile'));
+	}
+
 	typeChangeText(type){
 		if(type=='yisuifang'){
 			return '已随访'
@@ -226,6 +232,7 @@ class TodayMission extends PureComponent {
 	}
 	
 	render() {
+		console.log(this.props)
 		const { missionType, dataSource, columns, dataSource2, columns2 } = this.state
 		return (
 			<div>
@@ -339,4 +346,6 @@ class TodayMission extends PureComponent {
 	}
 }
 
-export default TodayMission
+export default connect(({ todayMission }) => ({
+  todayMission
+}))(TodayMission);

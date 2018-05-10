@@ -6,13 +6,16 @@ import { Route, Redirect, Switch } from 'dva/router';
 import Header from 'components/Header'
 import SiderMenu from 'components/SiderMenu'
 import { getMenuData } from '../common/menu'
-import { getRoutes } from '../utils/router'
+import { getRoutes } from 'utils/router'
 
 import styles from './BasicLayout.less';
 
 class BasicLayout extends Component {
 	render() {
-		const { match, routerData} = this.props
+		const { match, routerData } = this.props
+		const passProps = {
+			routerData
+		}
 		return (
 			<Fragment>
 				<Header />
@@ -27,11 +30,11 @@ class BasicLayout extends Component {
 								<Route
 								  key={item.key}
 			                      path={item.path}
-			                      component={item.component}
+			                      render={ props => <item.component {...props} {...passProps} /> }
 								/>
                 			))
                 		}
-                		<Redirect exact from="/" to="/followUpManage/todayMission" />
+                		<Redirect exact from="/" to="/manage/todayMission" />
                 	</Switch>
                 </div>
 			</Fragment>

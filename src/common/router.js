@@ -39,10 +39,13 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, ['specialDisease'], () => import('../routes/Manage/SpecialDisease/Profile')),
     },
     '/interview/satisfaction': {
-      component: dynamicWrapper(app, ['satisfaction'], () => import('../routes/Satisfaction/Satisfaction')),
+      component: dynamicWrapper(app, ['satisfaction'], () => import('../routes/Interview')),
     },
-    '/interview/satisfactionDetail': {
-      component: dynamicWrapper(app, ['satisfactionDetail'], () => import('../routes/Satisfaction/SatisfactionDetail')),
+    '/interview/satisfaction/list': {
+      component: dynamicWrapper(app, ['satisfaction'], () => import('../routes/Interview/List')),
+    },
+    '/interview/satisfaction/detail': {
+      component: dynamicWrapper(app, ['satisfactionDetail'], () => import('../routes/Interview/SatisfactionDetail')),
     },
     '/template/scale': {
       component: dynamicWrapper(app, ['scale'], () => import('../routes/Template/Scale')),

@@ -1,6 +1,8 @@
 import { PureComponent } from 'react'
 import styles from './List.less'
 import { Tabs, Select, DatePicker, Table, Input } from 'antd';
+import { routerRedux } from 'dva/router'
+import { connect } from 'dva'
 
 const TabPane = Tabs.TabPane;
 const Option = Select.Option;
@@ -110,7 +112,7 @@ class OutPatient extends PureComponent {
 			title: '操作',
 			key: 'action',
 			render: (text, record) => (
-				<a className="aLink" href="javascript:;">开始随访</a>
+				<a className="aLink" href="javascript:;" onClick={this.goDetail}>开始随访</a>
 			)
 		}],
 		dataSource2: [{
@@ -215,6 +217,10 @@ class OutPatient extends PureComponent {
 				<a className="aLink" href="javascript:;">开始随访</a>
 			)
 		}]
+  	}
+
+  	goDetail = () =>{
+  		this.props.dispatch(routerRedux.push('/manage/outPatient/profile'));
   	}
   	callback(key) {
 	  	console.log(key);
@@ -334,4 +340,6 @@ class OutPatient extends PureComponent {
 	}
 }
 
-export default OutPatient
+export default connect(({ outPatient }) => ({
+  outPatient
+}))(OutPatient);

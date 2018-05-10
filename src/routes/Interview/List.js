@@ -1,6 +1,8 @@
 import { PureComponent } from 'react'
-import styles from './Satisfaction.less'
+import styles from './List.less'
 import { Input, Tabs, Select, DatePicker, Table, Tooltip } from 'antd';
+import { routerRedux } from 'dva/router'
+import { connect } from 'dva'
 
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
@@ -106,7 +108,7 @@ class Satisfaction extends PureComponent {
 			title: '操作',
 			key: 'action',
 			render: (text, record) => (
-				<a className="aLink" href="javascript:;">开始回访</a>
+				<a className="aLink" href="javascript:;" onClick={this.goDetail}>开始回访</a>
 			)
 		}],
 		dataSource2: [{
@@ -190,6 +192,11 @@ class Satisfaction extends PureComponent {
 			)
 		}]
 	}
+
+	goDetail = () => {
+		this.props.dispatch(routerRedux.push('/interview/satisfaction/detail'));
+	}
+
 	render() {
 		const { rate, rate2, dataSource, columns, dataSource2, columns2 } = this.state
 		return (
@@ -340,4 +347,6 @@ class Satisfaction extends PureComponent {
 	}
 }
 
-export default Satisfaction
+export default connect(({ satisfaction }) => ({
+  satisfaction
+}))(Satisfaction);

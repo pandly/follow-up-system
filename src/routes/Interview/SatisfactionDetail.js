@@ -3,8 +3,6 @@ import styles from './SatisfactionDetail.less'
 import patientInfo from '../../assets/patient.png'
 
 
-
-
 class SatisfactionDetail extends PureComponent {
 	hideIdCard(id){
 		if(id.length==18){

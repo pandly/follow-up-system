@@ -1,0 +1,146 @@
+.contentWrap{
+	padding: 20px 0;
+	.patientInfo{
+		background-color: #fff;
+		box-shadow: 0 1px 4px 0 rgba(202,202,202,0.50);
+		margin: 0 20px;
+		padding: 18px 50px 18px 30px;
+		.infoWrap{
+			float: left;
+			.img{
+				display: inline-block;
+				img{
+					height: 64px;
+					width: 64px;
+					border-radius: 32px;
+					margin-right: 20px;
+				}
+			}
+			.info{
+				display: inline-block;
+				vertical-align: middle;
+				padding: 0 0 8px 0;
+			}
+			.infoItemWrap{
+				display: inline-block;
+				margin-right: 60px;
+				&:last-child{
+					margin-right: 0;
+				}
+			}
+			.infoItem{
+				padding-top: 8px;
+				line-height: 20px;
+				font-size: 14px;	
+
+				.basicInfo{
+					margin-left: 10px;
+					color: #666;
+					&:first-child{
+						margin-left: 0;
+						color: #333;
+					}
+				}			
+				.label{
+					color: #666;
+				}
+				.text{
+					display: inline-block;
+					color: #151515;
+					max-width: 255px;
+					vertical-align: middle;
+				}
+				
+			}
+		}
+		.call{
+			float: right;
+			text-align: center;
+			.callIcon{
+				color: #06AEA6;
+				font-size: 30px;
+				line-height: 30px;
+			}
+			.text{
+				margin-top: 13px;
+				font-size: 12px;
+				color: #4E5756;
+				line-height: 17px;
+			}
+		}
+	}
+	.mainInfo{
+		background-color: #fff;
+		box-shadow: 0 1px 4px 0 rgba(202,202,202,0.50);
+		margin: 20px 20px 0;
+		padding: 20px;
+		.info{
+			.title{
+				font-size: 14px;
+				color: #4A4A4A;
+				line-height: 14px;
+				margin-bottom: 20px;
+				span{
+					vertical-align: middle;
+					font-weight: 600;
+				}
+				.titleIcon{
+					color: #28BEA3;
+					font-size: 16px;
+					margin-right: 10px;
+					vertical-align: middle;
+				}
+			}
+			.content{
+				.infoItem{
+					color: #151515;
+					.label{
+						color: #666;
+						vertical-align: middle;
+					}
+					.text{
+						display: inline-block;						
+						vertical-align: middle;
+						.remark{
+							margin-right: 10px;
+						}
+					}
+				}
+				.line{
+					display: inline-block;
+					&:first-child{
+						margin-right: 50px;
+						.text{
+							max-width: 100px;
+						}
+					}
+					&:nth-child(2){
+						margin-right: 50px;
+						.text{
+							max-width: 80px;
+						}
+					}
+					&:nth-child(3){
+						margin-right: 43px;
+						.text{
+							max-width: 96px;
+						}
+					}
+					&:last-child{
+						.specialLine{
+							.infoItem{
+								display: inline-block;
+								&:first-child{
+									margin-right: 180px;
+								}
+							}
+						}
+						.text{
+							max-width: 225px;
+						}
+					}
+				}
+			}
+		}
+	}
+}

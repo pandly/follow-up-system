@@ -1,0 +1,117 @@
+.contentWrap{
+	.title{
+		padding: 0 20px;
+		margin-top: 20px;
+		font-size: 14px;
+		color: #4A4A4A;
+		line-height: 32px;
+	}
+	.titleIcon{
+		color: #28BEA3;
+		font-size: 16px;
+		margin-right: 10px;
+	}
+	.titleText{
+		float: left;
+		span{
+			font-weight: 600;
+		}
+	}
+	.titleBtn{
+		float: right;
+		:global{
+			.ant-btn{
+				padding: 0;
+				width: 32px;
+				border-radius: 1px;
+			}
+			.ant-btn-primary{
+				background-color: #06AEA6;
+    			border-color: #06AEA6;
+			}
+			.ant-input{
+				border: 1px solid #E8E8E8;
+    			border-radius: 0 1px 1px 0;
+    			height: 32px!important;
+    			&:focus{
+    				box-shadow: none;
+    			}
+			}
+			.ant-input-affix-wrapper:hover .ant-input:not(.ant-input-disabled){
+				border-color: #E8E8E8;
+			}
+		}
+	}
+	.content{
+		background-color: #fff;
+		box-shadow: 0 1px 4px 0 rgba(202,202,202,0.50);
+		padding: 20px;
+		margin: 20px;
+		position: absolute;
+		top: 52px;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		.selectWrap{
+			.selectItem{
+				margin-right: 20px;
+				display: inline-block;
+				margin-top: 20px;
+			}
+			.text{
+				width: 66px;
+				text-align: right;
+				padding-right: 10px;
+				display: inline-block;
+				vertical-align: middle;
+			}
+			:global{
+				.ant-calendar-picker{
+					vertical-align: middle;
+				}
+			}
+		}
+		.infoWrap{
+			background: #E9F2F0;
+			line-height: 25px;
+			padding: 5px 15px;
+			margin-top: 20px;
+			color: #333;
+			.infoItem{
+				display: inline-block;
+				.label{
+					font-size: 14px;
+					color: #666;
+					margin-right: 10px;
+					margin-left: 20px;
+					display: inline-block;
+				}
+				.text{
+					font-size: 18px;					
+					vertical-align: middle;
+					display: inline-block;
+				}
+
+				&:first-child .label{
+					margin-left: 0;
+				}
+			}
+			.infoIcon{
+				margin-left: 10px;
+				color: #808080;
+				font-size: 15px;
+				cursor: pointer;
+			}
+		}
+		.table{
+			margin-top: 20px;
+			
+		}
+		.green{
+			color: #06AEA6;
+		}
+		.red{
+			color: #F36969;
+		}
+	}
+}

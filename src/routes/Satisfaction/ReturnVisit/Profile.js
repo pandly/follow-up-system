@@ -1,6 +1,6 @@
 import { PureComponent } from 'react'
-import styles from './detail.less'
-import patientInfo from '../../assets/patient.png'
+import styles from './Profile.less'
+import patientInfo from '../../../assets/patient.png'
 import { Modal } from 'antd';
 
 

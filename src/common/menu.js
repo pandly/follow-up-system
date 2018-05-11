@@ -2,23 +2,27 @@ const menuData = [{
   name: '随访管理',
   icon: 'icon-suifangguanliicon',
   path: 'manage',
-  children: [{
-    name: '今日任务',
-    path: 'todayMission',
-  }, {
-    name: '出院随访',
-    path: 'outPatient',
-  }, {
-    name: '专病随访',
-    path: 'specialDisease',
-  }],
+  children: [
+    {
+      name: '今日任务',
+      path: 'todayMission',
+    }, 
+    {
+      name: '出院随访',
+      path: 'outPatient',
+    }, 
+    // {
+    //   name: '专病随访',
+    //   path: 'specialDisease',
+    // }
+  ],
 },{
   name: '满意度',
   icon: 'icon-huanzheguanliicon',
-  path: 'interview',
+  path: 'satisfaction',
   children: [{
     name: '满意度回访',
-    path: 'satisfaction'
+    path: 'returnVisit'
   }]
 }, {
   name: '随访模板',
@@ -30,17 +34,17 @@ const menuData = [{
   }, {
     name: '随访计划',
     path: 'plan',
-    children: [{
-      name: '哈哈哈哈',
-      path: 'hahah',
-    },{
-      name: '呵呵呵呵',
-      path: 'heheh',
-      children: [{
-        name: '嘿嘿嘿',
-        path: 'heihei'
-      }]
-    }]
+    // children: [{
+    //   name: '哈哈哈哈',
+    //   path: 'hahah',
+    // },{
+    //   name: '呵呵呵呵',
+    //   path: 'heheh',
+    //   children: [{
+    //     name: '嘿嘿嘿',
+    //     path: 'heihei'
+    //   }]
+    // }]
   }],
 }];
 

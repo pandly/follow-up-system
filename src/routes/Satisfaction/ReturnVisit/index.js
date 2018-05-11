@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { Route, Redirect, Switch } from 'dva/router';
 import { getRoutes } from 'utils/router';
 
-export default class Interview extends PureComponent {
+export default class Satisfaction extends PureComponent {
 
   render() {
     const { match, routerData } = this.props;
@@ -20,7 +20,7 @@ export default class Interview extends PureComponent {
             )
           })
         }
-        <Redirect exact from="/interview/satisfaction" to="/interview/satisfaction/list" />
+        <Redirect exact from="/satisfaction/returnVisit" to="/satisfaction/returnVisit/list" />
       </Switch>
     );
   }

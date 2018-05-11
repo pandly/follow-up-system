@@ -27,15 +27,12 @@
 	transition: all .3s;
 	&:hover {
 		color: #06AEA6;
-		.subMenu-title-icon {
-			transition: all .3s;
-			color: #06AEA6;
-		}
+		:global {
+			.menu-icon {
+				color: #06AEA6;
+			}
+		}	
 	}
-}
-.subMenu-title-icon {
-	margin-right: 8px;
-	color: #666;
 }
 .subMenu-title-text {
 	display: flex;
@@ -50,6 +47,11 @@
 		transition: all .3s;		
 		&:hover {
 			color: #06AEA6;
+			:global {
+				.menu-icon {
+					color: #06AEA6;
+				}
+			}	
 		}
 	}
 }
@@ -66,9 +68,17 @@
 	transform: rotateZ(180deg);
 }
 :global {
+	.menu-icon {
+		margin-right: 8px;
+		color: #666;
+		transition: all .3s;
+	}
 	a.actived {
 		color: #06AEA6;
 		border-left-color: #06AEA6;
+		.menu-icon {
+			color: #06AEA6;
+		}
 	}
 	.collapse-transition {
 		transition: height .3s;

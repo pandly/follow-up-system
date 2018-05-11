@@ -194,7 +194,7 @@ class Satisfaction extends PureComponent {
 	}
 
 	goDetail = () => {
-		this.props.dispatch(routerRedux.push('/interview/satisfaction/detail'));
+		this.props.dispatch(routerRedux.push('/satisfaction/returnVisit/profile'));
 	}
 
 	render() {

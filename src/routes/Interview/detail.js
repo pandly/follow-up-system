@@ -1,9 +1,14 @@
 import { PureComponent } from 'react'
-import styles from './SatisfactionDetail.less'
+import styles from './detail.less'
 import patientInfo from '../../assets/patient.png'
+import { Modal } from 'antd';
 
 
 class SatisfactionDetail extends PureComponent {
+	state = {
+		
+	}
+	
 	hideIdCard(id){
 		if(id.length==18){
 			return String(id).replace(String(id).substr(4,10),'**********')
@@ -14,6 +19,7 @@ class SatisfactionDetail extends PureComponent {
 		}
 	}
 	render(){
+		const { isSummaryShow } = this.state
 		return (
 			<div>
 				<div className={styles.contentWrap}>
@@ -79,7 +85,7 @@ class SatisfactionDetail extends PureComponent {
 									</div>
 									<div className={styles.infoItem}>
 										<span className={styles.label}>出院小结：</span>
-										<span className={`${styles.text} aLink`}>点击查看</span>
+										<span className={`${styles.text} aLink`} onClick={this.showSummary}>点击查看</span>
 									</div>
 								</div>
 								<div className={styles.line}>
@@ -143,6 +149,8 @@ class SatisfactionDetail extends PureComponent {
 						</div>
 					</div>
 				</div>
+				
+				
 			</div>
 		)
 	}

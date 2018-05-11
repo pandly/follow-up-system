@@ -45,7 +45,7 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, ['satisfaction'], () => import('../routes/Interview/List')),
     },
     '/interview/satisfaction/detail': {
-      component: dynamicWrapper(app, ['satisfactionDetail'], () => import('../routes/Interview/SatisfactionDetail')),
+      component: dynamicWrapper(app, ['satisfactionDetail'], () => import('../routes/Interview/detail')),
     },
     '/template/scale': {
       component: dynamicWrapper(app, ['scale'], () => import('../routes/Template/Scale')),

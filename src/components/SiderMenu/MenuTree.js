@@ -52,7 +52,7 @@ class MenuTree extends PureComponent {
 				<li className={styles['menu-subMenu']}>
 					<div className={styles['subMenu-title']} style={paddingLeft} onClick={this.clickSubMenu}>
 					    <span className={styles['subMenu-title-text']}>
-						    {currentNode.icon && <i className={`${currentNode.icon} menu-icon`}></i>}
+						    {currentNode.icon && <i className={`iconfont ${currentNode.icon} menu-icon`}></i>}
 							<span className="bold">{currentNode.name}</span>
 						</span>
 						<Icon type="down" className={ `${styles['subMenu-icon-arrow']} ${spread && styles['subMenu-icon-arrow-up']}`}/>

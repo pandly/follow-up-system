@@ -1,12 +1,4 @@
-.contentWrap{
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	// max-width: 1380px;
-	// min-width: 1098px;
-	// margin: 0 auto;
+.content{
 	.title{
 		padding: 0 20px;
 		margin-top: 20px;
@@ -30,6 +22,19 @@
 	}
 	.titleBtn{
 		float: right;
+		.addBtn{
+			color: #28BEA3;
+			margin-right: 30px;
+			line-height: 20px;
+			display: inline-block;
+			cursor: pointer;
+			.titleIcon{
+				vertical-align: middle;
+			}
+			.text{
+				vertical-align: middle;
+			}
+		}
 		:global{
 			.ant-btn{
 				padding: 0;
@@ -53,40 +58,19 @@
 			}
 		}
 	}
-	.content{
-		background-color: #fff;
-		box-shadow: 0 1px 4px 0 rgba(202,202,202,0.50);
-		padding: 20px;
-		margin: 20px;
-		position: absolute;
-		top: 52px;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		.selectWrap{
-			.selectItem{
-				margin-right: 20px;
-				display: inline-block;
-				margin-top: 20px;
-			}
-			.text{
-				width: 66px;
-				text-align: right;
-				padding-right: 10px;
-				display: inline-block;
-				vertical-align: middle;
-			}
-			:global{
-				.ant-calendar-picker{
-					vertical-align: middle;
-				}
+	.selectWrap{
+		margin-top: 20px;
+		padding: 0 20px;
+		.text{
+			margin-right: 10px;
+			margin-left: 20px;
+			&:first-child{
+				margin-left: 0;
 			}
 		}
-		.table{
-			margin-top: 20px;
-			.green{
-				color: #28BEA3;
-			}
-		}
+	}
+	.planList{
+		margin-top: 20px;
+		padding-left: 20px;
 	}
 }

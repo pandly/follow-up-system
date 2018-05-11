@@ -235,7 +235,7 @@ class OutPatient extends PureComponent {
 				<div className={styles.contentWrap}>
 					<div className={`${styles.title} clearfix`}>
 						<div className={styles.titleText}>
-							<i className={`iconfont icon-tianjiaicon ${styles.titleIcon}`}></i><span>出院随访</span>
+							<i className={`iconfont icon-tongyongbiaotiicon ${styles.titleIcon}`}></i><span>出院随访</span>
 						</div>
 						<div className={styles.titleBtn}>
 							<Search

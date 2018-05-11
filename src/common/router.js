@@ -50,8 +50,20 @@ export const getRouterData = (app) => {
     '/template/scale': {
       component: dynamicWrapper(app, ['scale'], () => import('../routes/Template/Scale')),
     },
+    '/template/scale/list': {
+      component: dynamicWrapper(app, ['scale'], () => import('../routes/Template/Scale/List')),
+    },
+    '/template/scale/profile': {
+      component: dynamicWrapper(app, ['scale'], () => import('../routes/Template/Scale/Profile')),
+    },
     '/template/plan': {
       component: dynamicWrapper(app, ['plan'], () => import('../routes/Template/Plan')),
+    },
+    '/template/plan/list': {
+      component: dynamicWrapper(app, ['plan'], () => import('../routes/Template/Plan/List')),
+    },
+    '/template/plan/profile': {
+      component: dynamicWrapper(app, ['plan'], () => import('../routes/Template/Plan/Profile')),
     },
   };
   return routerConfig;

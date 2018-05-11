@@ -1,12 +1,18 @@
 import { PureComponent } from 'react'
 import { Input } from 'antd';
-import styles from './Scale.less'
+import styles from './List.less'
+import { routerRedux } from 'dva/router'
+import { connect } from 'dva'
 
-import ListCard from 'components/ListCard'
+import TableListCard from 'components/TableListCard'
 
 const Search = Input.Search;
 
 class Scale extends PureComponent {
+	state = {}
+	goDetail = () => {
+		this.props.dispatch(routerRedux.push('/template/scale/profile'));
+	}
 	render() {
 		const tableList = [{
 			id:1,
@@ -52,7 +58,7 @@ class Scale extends PureComponent {
 				<div className={styles.content}>
 					<div className={`${styles.title} clearfix`}>
 						<div className={styles.titleText}>
-							<i className={`iconfont icon-tianjiaicon ${styles.titleIcon}`}></i><span>随访量表</span>
+							<i className={`iconfont icon-tongyongbiaotiicon ${styles.titleIcon}`}></i><span>随访量表</span>
 						</div>
 						<div className={styles.titleBtn}>
 							<span className={styles.addBtn}>
@@ -68,7 +74,7 @@ class Scale extends PureComponent {
 					</div>
 					<div className={styles.tableWrap}>
 						{ tableList.map(item => (
-							 <ListCard key={item.id} listData={item}></ListCard>
+							 <TableListCard key={item.id} listData={item} goDetail={this.goDetail}></TableListCard>
 						))}
 					</div>
 				</div>
@@ -77,4 +83,6 @@ class Scale extends PureComponent {
 	}
 }
 
-export default Scale
+export default connect(({ scale }) => ({
+  scale
+}))(Scale);

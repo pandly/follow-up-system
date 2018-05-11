@@ -160,7 +160,7 @@ class TodayMission extends PureComponent {
 			<div>
 				<div className={styles.contentWrap}>
 					<div className={styles.title}>
-						<i className={`iconfont icon-tianjiaicon ${styles.titleIcon}`}></i><span>今日任务</span>
+						<i className={`iconfont icon-tongyongbiaotiicon ${styles.titleIcon}`}></i><span>今日任务</span>
 					</div>
 					<div className={styles.content}>
 						<div className={styles.tabBtn}>

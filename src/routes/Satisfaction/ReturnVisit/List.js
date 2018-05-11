@@ -1,5 +1,5 @@
 import { PureComponent } from 'react'
-import styles from './Satisfaction.less'
+import styles from './List.less'
 import { Input, Tabs, Select, DatePicker, Table, Tooltip } from 'antd';
 
 const Search = Input.Search;
@@ -26,7 +26,7 @@ const statusDom = (text, record) => {
 		
 } 
 
-class Satisfaction extends PureComponent {
+class ReturnVisit extends PureComponent {
 	state = {
 		rate: 40,
 		rate2: 60,
@@ -341,4 +341,4 @@ class Satisfaction extends PureComponent {
 	}
 }
 
-export default Satisfaction
+export default ReturnVisit

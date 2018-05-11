@@ -48,7 +48,7 @@ const statusDom = (text, record) => {
 }
 
 class TodayMission extends PureComponent {
-
+    
 	state = {
 		missionType: 'wait',
 		dataSource: [{
@@ -212,7 +212,7 @@ class TodayMission extends PureComponent {
 	checkProfile = () => {
 		this.props.dispatch(routerRedux.push('/manage/todayMission/profile'));
 	}
-
+    
 	typeChangeText(type){
 		if(type=='yisuifang'){
 			return '已随访'

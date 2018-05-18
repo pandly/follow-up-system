@@ -1,12 +1,16 @@
-.tableItem{
+.tableItemWrap{
+	position: relative;
+	display: inline-block;
+	margin-right: 20px;
+	margin-bottom: 20px;
+	.tableItem{
 		padding: 20px;
 		background-color: #fff;
 		box-shadow: 0 1px 4px 0 rgba(202,202,202,0.50);
 		border-radius: 3px;
 		width: 323px;
 		display: inline-block;
-		margin-right: 20px;
-		margin-bottom: 20px;
+		
 		cursor: pointer;
 		.tableTitle{
 			line-height: 20px;
@@ -34,30 +38,31 @@
 			float: left;
 			line-height: 17px;
 		}
-		.tableBtn{
-			float: right;
-			line-height: 17px;
-			
-		}
+		
+	}
+	.dengIcon{
+		position: absolute;
+		top: 74px;
+		left: 175px;
+		z-index: 1000;
+		cursor: pointer;
+		color: #FFBF47;
+	}
+	.tableBtn{
+		line-height: 17px;
+		position: absolute;
+		top: 76px;
+		right: 20px;
+		z-index: 1000;
 		.tableIcon{
 			font-size: 16px;
-    		margin-right: 20px;
-    		color: #777;
-    		// display: none;
-    		cursor: pointer;
-    		&:last-child{
-    			margin-right: 0;
-    		}
-		}
-		:global{
-			.icon-dengpao{
-				color: #FFBF47;
-				cursor: pointer;
+			margin-right: 20px;
+			color: #777;
+			cursor: pointer;
+			&:last-child{
+				margin-right: 0;
 			}
 		}
-		// &:hover{
-		// 	.tableIcon{
-		// 		display: inline-block;
-		// 	}
-		// }
 	}
+}
+

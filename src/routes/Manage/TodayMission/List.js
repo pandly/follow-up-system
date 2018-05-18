@@ -92,7 +92,35 @@ class TodayMission extends PureComponent {
 			days: '10',
 			status: 'weidao'
 		}],
-		columns: [{
+		
+	}
+	
+	checkProfile = () => {
+		this.props.dispatch(routerRedux.push('/manage/todayMission/profile'));
+	}
+    
+	typeChangeText(type){
+		if(type=='yisuifang'){
+			return '已随访'
+		}else if(type=='yuqi'){
+			return '随访逾期'
+		}else if(type=='daisuifang'){
+			return '待随访'
+		}
+	}
+
+	changeTab(type){
+		this.setState({
+			missionType: type
+		})
+	}
+	handleChange(value) {
+  		console.log(`selected ${value}`);
+	}
+	
+	render() {
+		const { missionType, dataSource } = this.state
+		const columns = [{
 			title: '姓名',
 			dataIndex: 'name',
 			key: 'name'
@@ -128,34 +156,8 @@ class TodayMission extends PureComponent {
 			render: (text, record) => (
 				<a className="aLink" href="javascript:;" onClick={this.checkProfile}>查看随访</a>
 			)
-		}],
-	}
-	
-	checkProfile = () => {
-		this.props.dispatch(routerRedux.push('/manage/todayMission/profile'));
-	}
-    
-	typeChangeText(type){
-		if(type=='yisuifang'){
-			return '已随访'
-		}else if(type=='yuqi'){
-			return '随访逾期'
-		}else if(type=='daisuifang'){
-			return '待随访'
-		}
-	}
-
-	changeTab(type){
-		this.setState({
-			missionType: type
-		})
-	}
-	handleChange(value) {
-  		console.log(`selected ${value}`);
-	}
-	
-	render() {
-		const { missionType, dataSource, columns } = this.state
+		}]
+		
 		return (
 			<div>
 				<div className={styles.contentWrap}>

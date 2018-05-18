@@ -11,6 +11,7 @@ export default class ListCard extends Component {
 	hideDelPop = ()=>{
 		this.setState({
 	      	isPopDeleteHide: false,
+	      	isBtnShow: false,
 	    });
 	}
 	hideSignPop=()=>{
@@ -28,7 +29,7 @@ export default class ListCard extends Component {
 		return (
 	    	<div>
 	    		<div className="clearfix">
-	    			<i className="iconfont icon-chachaicon deleteIcon" onClick={() => this.hideDelPop()}></i>
+	    			<i className="iconfont icon-chachaicon deleteIcon" onClick={this.hideDelPop}></i>
 	    		</div>
 	    		<div className="popTitle">
 	    			<i className="iconfont icon-jinggaotanhaoicon"></i>
@@ -39,7 +40,7 @@ export default class ListCard extends Component {
 	    		</div>
 	    		<div className="popBtn">
 	    			<Button type="primary" onClick={() => this.sureDelete(item)}>确定</Button>
-	    			<Button onClick={() => this.hideDelPop()}>取消</Button>
+	    			<Button onClick={this.hideDelPop}>取消</Button>
 	    		</div>
 	    	</div>
 	    )
@@ -58,7 +59,7 @@ export default class ListCard extends Component {
 	    			若要恢复标记，可在内页进行操作。
 	    		</div>
 	    		<div className="popBtn">
-	    			<Button type="primary" onClick={() => this.sureDelete(item)}>确定</Button>
+	    			<Button type="primary" onClick={() => this.sureSign(item)}>确定</Button>
 	    			<Button onClick={() => this.hideSignPop()}>取消</Button>
 	    		</div>
 	    	</div>
@@ -76,49 +77,59 @@ export default class ListCard extends Component {
 	    });
 	}
 	sureDelete = (item)=> {
-		console.log(item,'4444')
+		this.setState({ 
+			isPopDeleteHide: false,
+			isBtnShow: false,
+		});
+	}
+	sureSign = (item)=> {
+		this.setState({ 
+			isPopSignHide: false,
+		});
 	}
 	render(){
 		const {listData} = this.props
 		const {isPopSignHide, isPopDeleteHide, isBtnShow} = this.state
 		// console.log(this.props)
 		return (
-			<div className={styles.tableItem} onMouseOver={this.showBtn} 
-				onMouseLeave={this.hideBtn} onClick={this.props.goDetail}>
-				<div className={styles.tableTitle}>{listData.name}</div>
-				<div className="clearfix">
-					<div className={styles.info}>
-						<span className={styles.label}>题量：</span>
-						<span className={styles.value}>{listData.question}</span>
-						<span className={styles.label}>应用次数：</span>
-						<span className={styles.value}>{listData.times}</span>
-						<Popover placement="bottomLeft"  
-							content={this.popoverSignDom(listData)} 
-							visible={isPopSignHide}
-							onVisibleChange={this.isPopSignHideChange}
-							trigger="click">
-				        	<Tooltip placement="top" title={'量表尚未制作完成，请及时完善；若已完成该模版，可点击取消草稿标记。'}
-				        		overlayClassName="signTooltip">
-						        <i className={`iconfont icon-dengpao ${styles.titleIcon}`} style={{display: listData.sign?'inline-block':'none'}}></i>
-						    </Tooltip>
-				      	</Popover>
-					</div>
-					<div className={styles.tableBtn} style={{display: isBtnShow?'inline-block':'none'}}  
-						onClick={this.showBtn}>
-						<Tooltip placement="top" title={'复制'}>
-					        <i className={`iconfont icon-fuzhiicon ${styles.tableIcon}`}></i>
-					    </Tooltip>
-					    <Popover placement="bottomLeft"  content={this.popoverDelDom(listData)} 
-					    	visible={isPopDeleteHide}
-					    	onVisibleChange={this.isPopDeleteHideChange}
-					    	trigger="click">
-				        	<Tooltip placement="top" title={'删除'}>
-						        <i className={`iconfont icon-shanchuicon ${styles.tableIcon}`}></i>
-						    </Tooltip>
-				      	</Popover>
+			<div className={styles.tableItemWrap} onMouseOver={this.showBtn} onMouseLeave={this.hideBtn} >
+				<div className={styles.tableItem} onClick={this.props.goDetail}>
+					<div className={styles.tableTitle}>{listData.name}</div>
+					<div className="clearfix">
+						<div className={styles.info}>
+							<span className={styles.label}>题量：</span>
+							<span className={styles.value}>{listData.question}</span>
+							<span className={styles.label}>应用次数：</span>
+							<span className={styles.value}>{listData.times}</span>
+						</div>
+						
 					</div>
 				</div>
-			</div>			
+				<Popover placement="bottomLeft"  
+					content={this.popoverSignDom(listData)} 
+					visible={isPopSignHide}
+					onVisibleChange={this.isPopSignHideChange}
+					trigger="click">
+		        	<Tooltip placement="top" title={'量表尚未制作完成，请及时完善；若已完成该模版，可点击取消草稿标记。'}
+		        		overlayClassName="signTooltip">
+				        <i className={`iconfont icon-dengpao ${styles.dengIcon}`} style={{display: listData.sign?'inline-block':'none'}}></i>
+				    </Tooltip>
+		      	</Popover>	
+		      	<div className={styles.tableBtn} style={{display: isBtnShow?'inline-block':'none'}}  
+					onClick={this.showBtn} onMouseOver={this.showBtn}>
+					<Tooltip placement="top" title={'复制'}>
+				        <i className={`iconfont icon-fuzhiicon ${styles.tableIcon}`}></i>
+				    </Tooltip>
+				    <Popover placement="bottomLeft"  content={this.popoverDelDom(listData)} 
+				    	visible={isPopDeleteHide}
+				    	onVisibleChange={this.isPopDeleteHideChange}
+				    	trigger="click">
+			        	<Tooltip placement="top" title={'删除'}>
+					        <i className={`iconfont icon-shanchuicon ${styles.tableIcon}`}></i>
+					    </Tooltip>
+			      	</Popover>
+				</div>
+	      	</div>		
 		)
 	}
 }

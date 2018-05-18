@@ -72,45 +72,7 @@ class Satisfaction extends PureComponent {
 			callTime: '2分30秒',
 			status: false
 		}],
-		columns: [{
-			title: '姓名',
-			dataIndex: 'name',
-			key: 'name'
-		},{
-			title: '出院科室',
-			dataIndex: 'dept',
-			key: 'dept'
-		},{
-			title: '随访人员',
-			dataIndex: 'doctor',
-			key: 'doctor'
-		},{
-			title: '出院诊断',
-			dataIndex: 'zhenduan',
-			key: 'zhenduan'
-		},{
-			title: '出院日期',
-			dataIndex: 'chuyuanDate',
-			key: 'chuyuanDate'
-		},{
-			title: '状态',
-			key: 'status',
-			render: (text, record) => statusDom(text, record)
-		},{
-			title: '随访日期',
-			dataIndex: 'suifangDate',
-			key: 'suifangDate'
-		},{
-			title: '随访时长',
-			dataIndex: 'callTime',
-			key: 'callTime'
-		},{
-			title: '操作',
-			key: 'action',
-			render: (text, record) => (
-				<a className="aLink" href="javascript:;" onClick={this.goDetail}>开始回访</a>
-			)
-		}],
+		
 		dataSource2: [{
 			key: '1',
 			name: '小玫瑰',
@@ -152,7 +114,55 @@ class Satisfaction extends PureComponent {
 			callTime: '2分30秒',
 			status: false
 		}],
-		columns2: [{
+		
+	}
+
+	goDetail = () => {
+		this.props.dispatch(routerRedux.push('/satisfaction/returnVisit/profile'));
+	}
+
+	render() {
+		const { rate, rate2, dataSource, dataSource2 } = this.state
+		const columns = [{
+			title: '姓名',
+			dataIndex: 'name',
+			key: 'name'
+		},{
+			title: '出院科室',
+			dataIndex: 'dept',
+			key: 'dept'
+		},{
+			title: '随访人员',
+			dataIndex: 'doctor',
+			key: 'doctor'
+		},{
+			title: '出院诊断',
+			dataIndex: 'zhenduan',
+			key: 'zhenduan'
+		},{
+			title: '出院日期',
+			dataIndex: 'chuyuanDate',
+			key: 'chuyuanDate'
+		},{
+			title: '状态',
+			key: 'status',
+			render: (text, record) => statusDom(text, record)
+		},{
+			title: '随访日期',
+			dataIndex: 'suifangDate',
+			key: 'suifangDate'
+		},{
+			title: '随访时长',
+			dataIndex: 'callTime',
+			key: 'callTime'
+		},{
+			title: '操作',
+			key: 'action',
+			render: (text, record) => (
+				<a className="aLink" href="javascript:;" onClick={this.goDetail}>开始回访</a>
+			)
+		}]
+		const columns2 = [{
 			title: '姓名',
 			dataIndex: 'name',
 			key: 'name'
@@ -191,14 +201,7 @@ class Satisfaction extends PureComponent {
 				<a className="aLink" href="javascript:;">查看回访</a>
 			)
 		}]
-	}
 
-	goDetail = () => {
-		this.props.dispatch(routerRedux.push('/satisfaction/returnVisit/profile'));
-	}
-
-	render() {
-		const { rate, rate2, dataSource, columns, dataSource2, columns2 } = this.state
 		return (
 			<div>
 				<div className={styles.contentWrap}>

@@ -1,0 +1,86 @@
+.modalWrap{
+	position: absolute;
+	top: 0;
+	right: 0;
+	left: 0;
+	bottom: 0;
+	animation: fadeIn .2s 1 0s;
+	.shadow{
+		position: absolute;
+		top: 0;
+		right: 0;
+		left: 0;
+		bottom: 0;
+		background: rgba(0,0,0,0.30);
+	}
+	.modal{
+		position: relative;
+		z-index: 2;
+		margin: 20px auto 0;
+		background: #fff;
+		width: 720px;
+		box-shadow: 0 0 4px 0 rgba(0,0,0,0.20);
+		border-radius: 3px;
+		padding: 20px;
+	}
+	.modalSmall{
+		width: 460px;
+	}
+	.modalTitle{
+		font-size: 16px;
+		color: #333;
+		line-height: 22px;
+		margin-bottom: 20px;
+		font-weight: bold;
+		.modalCloseIcon{
+			font-size: 14px;
+			float: right;
+			color: #979797;
+			cursor: pointer;
+			font-weight: normal;
+		}
+	}
+}
+
+.modalHidden{
+	display: none;
+}
+.hideFadeOut{
+	animation: fadeOut .2s 1 0s;
+}
+
+@keyframes fadeIn {  
+    0% {  
+    	opacity: 0; /*初始状态 透明度为0*/  
+    }  
+    20%{  
+        opacity: .2;  
+    }  
+    50% {  
+        opacity: .5; /*中间状态 透明度为0.5*/  
+    }  
+    70%{  
+        opacity: .7;  
+    }  
+    100% {  
+        opacity: 1; /*结尾状态 透明度为1*/ 
+        
+    } 
+}  
+@keyframes fadeOut {  
+    0% {  
+    opacity: 1; /*初始状态 透明度为0*/  
+    }  
+    20%{  
+        opacity: .7;  
+    }  
+    50% {  
+        opacity: .5; /*中间状态 透明度为0.5*/  
+    }  
+    70%{  
+        opacity: .2;  
+    }  
+    100% {  
+        opacity: 0; /*结尾状态 透明度为1*/  
+    }
+} 

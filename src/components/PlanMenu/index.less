@@ -1,0 +1,96 @@
+.menuItemWrap{
+	padding: 20px 20px 0;	
+	position: relative;
+	cursor: pointer;
+	transition: all .3s;
+	&:last-child{
+		.menuItem{
+			border-bottom: none;
+		}
+	}
+	.menuItem{
+		padding-bottom: 10px;
+		border-bottom: 1px solid #DBDBDB;
+	}
+	.itemIcon{
+		font-size: 12px;
+		margin-right: 16px;
+		position: absolute;
+		top: 22px;
+		left: 20px;
+		color: #ccc;
+	}
+	.content{
+		padding: 0 16px 0 28px;
+	}
+	.itemTitle{
+		font-size: 14px;
+		color: #333;
+		
+	}
+	.info{
+		font-size: 12px;
+		color: #999;
+	}
+	.tags{
+		font-size: 12px;
+		color: #fff;
+		background: #ccc;
+		border-radius: 10px;
+		display: inline-block;
+		padding: 2px 8px;
+		line-height: 12px;
+		span{
+			-webkit-transform:scale(0.8);
+			display: inline-block;
+		}
+	}
+	&:hover{
+		background: #F2F7F7;
+	}				
+}
+
+.menuItemChoosed.grey, .grey:hover{
+	.tags{
+		background-color: #999;
+	}
+	.itemIcon{
+		color: #999;
+	}
+}
+.menuItemChoosed.red,.red:hover{
+	.tags{
+		background-color: #F36969;
+	}
+	.itemIcon{
+		color: #F36969;
+	}
+}
+.menuItemChoosed.green,.green:hover{
+	.tags{
+		background-color: #06AEA6;
+	}
+	.itemIcon{
+		color: #06AEA6;
+	}
+}
+.menuItemChoosed.yellow,.yellow:hover{
+	.tags{
+		background-color: #FFBF47;
+	}
+	.itemIcon{
+		color: #FFBF47;
+	}
+}
+.menuItemChoosed{
+	background: #fff;
+	box-shadow: -4px 0 4px 0 rgba(178,178,178,0.60);
+	border-color: transparent;
+	margin-right: -2px;
+	&:hover{
+		background: #fff;
+	}
+	.menuItem{
+		border-bottom: none;
+	}
+}

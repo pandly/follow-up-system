@@ -62,7 +62,7 @@ export const getRouterData = (app) => {
     '/template/plan/list': {
       component: dynamicWrapper(app, ['plan'], () => import('../routes/Template/Plan/List')),
     },
-    '/template/plan/profile': {
+    '/template/plan/profile/:id': {
       component: dynamicWrapper(app, ['plan'], () => import('../routes/Template/Plan/Profile')),
     },
   };

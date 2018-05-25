@@ -1,3 +1,10 @@
+.contentMain{
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 180px;
+	right: 0;
+}
 .title{
 	font-size: 14px;
 	color: #4A4A4A;
@@ -26,6 +33,12 @@
 	border-top: 1px solid #DBDBDB;
 	font-size: 14px;
 	color: #F36969;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background: #fff;
+	z-index: 2000;
 	:global{
 		.ant-btn{
 			width: 96px!important;
@@ -52,8 +65,21 @@
 .contentWrap{
 	background-color: #fff;
 	box-shadow: 0 1px 4px 0 rgba(202,202,202,0.50);
-	margin: 20px;
-	padding-top: 20px;
+	margin: 20px 0 20px 20px;
+	position: absolute;
+	top: 30px;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	.main{
+		position: absolute;
+		top: 0;
+		bottom: 57px;
+		right: 0;
+		left: 0;
+		overflow: auto;
+		padding-top: 20px;
+	}
 	.content{
 		margin-bottom: 20px;
 		.item{
@@ -135,8 +161,21 @@
 .checkContent{
 	background-color: #fff;
 	box-shadow: 0 1px 4px 0 rgba(202,202,202,0.50);
-	margin: 20px;
-	padding-top: 20px;
+	margin: 20px 0 20px 20px;
+	position: absolute;
+	top: 30px;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	.main{
+		position: absolute;
+		top: 0;
+		bottom: 65px;
+		right: 0;
+		left: 0;
+		overflow: auto;
+		padding-top: 20px;
+	}
 	.label{
 		color: #666;
 	}
@@ -188,4 +227,10 @@
 }
 .hidden{
 	display: none!important;
+}
+
+@media screen and(max-width: 1620px) {
+	.checkContent, .contentWrap{
+		margin-right: 20px;
+	}
 }

@@ -21,7 +21,7 @@ class Plan extends PureComponent {
 			way: '',
 			table: ''
 		}],
-		status: 'check'
+		status: 'stop'
 	}
 	handleChange(value){
   		console.log(`selected ${value}`);
@@ -147,7 +147,7 @@ class Plan extends PureComponent {
 		
 		
 		return (
-			<div>
+			<div className={styles.contentMain}>
 				{/*{this.props.match.params.id}*/}
 				<Breadcrumb separator=">">
 				    <Breadcrumb.Item>随访模板</Breadcrumb.Item>
@@ -155,85 +155,87 @@ class Plan extends PureComponent {
 				    <Breadcrumb.Item>查看随访计划</Breadcrumb.Item>
 			  	</Breadcrumb>
 				<div className={`${styles.contentWrap} ${status=='add'?'':styles.hidden}`}>
-					<div className={styles.contentItem}>
-						<div className={styles.title}>
-							<div className={styles.titleText}>
-								<i className={`iconfont icon-tongyongbiaotiicon ${styles.titleIcon}`}></i><span>模版属性</span>
+					<div className={styles.main}>	
+						<div className={styles.contentItem}>
+							<div className={styles.title}>
+								<div className={styles.titleText}>
+									<i className={`iconfont icon-tongyongbiaotiicon ${styles.titleIcon}`}></i><span>模版属性</span>
+								</div>
+							</div>
+							<div className={styles.content}>
+								<div className={styles.item}>
+									<span className={styles.label}>模版类型</span>
+									<Select defaultValue="lucy" style={{ width: 255}} onChange={this.handleChange}
+										allowClear >
+								      	<Option value="lucy">Lucy</Option>
+								      	<Option value="111">111</Option>
+								      	<Option value="222">222</Option>
+								      	<Option value="333">333</Option>
+								    </Select>
+								</div>
+								<div className={styles.item}>
+									<span className={styles.label}>模版名称</span>
+									<Input style={{ width: 622 }} />
+								</div>
 							</div>
 						</div>
-						<div className={styles.content}>
-							<div className={styles.item}>
-								<span className={styles.label}>模版类型</span>
-								<Select defaultValue="lucy" style={{ width: 255}} onChange={this.handleChange}
-									allowClear >
-							      	<Option value="lucy">Lucy</Option>
-							      	<Option value="111">111</Option>
-							      	<Option value="222">222</Option>
-							      	<Option value="333">333</Option>
-							    </Select>
+						<div className={styles.contentItem}>
+							<div className={styles.title}>
+								<div className={styles.titleText}>
+									<i className={`iconfont icon-tongyongbiaotiicon ${styles.titleIcon}`}></i><span>适用范围</span>
+								</div>
 							</div>
-							<div className={styles.item}>
-								<span className={styles.label}>模版名称</span>
-								<Input style={{ width: 622 }} />
-							</div>
-						</div>
-					</div>
-					<div className={styles.contentItem}>
-						<div className={styles.title}>
-							<div className={styles.titleText}>
-								<i className={`iconfont icon-tongyongbiaotiicon ${styles.titleIcon}`}></i><span>适用范围</span>
-							</div>
-						</div>
-						<div className={styles.content}>
-							<div className={styles.item}>
-								<span className={`${styles.label} ${styles.required}`}>科室</span>
-								<Select defaultValue="lucy" style={{ width: 255 }} onChange={this.handleChange}
-									allowClear placeholder="请选择">
-							      	<Option value="lucy">Lucy</Option>
-							      	<Option value="111">111</Option>
-							      	<Option value="222">222</Option>
-							      	<Option value="333">333</Option>
-							    </Select>
-							</div>
-							<div className={styles.item}>
-								<span className={styles.label}>包含：</span>
-								<span className={styles.text}>肝胆外科</span>
-							</div>
-							<div className={`${styles.item} ${styles.specialItem}`}>
-								<Select defaultValue="lucy" style={{ width: 115 }} onChange={this.handleChange}
-									allowClear placeholder="请选择">
-							      	<Option value="lucy">Lucy</Option>
-							      	<Option value="111">111</Option>
-							      	<Option value="222">222</Option>
-							      	<Option value="333">333</Option>
-							    </Select>
-								<span className={styles.label}>疾病诊断</span>
-								<Input style={{ width: 422 }} placeholder="请填写（多填）" />
+							<div className={styles.content}>
+								<div className={styles.item}>
+									<span className={`${styles.label} ${styles.required}`}>科室</span>
+									<Select defaultValue="lucy" style={{ width: 255 }} onChange={this.handleChange}
+										allowClear placeholder="请选择">
+								      	<Option value="lucy">Lucy</Option>
+								      	<Option value="111">111</Option>
+								      	<Option value="222">222</Option>
+								      	<Option value="333">333</Option>
+								    </Select>
+								</div>
+								<div className={styles.item}>
+									<span className={styles.label}>包含：</span>
+									<span className={styles.text}>肝胆外科</span>
+								</div>
+								<div className={`${styles.item} ${styles.specialItem}`}>
+									<Select defaultValue="lucy" style={{ width: 115 }} onChange={this.handleChange}
+										allowClear placeholder="请选择">
+								      	<Option value="lucy">Lucy</Option>
+								      	<Option value="111">111</Option>
+								      	<Option value="222">222</Option>
+								      	<Option value="333">333</Option>
+								    </Select>
+									<span className={styles.label}>疾病诊断</span>
+									<Input style={{ width: 422 }} placeholder="请填写（多填）" />
+								</div>
 							</div>
 						</div>
-					</div>
-					<div className={styles.contentItem}>
-						<div className={styles.title}>
-							<div className={styles.titleText}>
-								<i className={`iconfont icon-tongyongbiaotiicon ${styles.titleIcon}`}></i><span>随访任务</span>
+						<div className={styles.contentItem}>
+							<div className={styles.title}>
+								<div className={styles.titleText}>
+									<i className={`iconfont icon-tongyongbiaotiicon ${styles.titleIcon}`}></i><span>随访任务</span>
+								</div>
 							</div>
-						</div>
-						<div className={styles.content}>
-							<div className={styles.item}>
-								<span className={`${styles.label} ${styles.specialLabel}`}>随访开始时间</span>
-								<Select defaultValue="lucy" style={{ width: 255 }} onChange={this.handleChange}
-									allowClear>
-							      	<Option value="lucy">Lucy</Option>
-							      	<Option value="111">111</Option>
-							      	<Option value="222">222</Option>
-							      	<Option value="333">333</Option>
-							    </Select>
-							</div>
-							<Table dataSource={dataSource} columns={columns} pagination={false}/>
-							<div className={`${styles.tableFooter} ${dataSource.length%2==0?styles.doubleTable:''}`}>
-								<span className={styles.footerBtn} onClick={this.handleAdd}>
-									<i className={`iconfont icon-tianjialiebiao_icon ${styles.tableIcon}`}></i><span>添加随访任务</span>
-								</span>
+							<div className={styles.content}>
+								<div className={styles.item}>
+									<span className={`${styles.label} ${styles.specialLabel}`}>随访开始时间</span>
+									<Select defaultValue="lucy" style={{ width: 255 }} onChange={this.handleChange}
+										allowClear>
+								      	<Option value="lucy">Lucy</Option>
+								      	<Option value="111">111</Option>
+								      	<Option value="222">222</Option>
+								      	<Option value="333">333</Option>
+								    </Select>
+								</div>
+								<Table dataSource={dataSource} columns={columns} pagination={false}/>
+								<div className={`${styles.tableFooter} ${dataSource.length%2==0?styles.doubleTable:''}`}>
+									<span className={styles.footerBtn} onClick={this.handleAdd}>
+										<i className={`iconfont icon-tianjialiebiao_icon ${styles.tableIcon}`}></i><span>添加随访任务</span>
+									</span>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -242,55 +244,59 @@ class Plan extends PureComponent {
 						<Button type="primary">保存</Button>
 					</div>
 				</div>
-				<div className={`${styles.checkContent} ${status=='stop'?styles.stopContent:''} ${status=='add'?styles.hidden:''}`}>					
-					<div className={styles.contentItem}>
-						<div className={styles.title}>
-							<div className={styles.titleText}>
-								<i className={`iconfont icon-tongyongbiaotiicon ${styles.titleIcon}`}></i><span>模版属性</span>
+
+				<div className={`${styles.checkContent} ${status=='stop'?styles.stopContent:''} ${status=='add'?styles.hidden:''}`}>
+					<div className={styles.main}>	
+						<div className={styles.contentItem}>
+							<div className={styles.title}>
+								<div className={styles.titleText}>
+									<i className={`iconfont icon-tongyongbiaotiicon ${styles.titleIcon}`}></i><span>模版属性</span>
+								</div>
+							</div>
+							<div className={styles.content}>
+								<div className={styles.item}>
+									<span className={styles.label}>模版类型：</span>
+									<span className={styles.text}>出院随访模板</span>
+								</div>
+								<div className={styles.item}>
+									<span className={styles.label}>模版名称：</span>
+									<span className={styles.text}>肝胆外科随访计划</span>
+								</div>
 							</div>
 						</div>
-						<div className={styles.content}>
-							<div className={styles.item}>
-								<span className={styles.label}>模版类型：</span>
-								<span className={styles.text}>出院随访模板</span>
+						<div className={styles.contentItem}>
+							<div className={styles.title}>
+								<div className={styles.titleText}>
+									<i className={`iconfont icon-tongyongbiaotiicon ${styles.titleIcon}`}></i><span>适用范围</span>
+								</div>
 							</div>
-							<div className={styles.item}>
-								<span className={styles.label}>模版名称：</span>
-								<span className={styles.text}>肝胆外科随访计划</span>
-							</div>
-						</div>
-					</div>
-					<div className={styles.contentItem}>
-						<div className={styles.title}>
-							<div className={styles.titleText}>
-								<i className={`iconfont icon-tongyongbiaotiicon ${styles.titleIcon}`}></i><span>适用范围</span>
-							</div>
-						</div>
-						<div className={styles.content}>
-							<div className={styles.item}>
-								<span className={styles.label}>科室：</span>
-								<span className={styles.text}>肝胆外科</span>
-							</div>
-							<div className={styles.item}>
-								<span className={styles.label}>包含：</span>
-								<span className={styles.text}>肝胆外科</span>
+							<div className={styles.content}>
+								<div className={styles.item}>
+									<span className={styles.label}>科室：</span>
+									<span className={styles.text}>肝胆外科</span>
+								</div>
+								<div className={styles.item}>
+									<span className={styles.label}>包含：</span>
+									<span className={styles.text}>肝胆外科</span>
+								</div>
 							</div>
 						</div>
-					</div>
-					<div className={styles.contentItem}>
-						<div className={styles.title}>
-							<div className={styles.titleText}>
-								<i className={`iconfont icon-tongyongbiaotiicon ${styles.titleIcon}`}></i><span>随访任务</span>
+						<div className={styles.contentItem}>
+							<div className={styles.title}>
+								<div className={styles.titleText}>
+									<i className={`iconfont icon-tongyongbiaotiicon ${styles.titleIcon}`}></i><span>随访任务</span>
+								</div>
+							</div>
+							<div className={styles.content}>
+								<div className={`${styles.item} ${styles.specialItem}`}>
+									<span className={styles.label}>随访开始时间：</span>
+									<span className={styles.text}>肝胆外科</span>
+								</div>
+								<Table dataSource={dataSource} columns={columns2} pagination={false}/>
 							</div>
 						</div>
-						<div className={styles.content}>
-							<div className={`${styles.item} ${styles.specialItem}`}>
-								<span className={styles.label}>随访开始时间：</span>
-								<span className={styles.text}>肝胆外科</span>
-							</div>
-							<Table dataSource={dataSource} columns={columns2} pagination={false}/>
-						</div>
-					</div>
+					</div>					
+					
 					<div className={`${styles.footer} ${styles.linkFooter}`}>
 						<div className={`${styles.footerItem} aLink`}>
 							<i className={`iconfont icon-bi ${styles.footerIcon}`}></i>

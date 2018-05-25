@@ -11,10 +11,10 @@ export default class EditSelectCell extends Component {
         editable: false,
     }
     handleChange = (value) => {
-        this.setState({ value });
-    }
-    check = () => {
-        this.setState({ editable: false });
+        this.setState({ 
+            value: value,
+            editable: false
+         });
         if (this.props.onChange) {
             this.props.onChange(this.state.value);
         }
@@ -35,11 +35,6 @@ export default class EditSelectCell extends Component {
                                 <Option value="disabled" disabled>Disabled</Option>
                                 <Option value="Yiminghe">yiminghe</Option>
                             </Select>
-                            <Icon
-                                type="check"
-                                className={styles.checkIcon}
-                                onClick={this.check}
-                            />
                         </div>
                         :
                         <div>

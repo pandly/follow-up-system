@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import styles from './index.less';
 
+import PopoverSure from 'components/PopoverSure'
+
 export default class PlanListCard extends Component {
 	state = {
 		isHover: false
@@ -21,6 +23,9 @@ export default class PlanListCard extends Component {
 		}else{
 			return
 		}
+	}
+	sureRestart = ()=> {
+		
 	}
 	render(){
 		const {listData} = this.props
@@ -53,7 +58,11 @@ export default class PlanListCard extends Component {
 					</div>
 					<div className={styles.ntnWrap}>
 						<span onClick={this.props.goDetail}>查看详情</span>
-						<span className="aLink">重新发布</span>
+						<PopoverSure title="您确定要重新发布该计划吗？"
+							text="目标重新发布后可进行再次编辑。"
+							sureFunction={()=>this.sureRestart()}>
+							<span className="aLink">重新发布</span>
+						</PopoverSure>
 					</div>
 				</div>
 			</div>

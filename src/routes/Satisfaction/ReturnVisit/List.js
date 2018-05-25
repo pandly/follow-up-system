@@ -272,7 +272,7 @@ class Satisfaction extends PureComponent {
 						    		</div>
 						    		<Tooltip placement="top" title={`${rate>50?'您已完成回访率指标':'您尚未达到回访率指标，请尽快完成'}`}
 				        				overlayClassName="signTooltip">
-						        		<i className={`iconfont icon-jinggaotanhaoicon ${styles.infoIcon}`}></i>
+						        		<i className={`iconfont icon-information ${styles.infoIcon}`}></i>
 						    		</Tooltip>
 						    		
 						    	</div>
@@ -333,7 +333,7 @@ class Satisfaction extends PureComponent {
 						    		</div>
 						    		<Tooltip placement="top" title={`${rate2>50?'您已完成回访率指标':'您尚未达到回访率指标，请尽快完成'}`}
 				        				overlayClassName="signTooltip">
-						        		<i className={`iconfont icon-jinggaotanhaoicon ${styles.infoIcon}`}></i>
+						        		<i className={`iconfont icon-information ${styles.infoIcon}`}></i>
 						    		</Tooltip>
 						    		
 						    	</div>

@@ -20,13 +20,13 @@ export default class PlanMenu extends Component {
 	}
 	iconChange(type){
 		if(type=='yisuifang'){
-			return 'yisuifang-icon-grey'
+			return 'yisuifang-icon-color'
 		}else if(type=='yuqi'){
-			return 'suifangyuqi-icon-grey'
+			return 'suifangyuqi-icon-color'
 		}else if(type=='daisuifang'){
-			return 'daisuifangicon-grey'
+			return 'daisuifangicon-color'
 		}else if(type=='weidao'){
-			return 'shijianweidao-icon-grey'
+			return 'shijianweidao-icon-color'
 		}else{
 			return ''
 		}

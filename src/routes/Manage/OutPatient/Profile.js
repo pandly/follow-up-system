@@ -307,16 +307,16 @@ class MissionProfile extends Component {
 										<i className={`iconfont icon-suifangjihuaicon ${styles.itemIcon}`}></i>
 										<div className={styles.content}>
 											<div className={styles.itemTitle}>
-												患者信息
+												随访计划
 											</div>
 											<div className={styles.info}>
 												肾小球肾炎随访的计划
 											</div>
 											<div className={`${styles.btnItem} aLink`} onClick={this.showEditPlan}>
-												<i className={`iconfont icon-green_bianji`}></i><span>编辑计划</span>
+												<i className={`iconfont icon-grey_bianji`}></i><span>编辑计划</span>
 											</div>
 											<div className={`${styles.btnItem} aLink`} onClick={this.showStopPlan}>
-												<i className={`iconfont icon-tianjialiebiao_icon`}></i><span>手动结案</span>
+												<i className={`iconfont icon-jieshu`}></i><span>手动结案</span>
 											</div>
 										</div>
 									</div>
@@ -422,7 +422,7 @@ class MissionProfile extends Component {
 								    </Select>
 								</div>
 								<div className={styles.stopItem}>
-									<span className={styles.label}>结案原因</span>
+									<span className={styles.label}>描述</span>
 									<TextArea style={{ width: 353, height: 120 }} />
 								</div>
 								<div className={styles.stopText}>
@@ -451,19 +451,18 @@ class MissionProfile extends Component {
 											<span className={styles.text}>2018-04-18</span>
 										</div>
 										<div className={`${styles.item} ${styles.specialItem}`}>
-											<span className={styles.label}>入院诊断：</span>
-											<span className={styles.text}>1.动脉粥样硬化；2.脑供血不足。</span>
-										</div>
-									</div>
-									<div>
-										<div className={`${styles.item} ${styles.specialItem}`}>
 											<span className={styles.label}>出院日期：</span>
 											<span className={styles.text}>2018-04-18</span>
 										</div>
-										<div className={`${styles.item} ${styles.specialItem}`}>
-											<span className={styles.label}>出院诊断：</span>
-											<span className={styles.text}>1.右侧基底节区腔隙性脑梗；2.脑供血不足；3.颈椎病；4.前列腺肥大。</span>
-										</div>
+										
+									</div>
+									<div className={styles.item}>
+										<span className={styles.label}>入院诊断：</span>
+										<span className={styles.text}>1.动脉粥样硬化；2.脑供血不足。</span>
+									</div>
+									<div className={styles.item}>
+										<span className={styles.label}>出院诊断：</span>
+										<span className={styles.text}>1.右侧基底节区腔隙性脑梗；2.脑供血不足；3.颈椎病；4.前列腺肥大。</span>
 									</div>
 									<div className={styles.item}>
 										<span className={styles.label}>入院情况：</span>

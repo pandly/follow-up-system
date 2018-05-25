@@ -315,7 +315,7 @@ class Plan extends PureComponent {
 							text="目标重新发布后可进行再次编辑。"
 							sureFunction={()=>this.sureRestart()}>
 							<div className={`${styles.footerItem} aLink ${status=='stop'?'':styles.hidden}`}>
-								<i className={`iconfont icon-grey_shanchu ${styles.footerIcon}`}></i>
+								<i className={`iconfont icon-zhongxinfabuicon ${styles.footerIcon}`}></i>
 								<span>重新发布</span>
 							</div>
 						</PopoverSure>
@@ -323,7 +323,7 @@ class Plan extends PureComponent {
 							text="目标删除后将不可恢复。"
 							sureFunction={()=>this.sureDelete()}>
 							<div className={`${styles.footerItem} ${status=='stop'?'':styles.hidden}`}>
-								<i className={`iconfont icon-grey_shanchu ${styles.footerIcon}`}></i>
+								<i className={`iconfont icon-hongselajixiang ${styles.footerIcon}`}></i>
 								<span>删除</span>
 							</div>
 						</PopoverSure>

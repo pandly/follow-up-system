@@ -275,19 +275,18 @@ class SatisfactionDetail extends PureComponent {
 											<span className={styles.text}>2018-04-18</span>
 										</div>
 										<div className={`${styles.item} ${styles.specialItem}`}>
-											<span className={styles.label}>入院诊断：</span>
-											<span className={styles.text}>1.动脉粥样硬化；2.脑供血不足。</span>
-										</div>
-									</div>
-									<div>
-										<div className={`${styles.item} ${styles.specialItem}`}>
 											<span className={styles.label}>出院日期：</span>
 											<span className={styles.text}>2018-04-18</span>
 										</div>
-										<div className={`${styles.item} ${styles.specialItem}`}>
-											<span className={styles.label}>出院诊断：</span>
-											<span className={styles.text}>1.右侧基底节区腔隙性脑梗；2.脑供血不足；3.颈椎病；4.前列腺肥大。</span>
-										</div>
+										
+									</div>
+									<div className={styles.item}>
+										<span className={styles.label}>入院诊断：</span>
+										<span className={styles.text}>1.动脉粥样硬化；2.脑供血不足。</span>
+									</div>
+									<div className={styles.item}>
+										<span className={styles.label}>出院诊断：</span>
+										<span className={styles.text}>1.右侧基底节区腔隙性脑梗；2.脑供血不足；3.颈椎病；4.前列腺肥大。</span>
 									</div>
 									<div className={styles.item}>
 										<span className={styles.label}>入院情况：</span>

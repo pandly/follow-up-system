@@ -11,10 +11,10 @@ export default class EditDateCell extends Component {
     }
     handleChange = (date, dateString) => {
         const value = dateString;
-        this.setState({ value });
-    }
-    check = () => {
-        this.setState({ editable: false });
+        this.setState({ 
+            value: value,
+            editable: false
+         });
         if (this.props.onChange) {
             this.props.onChange(this.state.value);
         }
@@ -31,11 +31,6 @@ export default class EditDateCell extends Component {
                         <div>
                             <DatePicker defaultValue={moment(value, 'YYYY-MM-DD')} onChange={this.handleChange} 
                                 style={{width: 120}}/>
-                            <Icon
-                                type="check"
-                                className={styles.checkIcon}
-                                onClick={this.check}
-                            />
                         </div>
                         :
                         <div>

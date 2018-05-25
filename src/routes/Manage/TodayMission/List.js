@@ -1,5 +1,5 @@
 import { PureComponent } from 'react'
-import { Select, Table } from 'antd'
+import { Select, Table, Breadcrumb } from 'antd'
 import { routerRedux } from 'dva/router'
 import { connect } from 'dva'
 import styles from './List.less'
@@ -161,6 +161,10 @@ class TodayMission extends PureComponent {
 		return (
 			<div>
 				<div className={styles.contentWrap}>
+					<Breadcrumb separator=">">
+					    <Breadcrumb.Item>随访管理</Breadcrumb.Item>
+					    <Breadcrumb.Item>今日任务</Breadcrumb.Item>
+				  	</Breadcrumb>
 					<div className={styles.title}>
 						<i className={`iconfont icon-tongyongbiaotiicon ${styles.titleIcon}`}></i><span>今日任务</span>
 					</div>
@@ -212,7 +216,6 @@ class TodayMission extends PureComponent {
 							}}/>
 						</div>
 					</div>
-					
 				</div>
 			</div>
 		)

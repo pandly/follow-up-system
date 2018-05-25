@@ -1,9 +1,9 @@
 * {
 	box-sizing: border-box;
-	font-family: 'PingFangSC-Regular';
+	font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 html, body, :global(#root) {
-  color: #333;
+  color: #333;  
 }
 ul {
 	list-style: none;
@@ -846,5 +846,23 @@ li a {
 	.ant-checkbox-wrapper + span, .ant-checkbox + span{
 		padding-left: 10px!important;
 		padding-right: 10px!important;
+	}
+	/*----------------------------------------面包屑----------------------------------------------------*/
+	.ant-breadcrumb{
+		line-height: 30px!important;
+		background: #fff;
+		box-shadow: 0 1px 4px 0 rgba(202,202,202,0.50);
+		font-size: 12px!important;
+		color: #ccc!important;
+		padding: 0 20px!important;
+	}
+	.ant-breadcrumb a:hover{
+		color: #06AEA6!important;
+	}
+	.ant-breadcrumb > span:last-child{
+		color: #666!important;
+	}
+	.ant-breadcrumb-separator{
+		color: #999!important;
 	}
 }

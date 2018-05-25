@@ -1,6 +1,6 @@
 import { PureComponent } from 'react'
 import styles from './List.less'
-import { Input, Select } from 'antd';
+import { Input, Select, Breadcrumb } from 'antd';
 import { routerRedux } from 'dva/router'
 import { connect } from 'dva'
 
@@ -80,6 +80,10 @@ class Plan extends PureComponent {
 		return (
 			<div>
 				<div className={styles.content}>
+					<Breadcrumb separator=">">
+					    <Breadcrumb.Item>随访模板</Breadcrumb.Item>
+					    <Breadcrumb.Item>随访计划</Breadcrumb.Item>
+				  	</Breadcrumb>
 					<div className={`${styles.title} clearfix`}>
 						<div className={styles.titleText}>
 							<i className={`iconfont icon-tongyongbiaotiicon ${styles.titleIcon}`}></i><span>随访计划</span>

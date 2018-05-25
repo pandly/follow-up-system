@@ -1,10 +1,14 @@
 import { Component } from 'react'
 import styles from './Profile.less'
 import patientInfo from '../../../assets/patient.png'
-import { Select, DatePicker, Table, Input, Button } from 'antd';
+import { Select, DatePicker, Table, Input, Button, Breadcrumb } from 'antd';
+
 
 import PlanMenu from 'components/PlanMenu'
 import Modal from 'components/Modal'
+import PopoverSure from 'components/PopoverSure'
+import EditDateCell from 'components/EditTableCell/EditDateCell.js'
+import EditSelectCell from 'components/EditTableCell/EditSelectCell.js'
 
 const Option = Select.Option;
 const { TextArea } = Input;
@@ -192,10 +196,25 @@ class MissionProfile extends Component {
 	      	dataSource: [...dataSource, newData]
 	    });
   	}
-  	deletePlan = (key) => {
-		const dataSource = [...this.state.dataSource];
-		this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
+  	deletePlan = (record) => {
+  		if(record.status!='yisuifang'){
+  			const dataSource = [...this.state.dataSource];
+			this.setState({ dataSource: dataSource.filter(item => item.key !== record.key) });
+  		}else{
+  			return
+  		}
+		
 	}
+	onCellChange = (key, dataIndex) => {
+	    return (value) => {
+	      	const dataSource = [...this.state.dataSource];
+	     	const target = dataSource.find(item => item.key === key);
+	      	if (target) {
+		        target[dataIndex] = value;
+		        this.setState({ dataSource });
+	      	}
+	    };
+  	}
 	render(){
 		const { isSummaryShow, listData, status, editPlanShow, dataSource, stopPlanShow, conclusionShow, medicineShow, dataSource2 } = this.state
 		const columns = [{
@@ -204,12 +223,24 @@ class MissionProfile extends Component {
 			render: (text, record) => statusDom(text, record)
 		},{
 			title: '随访日期',
+			width: '160px',
 			dataIndex: 'date',
-			key: 'date'
+			render: (text, record) => (
+				record.status!='yisuifang'?
+				<EditDateCell value={text} onChange={this.onCellChange(record.key, 'date')}></EditDateCell>
+				:
+				<span>{text}</span>
+			)
 		},{
 			title: '随访方式',
+			width: '160px',
 			dataIndex: 'way',
-			key: 'way'
+			render: (text, record) => (
+				record.status!='yisuifang'?
+				<EditSelectCell value={text} onChange={this.onCellChange(record.key, 'way')}></EditSelectCell>
+				:
+				<span>{text}</span>
+			)
 		},{
 			title: '量表选择',
 			dataIndex: 'table',
@@ -218,7 +249,14 @@ class MissionProfile extends Component {
 			title: '操作',
 			key: 'action',
 			render: (text, record) => (
-				<span className="delLink" onClick={() => this.deletePlan(record.key)}>删除</span>
+				record.status!='yisuifang'?
+				<PopoverSure title="您确定要删除该表格吗？"
+					text="目标删除后将不可恢复。"
+					sureFunction={()=>this.deletePlan(record)}>
+					<span className="delLink">删除</span>
+				</PopoverSure>
+				:
+				<span className="delLink">删除</span>
 			)
 		}]   
 		const columns2 = [{
@@ -241,6 +279,11 @@ class MissionProfile extends Component {
 		return (
 			<div>
 				<div className={styles.contentWrap}>
+					<Breadcrumb separator=">">
+					    <Breadcrumb.Item>随访管理</Breadcrumb.Item>
+					    <Breadcrumb.Item href="">今日任务</Breadcrumb.Item>
+					    <Breadcrumb.Item>开始随访</Breadcrumb.Item>
+				  	</Breadcrumb>
 					<div className={`${styles.patientInfo} clearfix`}>
 						<div className={styles.infoWrap}>
 							<div className={styles.img}>
@@ -381,7 +424,10 @@ class MissionProfile extends Component {
 									<Input defaultValue="肝胆外科随访计划模板" style={{width: 270}}></Input>
 								</div>
 								<div className={styles.table}>
-									<Table dataSource={dataSource} columns={columns} pagination={false}/>
+									<Table dataSource={dataSource} columns={columns} pagination={false}
+										rowClassName={(record, index) => {
+											return record.status
+										}}/>
 									<div className={`${styles.tableFooter} ${dataSource.length%2==0?styles.doubleTable:''}`}>
 										<span className={styles.footerBtn} onClick={this.handleAdd}>
 											<i className={`iconfont icon-tianjialiebiao_icon ${styles.tableIcon}`}></i><span>添加计划</span>

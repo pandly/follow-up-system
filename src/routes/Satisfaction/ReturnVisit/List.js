@@ -1,6 +1,6 @@
 import { PureComponent } from 'react'
 import styles from './List.less'
-import { Input, Tabs, Select, DatePicker, Table, Tooltip } from 'antd';
+import { Input, Tabs, Select, DatePicker, Table, Tooltip, Breadcrumb } from 'antd';
 import { routerRedux } from 'dva/router'
 import { connect } from 'dva'
 
@@ -205,6 +205,10 @@ class Satisfaction extends PureComponent {
 		return (
 			<div>
 				<div className={styles.contentWrap}>
+					<Breadcrumb separator=">">
+					    <Breadcrumb.Item>满意度</Breadcrumb.Item>
+					    <Breadcrumb.Item>满意度回访</Breadcrumb.Item>
+				  	</Breadcrumb>
 					<div className={`${styles.title} clearfix`}>
 						<div className={styles.titleText}>
 							<i className={`iconfont icon-tongyongbiaotiicon ${styles.titleIcon}`}></i><span>满意度回访</span>

@@ -1,8 +1,10 @@
 import { PureComponent } from 'react'
 import styles from './List.less'
-import { Tabs, Select, DatePicker, Table, Input } from 'antd';
+import { Tabs, Select, DatePicker, Table, Input, Breadcrumb } from 'antd';
 import { routerRedux } from 'dva/router'
 import { connect } from 'dva'
+
+import RInput from 'components/RInput'
 
 const TabPane = Tabs.TabPane;
 const Option = Select.Option;
@@ -129,7 +131,6 @@ class OutPatient extends PureComponent {
 			status: false
 		}],
   	}
-
   	goDetail = () =>{
   		this.props.dispatch(routerRedux.push('/manage/outPatient/profile'));
   	}
@@ -140,7 +141,7 @@ class OutPatient extends PureComponent {
 	  	console.log(date, dateString);
 	}
 	render() {
-		const { dataSource, dataSource2 } = this.state
+		const { dataSource, dataSource2, value } = this.state
 		const columns = [{
 			title: '姓名',
 			dataIndex: 'name',
@@ -234,6 +235,10 @@ class OutPatient extends PureComponent {
 		return (
 			<div>
 				<div className={styles.contentWrap}>
+					<Breadcrumb separator=">">
+					    <Breadcrumb.Item>随访管理</Breadcrumb.Item>
+					    <Breadcrumb.Item>出院随访</Breadcrumb.Item>
+				  	</Breadcrumb>
 					<div className={`${styles.title} clearfix`}>
 						<div className={styles.titleText}>
 							<i className={`iconfont icon-tongyongbiaotiicon ${styles.titleIcon}`}></i><span>出院随访</span>

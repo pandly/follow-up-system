@@ -1,6 +1,8 @@
 import { PureComponent } from 'react'
-import { Select, Input, InputNumber, Table, Button, Popover } from 'antd'
+import { Select, Input, InputNumber, Table, Button, Popover, Breadcrumb } from 'antd'
 import styles from './Profile.less'
+
+import PopoverSure from 'components/PopoverSure'
 
 const Option = Select.Option;
 
@@ -19,10 +21,7 @@ class Plan extends PureComponent {
 			way: '',
 			table: ''
 		}],
-		status: 'stop',
-		isPopDeleteHide: false,
-		isPopStopHide: false,
-		isPopRestartHide: false
+		status: 'check'
 	}
 	handleChange(value){
   		console.log(`selected ${value}`);
@@ -45,108 +44,18 @@ class Plan extends PureComponent {
 	    });
   	}
   	//删除
-  	hideDelPop = ()=>{
-		this.setState({
-	      	isPopDeleteHide: false
-	    });
-	}
 	sureDelete = ()=> {
-		this.setState({ 
-			isPopDeleteHide: false
-		});
-	}
-	isPopDeleteHideChange=(visible)=>{
-		this.setState({ isPopDeleteHide: visible });
-	}
-  	popoverDelDom(){
-		return (
-	    	<div>
-	    		<div className="clearfix">
-	    			<i className="iconfont icon-chachaicon deleteIcon" onClick={this.hideDelPop}></i>
-	    		</div>
-	    		<div className="popTitle">
-	    			<i className="iconfont icon-jinggaotanhaoicon"></i>
-	    			<span className="">您确定要删除该计划吗？</span>
-	    		</div>
-	    		<div className="popText">
-	    			目标删除后将不可恢复。
-	    		</div>
-	    		<div className="popBtn">
-	    			<Button type="primary" onClick={() => this.sureDelete()}>确定</Button>
-	    			<Button onClick={this.hideDelPop}>取消</Button>
-	    		</div>
-	    	</div>
-	    )
+		
 	}
 
 	//暂停使用
-  	hideStopPop = ()=>{
-		this.setState({
-	      	isPopStopHide: false
-	    });
-	}
-	sureDelete = ()=> {
-		this.setState({ 
-			isPopStopHide: false
-		});
-	}
-	isPopStopHideChange=(visible)=>{
-		this.setState({ isPopStopHide: visible });
-	}
-  	popoverStopDom(){
-		return (
-	    	<div>
-	    		<div className="clearfix">
-	    			<i className="iconfont icon-chachaicon deleteIcon" onClick={this.hideStopPop}></i>
-	    		</div>
-	    		<div className="popTitle">
-	    			<i className="iconfont icon-jinggaotanhaoicon"></i>
-	    			<span className="">您确定要暂停该计划吗？</span>
-	    		</div>
-	    		<div className="popText">
-	    			目标暂停后可重新发布。
-	    		</div>
-	    		<div className="popBtn">
-	    			<Button type="primary" onClick={() => this.sureStop()}>确定</Button>
-	    			<Button onClick={this.hideStopPop}>取消</Button>
-	    		</div>
-	    	</div>
-	    )
+	sureStop = ()=> {
+		
 	}
 
 	//重新发布
-	hideRestartPop = ()=>{
-		this.setState({
-	      	isPopRestartHide: false
-	    });
-	}
 	sureRestart = ()=> {
-		this.setState({ 
-			isPopRestartHide: false
-		});
-	}
-	isPopRestartHideChange=(visible)=>{
-		this.setState({ isPopRestartHide: visible });
-	}
-  	popoverRestartDom(){
-		return (
-	    	<div>
-	    		<div className="clearfix">
-	    			<i className="iconfont icon-chachaicon deleteIcon" onClick={this.hideRestartPop}></i>
-	    		</div>
-	    		<div className="popTitle">
-	    			<i className="iconfont icon-jinggaotanhaoicon"></i>
-	    			<span className="">您确定要重新发布该计划吗？</span>
-	    		</div>
-	    		<div className="popText">
-	    			目标重新发布后可进行再次编辑。
-	    		</div>
-	    		<div className="popBtn">
-	    			<Button type="primary" onClick={() => this.sureRestart()}>确定</Button>
-	    			<Button onClick={this.hideRestartPop}>取消</Button>
-	    		</div>
-	    	</div>
-	    )
+		
 	}
 	render() {
 		const { dataSource, status, isPopDeleteHide, isPopStopHide, isPopRestartHide } = this.state
@@ -240,6 +149,11 @@ class Plan extends PureComponent {
 		return (
 			<div>
 				{/*{this.props.match.params.id}*/}
+				<Breadcrumb separator=">">
+				    <Breadcrumb.Item>随访模板</Breadcrumb.Item>
+				    <Breadcrumb.Item>随访计划</Breadcrumb.Item>
+				    <Breadcrumb.Item>查看随访计划</Breadcrumb.Item>
+			  	</Breadcrumb>
 				<div className={`${styles.contentWrap} ${status=='add'?'':styles.hidden}`}>
 					<div className={styles.contentItem}>
 						<div className={styles.title}>
@@ -328,7 +242,7 @@ class Plan extends PureComponent {
 						<Button type="primary">保存</Button>
 					</div>
 				</div>
-				<div className={`${styles.checkContent} ${status=='stop'?styles.stopContent:''} ${status=='add'?styles.hidden:''}`}>
+				<div className={`${styles.checkContent} ${status=='stop'?styles.stopContent:''} ${status=='add'?styles.hidden:''}`}>					
 					<div className={styles.contentItem}>
 						<div className={styles.title}>
 							<div className={styles.titleText}>
@@ -382,34 +296,31 @@ class Plan extends PureComponent {
 							<i className={`iconfont icon-bi ${styles.footerIcon}`}></i>
 							<span>编辑</span>
 						</div>
-						
-						<Popover placement="bottomLeft"  content={this.popoverStopDom()} 
-					    	visible={isPopStopHide}
-					    	onVisibleChange={this.isPopStopHideChange}
-					    	trigger="click">
-				        	<div className={`${styles.footerItem} aLink ${status=='check'?'':styles.hidden}`}>
+						<PopoverSure title="您确定要暂停该计划吗？"
+							text="目标暂停后可重新发布。"
+							sureFunction={()=>this.sureStop()}>
+							<div className={`${styles.footerItem} aLink ${status=='check'?'':styles.hidden}`}>
 								<i className={`iconfont icon-lansezantingshiyong ${styles.footerIcon}`}></i>
 								<span>暂停使用</span>
 							</div>
-				      	</Popover>
-						<Popover placement="bottomLeft"  content={this.popoverRestartDom()} 
-					    	visible={isPopRestartHide}
-					    	onVisibleChange={this.isPopRestartHideChange}
-					    	trigger="click">
-				        	<div className={`${styles.footerItem} aLink ${status=='stop'?'':styles.hidden}`}>
+						</PopoverSure>
+						
+				      	<PopoverSure title="您确定要重新发布该计划吗？"
+							text="目标重新发布后可进行再次编辑。"
+							sureFunction={()=>this.sureRestart()}>
+							<div className={`${styles.footerItem} aLink ${status=='stop'?'':styles.hidden}`}>
 								<i className={`iconfont icon-grey_shanchu ${styles.footerIcon}`}></i>
 								<span>重新发布</span>
 							</div>
-				      	</Popover>
-						<Popover placement="bottomLeft"  content={this.popoverDelDom()} 
-					    	visible={isPopDeleteHide}
-					    	onVisibleChange={this.isPopDeleteHideChange}
-					    	trigger="click">
-				        	<div className={`${styles.footerItem} ${status=='stop'?'':styles.hidden}`}>
+						</PopoverSure>
+				      	<PopoverSure title="您确定要删除该计划吗？"
+							text="目标删除后将不可恢复。"
+							sureFunction={()=>this.sureDelete()}>
+							<div className={`${styles.footerItem} ${status=='stop'?'':styles.hidden}`}>
 								<i className={`iconfont icon-grey_shanchu ${styles.footerIcon}`}></i>
 								<span>删除</span>
 							</div>
-				      	</Popover>
+						</PopoverSure>
 					</div>
 				</div>
 				

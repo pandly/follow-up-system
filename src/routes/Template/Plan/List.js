@@ -1,6 +1,6 @@
 import { PureComponent } from 'react'
 import styles from './List.less'
-import { Input, Select } from 'antd';
+import { Input, Select, Breadcrumb } from 'antd';
 import { routerRedux } from 'dva/router'
 import { connect } from 'dva'
 
@@ -72,20 +72,24 @@ class Plan extends PureComponent {
 	handleChange(value) {
   		console.log(`selected ${value}`);
 	}
-	goDetail = () => {
-		this.props.dispatch(routerRedux.push('/template/plan/profile'));
+	goDetail(id){
+		this.props.dispatch(routerRedux.push('/template/plan/profile/'+id));
 	}
 	render() {
 		const { listData } = this.state
 		return (
 			<div>
 				<div className={styles.content}>
+					<Breadcrumb separator=">">
+					    <Breadcrumb.Item>随访模板</Breadcrumb.Item>
+					    <Breadcrumb.Item>随访计划</Breadcrumb.Item>
+				  	</Breadcrumb>
 					<div className={`${styles.title} clearfix`}>
 						<div className={styles.titleText}>
 							<i className={`iconfont icon-tongyongbiaotiicon ${styles.titleIcon}`}></i><span>随访计划</span>
 						</div>
 						<div className={styles.titleBtn}>
-							<span className={styles.addBtn}>
+							<span className={styles.addBtn} onClick={() => this.goDetail('add')}>
 								<i className={`iconfont icon-tianjiaicon ${styles.titleIcon}`}></i><span className={styles.text}>创建随访计划</span>
 							</span>
 							<Search
@@ -117,7 +121,7 @@ class Plan extends PureComponent {
 					<div className={styles.planList}>
 						{
 							listData.map(item => (
-								<PlanListCard key={item.id} listData={item} goDetail={this.goDetail}></PlanListCard>
+								<PlanListCard key={item.id} listData={item} goDetail={() => this.goDetail(item.id)}></PlanListCard>
 							))
 						}
 					</div>

@@ -1,4 +1,9 @@
 .content{
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 180px;
+	right: 0;
 	.title{
 		padding: 0 20px;
 		margin-top: 20px;
@@ -30,6 +35,7 @@
 			cursor: pointer;
 			.titleIcon{
 				vertical-align: middle;
+				background-color: transparent;
 			}
 			.text{
 				vertical-align: middle;
@@ -61,6 +67,7 @@
 	.selectWrap{
 		margin-top: 20px;
 		padding: 0 20px;
+		color: #666;
 		.text{
 			margin-right: 10px;
 			margin-left: 20px;
@@ -72,5 +79,11 @@
 	.planList{
 		margin-top: 20px;
 		padding-left: 20px;
+	}
+}
+
+@media screen and(max-width: 1620px) {
+	.title{
+		padding-right: 20px!important;
 	}
 }

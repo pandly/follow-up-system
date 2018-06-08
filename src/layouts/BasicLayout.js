@@ -18,12 +18,15 @@ class BasicLayout extends Component {
 		}
 		return (
 			<Fragment>
-				<Header />
-                <SiderMenu 
-                  menuData={ getMenuData() }
-                  {...this.props}
-                />
+				<div className={styles.headerWrap}>
+					<Header />
+				</div>
+                
                 <div className={styles.content}>
+                	<SiderMenu 
+                  		menuData={ getMenuData() }
+                  		{...this.props}
+                		/>
                 	<Switch>
                 		{
                 			getRoutes(match.path, routerData).map(item => (

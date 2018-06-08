@@ -1,10 +1,15 @@
 * {
 	box-sizing: border-box;
+<<<<<<< HEAD
 	font-family: 'PingFangSC-Regular';
 	user-select: none;
+=======
+	font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+>>>>>>> 380e8deac69dc0b6b5391794f7678e67983f1dcf
 }
 html, body, :global(#root) {
-  color: #333;
+  color: #333;  
+  background-color: #F4F5F6!important;
 }
 ul {
 	list-style: none;
@@ -17,6 +22,60 @@ li a {
 	width: 100%;
 	text-decoration: none !important;
 	color: #333;
+}
+
+/*-----------------------------------popover提示框---------------------------------------*/
+:global{
+	:root .ant-popover{
+		width: 300px;
+		.ant-popover-inner-content{
+			padding: 7px 10px 18px;
+		}
+		.deleteIcon{
+			float: right;
+			color: red;
+			font-size: 12px;
+			color: #ccc;
+			height: 12px;
+			cursor: pointer;
+		}
+		.icon-jinggaotanhaoicon{
+			color: #FF9B54;
+			font-size: 20px;
+		}
+		.popTitle{
+			padding: 0 22px;
+			line-height: 20px;
+			.iconfont{
+				margin-right: 10px;
+			}
+			span{
+				font-size: 14px;
+				color: #333333;
+				font-weight: 600;
+			}
+			.iconfont,span{
+				vertical-align: middle;
+			}
+		}
+		.popText{
+			font-size: 12px;
+			color: #666666;
+			padding: 10px 32px 0 52px;
+		}
+		.popBtn{
+			text-align: center;
+			margin-top: 13px;
+			.ant-btn{
+				width: 90px;
+				height: 30px!important;
+				line-height: 28px!important;
+				&:not(:last-child){
+					margin-right: 10px;
+				}
+			}
+		}
+	}
 }
 
 :global{
@@ -59,6 +118,10 @@ li a {
 		color:  #45A8E6;
 		cursor: pointer;
 	}
+	.delLink{
+		color: #F36969;
+		cursor: pointer;
+	}
 	//省略号
 	.text-hidden{
 		text-overflow: ellipsis;
@@ -70,6 +133,7 @@ li a {
 	.ant-table{
 		font-size: 12px!important;
 		color: #666!important;
+		border-bottom: 1px solid #F5F5F5;
 	}
 	.ant-table-thead > tr > th{
 		background-color: #eee!important;
@@ -77,7 +141,7 @@ li a {
 		color: #333!important;
 	}
 	.ant-table-thead > tr > th, .ant-table-tbody > tr > td{
-		padding: 10px!important;
+		padding: 10px 20px!important;
 		border-bottom: none!important;
 	}
 	.ant-table-thead > tr.ant-table-row-hover > td, .ant-table-tbody > tr.ant-table-row-hover > td, .ant-table-thead > tr:hover > td, .ant-table-tbody > tr:hover > td{
@@ -91,6 +155,9 @@ li a {
 	}
 	.ant-table-pagination.ant-pagination{
 		margin: 20px 0 0 0!important;
+	}
+	.ant-table-placeholder{
+		border-bottom: none!important;
 	}
 	
 	/*----------------------------------选择器-------------------------------------------*/
@@ -165,7 +232,7 @@ li a {
 	}
 	//清除键
 	.ant-select-selection__clear{
-		right: 8px!important;
+		right: 25px!important;
 		width: 16px!important;
     	height: 16px!important;
     	font-size: 16px!important;
@@ -365,9 +432,11 @@ li a {
 	.ant-btn{
 		border-color: #06AEA6!important;
 		border-radius: 0!important;
-		height: 30px!important;
-		line-height: 28px!important;
 		color: #06AEA6!important;
+	}
+	.ant-input-search-button{
+		height: 32px!important;
+		line-height: 28px!important;
 	}
 	.ant-btn-primary{
 		background-color: #06AEA6!important;
@@ -386,7 +455,7 @@ li a {
 		background-color: #06AEA6!important;
 	}
 	.ant-tabs{
-		color: #333!important;
+		color: #666!important;
 	}
 	.ant-tabs-nav .ant-tabs-tab{
 		margin: 0 30px 0 0!important;
@@ -397,7 +466,7 @@ li a {
 	}
 
 	/*-----------------------------datepicker--------------------------------*/
-	.ant-input{
+	.ant-calendar-picker-input{
 		border: 1px solid #ccc!important;
 		border-radius: 0!important;
 		padding: 7px 10px!important;
@@ -411,6 +480,8 @@ li a {
 	}
 	.ant-calendar-picker-icon:after{
 		font-size: 16px!important;
+		content: "\e621"!important;
+		font-family: 'iconfont'!important;
 	}
 	.ant-calendar-range-picker-input{
 		height: 18px!important;
@@ -667,6 +738,140 @@ li a {
 			background-color: #06AEA6!important;
 			color: #fff!important;
 		}
+	}
+	/*-------------------------数字选择器--------------------------*/
+	.ant-input-number{
+		vertical-align: middle;
+		border-radius: 0!important;
+		border: 1px solid #ccc!important;
+		&:hover, &:focus{
+			border-color: #ccc!important;
+		}
+	}
+	.ant-input-number-focused{
+		box-shadow: none!important;
+	}
+	.ant-input-number-input{
+		border-radius: 0!important;
+	}
+	.ant-input-number-handler-wrap{
+		opacity: 1!important;
+		border: none!important;
+		background: transparent!important;
+	}
+	.ant-input-number-handler-down{
+		border: none!important;
+	}
+	.ant-input-number-handler-up-inner:before{
+		content: '\E607'!important;
+	}
+	.ant-input-number-handler-down-inner:before{
+		content: '\E606'!important;
+	}
+	.ant-input-number-handler-down{
+		top: -4px!important;
+	}
+	.ant-input-number-handler-up-inner{
+		margin-top: -2px!important;
+	}
+	.ant-input-number-handler:active{
+		background: transparent!important;
+	}
+	.ant-input-number-handler-down:hover{
+		height: 50%!important;
+	}
+	.ant-input-number-handler-wrap:hover .ant-input-number-handler{
+		height: 50%!important;
+	}
+	.ant-input-number-handler:hover .ant-input-number-handler-up-inner, .ant-input-number-handler:hover .ant-input-number-handler-down-inner{
+		color: #28BEA3!important;
+	}
+	.ant-input-number-handler-up-disabled:hover .ant-input-number-handler-up-inner, .ant-input-number-handler-down-disabled:hover .ant-input-number-handler-down-inner{
+		color: rgba(0, 0, 0, 0.25)!important;
+	}
+	.ant-input-number-input{
+		font-size: 12px;
+		color: #333!important;
+	}
+
+
+	/*--------------------------------------textarea----------------------------------------------*/
+	textarea.ant-input{
+		resize: none;
+		vertical-align: top!important;
+		border: 1px solid #ccc!important;
+		border-radius: 0!important;
+		padding: 7px 10px!important;
+	}
+	/*--------------------------------------input----------------------------------------------*/
+	.ant-input{
+		border-radius: 0!important;
+	}
+	.ant-input:focus{
+		box-shadow: none!important;
+		border-color: #ccc!important;
+	}
+	.ant-input-disabled{
+		border: 1px solid #e8e8e8!important;
+		background-color: #f7f7f7!important;
+		color: #ccc!important;
+	}
+	/*----------------------------------------radio----------------------------------------------------*/
+	.ant-radio-checked .ant-radio-inner{
+		border-color: #06AEA6!important;
+	}
+	.ant-radio-inner:after{
+		background-color: #06AEA6!important;
+	}
+	.ant-radio-wrapper:hover .ant-radio .ant-radio-inner, .ant-radio:hover .ant-radio-inner, .ant-radio-focused .ant-radio-inner{
+		border-color: #06AEA6!important;
+	}
+	span.ant-radio + *{
+		padding-left: 10px!important;
+		padding-right: 10px!important;
+	}
+	/*----------------------------------------checkbox----------------------------------------------------*/
+	.ant-checkbox-checked .ant-checkbox-inner, .ant-checkbox-indeterminate .ant-checkbox-inner{
+		background-color: #fff!important;
+		border-color: #06AEA6!important;
+	}
+	.ant-checkbox-checked .ant-checkbox-inner:after{
+		border-top: 2px solid #06AEA6!important;
+		border-top: 0!important;
+    	border-left: 0!important;
+	}
+	.ant-checkbox-inner:after{
+		border: 2px solid #06AEA6!important;
+		border-top: 0!important;
+    	border-left: 0!important;
+	}
+	.ant-checkbox-inner{
+		border-radius: 0px!important;
+	}
+	.ant-checkbox-wrapper:hover .ant-checkbox-inner, .ant-checkbox:hover .ant-checkbox-inner, .ant-checkbox-input:focus + .ant-checkbox-inner{
+		border-color: #06AEA6!important;
+	}
+	.ant-checkbox-wrapper + span, .ant-checkbox + span{
+		padding-left: 10px!important;
+		padding-right: 10px!important;
+	}
+	/*----------------------------------------面包屑----------------------------------------------------*/
+	.ant-breadcrumb{
+		line-height: 30px!important;
+		background: #fff;
+		box-shadow: 0 1px 4px 0 rgba(202,202,202,0.50);
+		font-size: 12px!important;
+		color: #ccc!important;
+		padding: 0 20px!important;
+	}
+	.ant-breadcrumb a:hover{
+		color: #06AEA6!important;
+	}
+	.ant-breadcrumb > span:last-child{
+		color: #666!important;
+	}
+	.ant-breadcrumb-separator{
+		color: #999!important;
 	}
 }
 

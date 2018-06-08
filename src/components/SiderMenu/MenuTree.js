@@ -44,7 +44,7 @@ class MenuTree extends PureComponent {
 		let childrenItems = null
 		const { currentNode, level, currentPath } = this.props
 		const { spread } = this.state
-		const paddingLeft = { paddingLeft: 24 + level * 24 }
+		const paddingLeft = { paddingLeft: 24 + level * 33 }
       
 		if(currentNode.children) {
 			childrenItems = currentNode.children.map(node => <MenuTree key={node.path} currentNode={node} level={level + 1} currentPath={currentPath} />)

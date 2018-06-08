@@ -1,5 +1,5 @@
 import { PureComponent } from 'react'
-import { Select, Table } from 'antd'
+import { Select, Table, Breadcrumb } from 'antd'
 import { routerRedux } from 'dva/router'
 import { connect } from 'dva'
 import styles from './List.less'
@@ -92,7 +92,35 @@ class TodayMission extends PureComponent {
 			days: '10',
 			status: 'weidao'
 		}],
-		columns: [{
+		
+	}
+	
+	checkProfile = () => {
+		this.props.dispatch(routerRedux.push('/manage/todayMission/profile'));
+	}
+    
+	typeChangeText(type){
+		if(type=='yisuifang'){
+			return '已随访'
+		}else if(type=='yuqi'){
+			return '随访逾期'
+		}else if(type=='daisuifang'){
+			return '待随访'
+		}
+	}
+
+	changeTab(type){
+		this.setState({
+			missionType: type
+		})
+	}
+	handleChange(value) {
+  		console.log(`selected ${value}`);
+	}
+	
+	render() {
+		const { missionType, dataSource } = this.state
+		const columns = [{
 			title: '姓名',
 			dataIndex: 'name',
 			key: 'name'
@@ -128,37 +156,15 @@ class TodayMission extends PureComponent {
 			render: (text, record) => (
 				<a className="aLink" href="javascript:;" onClick={this.checkProfile}>查看随访</a>
 			)
-		}],
-	}
-	
-	checkProfile = () => {
-		this.props.dispatch(routerRedux.push('/manage/todayMission/profile'));
-	}
-    
-	typeChangeText(type){
-		if(type=='yisuifang'){
-			return '已随访'
-		}else if(type=='yuqi'){
-			return '随访逾期'
-		}else if(type=='daisuifang'){
-			return '待随访'
-		}
-	}
-
-	changeTab(type){
-		this.setState({
-			missionType: type
-		})
-	}
-	handleChange(value) {
-  		console.log(`selected ${value}`);
-	}
-	
-	render() {
-		const { missionType, dataSource, columns } = this.state
+		}]
+		
 		return (
 			<div>
 				<div className={styles.contentWrap}>
+					<Breadcrumb separator=">">
+					    <Breadcrumb.Item>随访管理</Breadcrumb.Item>
+					    <Breadcrumb.Item>今日任务</Breadcrumb.Item>
+				  	</Breadcrumb>
 					<div className={styles.title}>
 						<i className={`iconfont icon-tongyongbiaotiicon ${styles.titleIcon}`}></i><span>今日任务</span>
 					</div>
@@ -210,7 +216,6 @@ class TodayMission extends PureComponent {
 							}}/>
 						</div>
 					</div>
-					
 				</div>
 			</div>
 		)

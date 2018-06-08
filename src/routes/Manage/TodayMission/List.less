@@ -1,16 +1,15 @@
 .contentWrap{
-	padding: 20px;
 	position: absolute;
 	top: 0;
 	bottom: 0;
-	left: 0;
+	left: 180px;
 	right: 0;
-	max-width: 1380px;
-	margin: 0 auto;
 	.title{
 		font-size: 14px;
 		color: #4A4A4A;
 		line-height: 14px;
+		margin-top: 20px;
+		padding: 0 20px;
 		span{
 			vertical-align: middle;
 			font-weight: 600;
@@ -26,39 +25,45 @@
 	.content{
 		background-color: #fff;
 		box-shadow: 0 1px 4px 0 rgba(202,202,202,0.50);
-		margin: 0 20px;
+		margin-left: 20px;
 		padding: 20px;
 		position: absolute;
-		top: 56px;
+		top: 86px;
 		bottom: 20px;
 		right: 0;
 		left: 0;
 		overflow: auto;
 	}
 	.tabItem{
-		line-height: 40px;
+		line-height: 36px;
+		height: 40px;
 		display: inline-block;
 		border: 1px solid #32A6A0;
 		box-shadow: 0 1px 4px 0 rgba(202,202,202,0.50);
 		padding: 0 26px 0 15px;
-		color: #28BEA3;
+		color: #06AEA6;
 		margin-right: 10px;
 		cursor: pointer;
 		.tabIcon{
-			font-size: 16px;
+			height: 38px;
+			font-size: 18px;
 			margin-right: 10px;
 			display: inline-block;
-			vertical-align: top;
+			vertical-align: middle;
 		}
 		.text{
+			height: 38px;
 			font-size: 14px;
 			line-height: 40px;
 			margin-right: 26px;
 			display: inline-block;
-			vertical-align: top;
+			vertical-align: middle;
 		}
 		.number{
+			height: 38px;
 			font-size: 22px;
+			display: inline-block;
+			vertical-align: middle;
 		}
 	}
 	.tabItemChoosed{
@@ -120,5 +125,11 @@
 		.statusText{
 			vertical-align: middle;
 		}
+	}
+}
+
+@media screen and(max-width: 1620px) {
+	.content{
+		margin-right: 20px;
 	}
 }

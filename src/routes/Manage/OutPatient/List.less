@@ -2,13 +2,10 @@
 	position: absolute;
 	top: 0;
 	bottom: 0;
-	left: 0;
+	left: 180px;
 	right: 0;
-	// max-width: 1380px;
-	// min-width: 1098px;
-	// margin: 0 auto;
 	.title{
-		padding: 0 20px;
+		padding-left: 20px;
 		margin-top: 20px;
 		font-size: 14px;
 		color: #4A4A4A;
@@ -57,9 +54,9 @@
 		background-color: #fff;
 		box-shadow: 0 1px 4px 0 rgba(202,202,202,0.50);
 		padding: 20px;
-		margin: 20px;
+		margin: 20px 0 20px 20px;
 		position: absolute;
-		top: 52px;
+		top: 80px;
 		bottom: 0;
 		left: 0;
 		right: 0;
@@ -88,5 +85,14 @@
 				color: #28BEA3;
 			}
 		}
+	}
+}
+
+@media screen and(max-width: 1620px) {
+	.title{
+		padding-right: 20px!important;
+	}
+	.content{
+		margin-right: 20px!important;
 	}
 }

@@ -1,8 +1,10 @@
 import { PureComponent } from 'react'
 import styles from './List.less'
-import { Tabs, Select, DatePicker, Table, Input } from 'antd';
+import { Tabs, Select, DatePicker, Table, Input, Breadcrumb } from 'antd';
 import { routerRedux } from 'dva/router'
 import { connect } from 'dva'
+
+import RInput from 'components/RInput'
 
 const TabPane = Tabs.TabPane;
 const Option = Select.Option;
@@ -74,47 +76,7 @@ class OutPatient extends PureComponent {
 			days: '10',
 			daisuifangDate: '2018-04-10'
 		}],
-		columns: [{
-			title: '姓名',
-			dataIndex: 'name',
-			key: 'name'
-		},{
-			title: '基本信息',
-			key: 'info',
-			render: (text, record) => (
-				<span>{record.sex}/{record.age}岁</span>
-			)
-		},{
-			title: '科室',
-			dataIndex: 'dept',
-			key: 'dept'
-		},{
-			title: '出院诊断',
-			dataIndex: 'zhenduan',
-			key: 'zhenduan'
-		},{
-			title: '主管医生',
-			dataIndex: 'doctor',
-			key: 'doctor'
-		},{
-			title: '出院日期',
-			dataIndex: 'chuyuanDate',
-			key: 'chuyuanDate'
-		},{
-			title: '离院天数',
-			dataIndex: 'days',
-			key: 'days'
-		},{
-			title: '待随访日期',
-			dataIndex: 'daisuifangDate',
-			key: 'daisuifangDate'
-		},{
-			title: '操作',
-			key: 'action',
-			render: (text, record) => (
-				<a className="aLink" href="javascript:;" onClick={this.goDetail}>开始随访</a>
-			)
-		}],
+		
 		dataSource2: [{
 			key: '1',
 			name: '小玫瑰',
@@ -168,7 +130,60 @@ class OutPatient extends PureComponent {
 			callTime: '2分30秒',
 			status: false
 		}],
-		columns2: [{
+  	}
+  	goDetail = () =>{
+  		this.props.dispatch(routerRedux.push('/manage/outPatient/profile'));
+  	}
+  	callback(key) {
+	  	console.log(key);
+	}
+	onChange(date, dateString) {
+	  	console.log(date, dateString);
+	}
+	render() {
+		const { dataSource, dataSource2, value } = this.state
+		const columns = [{
+			title: '姓名',
+			dataIndex: 'name',
+			key: 'name'
+		},{
+			title: '基本信息',
+			key: 'info',
+			render: (text, record) => (
+				<span>{record.sex}/{record.age}岁</span>
+			)
+		},{
+			title: '科室',
+			dataIndex: 'dept',
+			key: 'dept'
+		},{
+			title: '出院诊断',
+			dataIndex: 'zhenduan',
+			key: 'zhenduan'
+		},{
+			title: '主管医生',
+			dataIndex: 'doctor',
+			key: 'doctor'
+		},{
+			title: '出院日期',
+			dataIndex: 'chuyuanDate',
+			key: 'chuyuanDate'
+		},{
+			title: '离院天数',
+			dataIndex: 'days',
+			key: 'days'
+		},{
+			title: '待随访日期',
+			dataIndex: 'daisuifangDate',
+			key: 'daisuifangDate'
+		},{
+			title: '操作',
+			key: 'action',
+			render: (text, record) => (
+				<a className="aLink" href="javascript:;" onClick={this.goDetail}>开始随访</a>
+			)
+		}]
+		const columns2 = [{
 			title: '姓名',
 			dataIndex: 'name',
 			key: 'name'
@@ -217,22 +232,13 @@ class OutPatient extends PureComponent {
 				<a className="aLink" href="javascript:;">开始随访</a>
 			)
 		}]
-  	}
-
-  	goDetail = () =>{
-  		this.props.dispatch(routerRedux.push('/manage/outPatient/profile'));
-  	}
-  	callback(key) {
-	  	console.log(key);
-	}
-	onChange(date, dateString) {
-	  	console.log(date, dateString);
-	}
-	render() {
-		const { dataSource, columns, dataSource2, columns2 } = this.state
 		return (
 			<div>
 				<div className={styles.contentWrap}>
+					<Breadcrumb separator=">">
+					    <Breadcrumb.Item>随访管理</Breadcrumb.Item>
+					    <Breadcrumb.Item>出院随访</Breadcrumb.Item>
+				  	</Breadcrumb>
 					<div className={`${styles.title} clearfix`}>
 						<div className={styles.titleText}>
 							<i className={`iconfont icon-tongyongbiaotiicon ${styles.titleIcon}`}></i><span>出院随访</span>

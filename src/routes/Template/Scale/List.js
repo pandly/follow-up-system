@@ -1,5 +1,5 @@
 import { PureComponent } from 'react'
-import { Input } from 'antd';
+import { Input, Breadcrumb } from 'antd';
 import styles from './List.less'
 import { connect } from 'dva'
 
@@ -55,6 +55,10 @@ class Scale extends PureComponent {
 		return (
 			<div>
 				<div className={styles.content}>
+					<Breadcrumb separator=">">
+					    <Breadcrumb.Item>随访模板</Breadcrumb.Item>
+					    <Breadcrumb.Item>随访量表</Breadcrumb.Item>
+				  	</Breadcrumb>
 					<div className={`${styles.title} clearfix`}>
 						<div className={styles.titleText}>
 							<i className={`iconfont icon-tongyongbiaotiicon ${styles.titleIcon}`}></i><span>随访量表</span>

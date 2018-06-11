@@ -89,6 +89,18 @@
 			display: flex;
 			min-height: 100%;
 			position: relative;
+			:global{
+				.ant-form-inline .ant-form-item{
+					margin-right: 0!important;
+					&:first-child{
+						margin-bottom: 20px!important;
+					}
+				}
+				.ant-form-inline .ant-form-explain{
+					left: 66px;
+				}
+				
+			}
 		}
 		.menuList{
 			width: 180px;
@@ -308,7 +320,10 @@
 					height: 40px!important;
 				}
 				.ant-table-thead > tr > th, .ant-table-tbody > tr > td{
-					padding: 0 0 0 20px!important;
+					padding: 0 0 0 10px!important;
+					&:first-child{
+						padding-left: 20px!important;
+					}
 				}
 			}
 			

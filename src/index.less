@@ -216,6 +216,13 @@ li a {
 			transform: rotate(180deg) scale(.7)!important;
 		}
 	}
+	.ant-select-disabled{
+		border-color: #e8e8e8!important;
+		color: #ccc!important;
+		.ant-select-selection{
+			background-color: #f7f7f7!important;
+		}		
+	}
 	//箭头
 	.ant-select-arrow{
 		right: 6.5px!important;
@@ -461,6 +468,15 @@ li a {
 	}
 
 	/*-----------------------------datepicker--------------------------------*/
+	.ant-calendar-picker{
+		vertical-align: middle;
+	}
+	.ant-calendar .ant-calendar-input-wrap{
+		display: none;
+	}
+	.ant-calendar-range-middle{
+		display: none;
+	}
 	.ant-calendar-picker-input{
 		border: 1px solid #ccc!important;
 		border-radius: 0!important;
@@ -471,7 +487,7 @@ li a {
 		font-size: 16px!important;
 		width: 15px!important;
     	height: 15px!important;
-    	right: 11px!important;
+    	right: 35px!important;
 	}
 	.ant-calendar-picker-icon:after{
 		font-size: 16px!important;
@@ -565,7 +581,7 @@ li a {
 			position: absolute;
 			top: 8px;
 			right: -4px;
-			left: 34px;
+			left: 33px;
 			bottom: 8px;
 		}
 	}
@@ -610,13 +626,13 @@ li a {
 		}
 	}
 	.ant-calendar-range-middle{
-		margin-left: -178px!important;
+		// margin-left: -178px!important;
 	}
 	.ant-calendar-range-right .ant-calendar-date-input-wrap{
-		margin-left: -167px!important;
+		// margin-left: -167px!important;
 	}
 	.ant-calendar-range .ant-calendar-input, .ant-calendar-range .ant-calendar-time-picker-input{
-		height: 20px!important;
+		// height: 20px!important;
 	}
 	.ant-calendar-range-picker-input{
 		text-align: left!important;
@@ -801,6 +817,10 @@ li a {
 	/*--------------------------------------input----------------------------------------------*/
 	.ant-input{
 		border-radius: 0!important;
+		color: #333!important;
+		&:hover{
+			border-color: #ccc!important;
+		}
 	}
 	.ant-input:focus{
 		box-shadow: none!important;

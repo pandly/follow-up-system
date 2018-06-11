@@ -1,41 +1,35 @@
 import { PureComponent } from 'react'
 import styles from './Profile.less'
 import patientInfo from '../../../assets/patient.png'
-import { Select, Table, Input, Button, Breadcrumb } from 'antd';
+import { Select, Table, Input, Button, Breadcrumb, Form, message } from 'antd';
+import { connect } from 'dva'
 
 import Modal from 'components/Modal'
 
 const Option = Select.Option;
 const { TextArea } = Input;
+const FormItem = Form.Item
+
+@Form.create()
 
 class SatisfactionDetail extends PureComponent {
 	state = {
-		dataSource: [{
-			key: '1',
-			name:'他克莫司(华东)胶囊',
-			specification:'1毫克*50粒',
-			amount:'1盒',
-			usage:'每次0.5mg   一日一次  口服'
-		},{
-			key: '2',
-			name:'他克莫司(华东)胶囊',
-			specification:'1毫克*50粒',
-			amount:'1盒',
-			usage:'每次0.5mg   一日一次  口服'
-		},{
-			key: '3',
-			name:'他克莫司(华东)胶囊',
-			specification:'1毫克*50粒',
-			amount:'1盒',
-			usage:'每次0.5mg   一日一次  口服'
-		}],
 		conclusionShow: false,
 		medicineShow: false,
 		commentShow: false,
-		detailShow: false
+		detailShow: false,
+		remarkShow: false,
+		inhospitalId: this.props.match.params.id,
+		medicineSquareTime: '',
+		medicineResident: '',
+		remarkReason: '',
+		remarkDes: '',
 	}
 	
-	hideIdCard(id){
+	hideIdCard=(id)=>{
+		if(!id){
+			return
+		}
 		if(id.length==18){
 			return String(id).replace(String(id).substr(4,10),'**********')
 		}else if(id.length==15){
@@ -84,20 +78,104 @@ class SatisfactionDetail extends PureComponent {
 			commentShow: false
 		})
 	}
+	addComment = (e) => {
+		e.preventDefault();
+		this.props.form.validateFields((err, values) => {
+			if(!err){
+				console.log('wwww', values)
+				const param = {
+					taskId: this.props.patientDetail.satisfyDetail.satisfyTask.taskId,
+					remarkReason: values.reason,
+					remarkDes: values.desc
+				}
+				console.log(param)
+				this.props.dispatch({
+					type: 'patientDetail/addRemark',
+					payload: param
+				}).then(()=>{
+					this.setState({
+						commentShow: false,
+						remarkReason: values.reason,
+						remarkDes: values.desc,
+						remarkShow: true
+					})
+					message.success('添加成功！')
+				})
+			}
+		})
+
+	}
+
+	componentDidMount( ){
+		this.props.dispatch({
+			type: 'global/fetchDict'
+		})
+  		this.props.dispatch({
+  			type: 'patientDetail/fetchSummary',
+  			payload: this.state.inhospitalId
+  		})
+  		this.props.dispatch({
+  			type: 'patientDetail/fetchMedicine',
+  			payload: this.state.inhospitalId
+  		}).then(()=>{
+  			this.setState({
+				medicineSquareTime: this.props.patientDetail.outMedicine[0].squareTime,
+				medicineResident: this.props.patientDetail.outMedicine[0].resident
+			})
+  		})
+		this.props.dispatch({
+			type: 'patientDetail/fetchSatisfy',
+			payload: this.state.inhospitalId
+		}).then(()=>{
+			this.setState({
+				remarkShow: this.props.patientDetail.satisfyDetail.satisfyTask.remarkReason?true:false,
+				remarkReason: this.props.patientDetail.satisfyDetail.satisfyTask.remarkReason,
+				remarkDes: this.props.patientDetail.satisfyDetail.satisfyTask.remarkDes
+			})
+		})		
+	}
+
+
 	render(){
-		const { conclusionShow, medicineShow, commentShow, detailShow, dataSource } = this.state
+		const { 
+			conclusionShow, 
+			medicineShow, 
+			commentShow, 
+			detailShow,
+			remarkShow,
+			remarkReason,
+			remarkDes,
+			medicineSquareTime,
+			medicineResident
+		} = this.state
+
+		const {
+			satisfyDetail,
+			outSummary,
+			outMedicine
+		} = this.props.patientDetail
+
+		const {dictionary} = this.props.global
+
+		const {
+			getFieldDecorator
+		} = this.props.form
+
 		const columns = [{
 			title: '药品名称',
-			dataIndex: 'name',
-			key: 'name'
+			dataIndex: 'drugsName',
+			key: 'drugsName'
 		},{
 			title: '药品规格',
-			dataIndex: 'specification',
-			key: 'specification'
+			dataIndex: 'drugSpecifications',
+			key: 'drugSpecifications'
 		},{
 			title: '药品数量',
 			dataIndex: 'amount',
-			key: 'amount'
+			key: 'amount',
+			render: (text, record) => (
+				<span>{record.number+record.unit}</span>
+			)
 		},{
 			title: '用法用量',
 			dataIndex: 'usage',
@@ -119,34 +197,34 @@ class SatisfactionDetail extends PureComponent {
 							<div className={styles.info}>
 								<div className={styles.infoItemWrap}>
 									<div className={styles.infoItem}>
-										<span className={styles.basicInfo}>赵默笙</span>
-										<span className={styles.basicInfo}>女</span>
-										<span className={styles.basicInfo}>18岁</span>
+										<span className={styles.basicInfo}>{satisfyDetail.patientName}</span>
+										<span className={styles.basicInfo}>{satisfyDetail.sex}</span>
+										<span className={styles.basicInfo}>{satisfyDetail.age}岁</span>
 									</div>
 									<div className={styles.infoItem}>
 										<span className={styles.label}>身份证号：</span>
-										<span className={styles.text}>{this.hideIdCard('330601199010100011')}</span>
+										<span className={styles.text}>{this.hideIdCard(satisfyDetail.cardNo)}</span>
 									</div>
 								</div>
 								<div className={styles.infoItemWrap}>									
 									<div className={styles.infoItem}>
 										<span className={styles.label}>联系人：</span>
-										<span className={styles.text}>儿子 何照</span>
+										<span className={styles.text}>{satisfyDetail.patientRelationship} {satisfyDetail.contactPeople}</span>
 									</div>
 									<div className={styles.infoItem}>
 										<span className={styles.label}>费用类型：</span>
-										<span className={styles.text}>市医保</span>
+										<span className={styles.text}>{satisfyDetail.costType}</span>
 									</div>
 									
 								</div>
 								<div className={styles.infoItemWrap}>
 									<div className={styles.infoItem}>
 										<span className={styles.label}>联系电话：</span>
-										<span className={styles.text}>18866669999</span>
+										<span className={styles.text}>{satisfyDetail.contactPhone}</span>
 									</div>
 									<div className={styles.infoItem}>
 										<span className={styles.label}>家庭住址：</span>
-										<span className={`${styles.text} text-hidden`}>浙江省杭州市下城区东新路xxxx小区11111111</span>
+										<span className={`${styles.text} text-hidden`}>{satisfyDetail.contactAddress}</span>
 									</div>
 								</div>
 							</div>
@@ -166,25 +244,11 @@ class SatisfactionDetail extends PureComponent {
 									<div className={styles.line}>
 										<div className={styles.infoItem}>
 											<span className={styles.label}>住院科室：</span>
-											<span className={`${styles.text} text-hidden`}>肾内科肾内科肾内科肾内科</span>
+											<span className={`${styles.text} text-hidden`}>{satisfyDetail.hospitalizationDepartment}</span>
 										</div>
 										<div className={styles.infoItem}>
 											<span className={styles.label}>转归情况：</span>
-											<span className={`${styles.text} text-hidden`}>逐渐可见好转</span>
-										</div>
-										<div className={styles.infoItem}>
-											<span className={styles.label}>出院小结：</span>
-											<span className={`${styles.text} aLink`} onClick={this.showConclusion}>点击查看</span>
-										</div>
-									</div>
-									<div className={styles.line}>
-										<div className={styles.infoItem}>
-											<span className={styles.label}>病区：</span>
-											<span className={styles.text}>0501</span>
-										</div>
-										<div className={styles.infoItem}>
-											<span className={styles.label}>出院日期：</span>
-											<span className={styles.text}>2018-01-06</span>
+											<span className={`${styles.text} text-hidden`}>{satisfyDetail.physicalCondition}</span>
 										</div>
 										<div className={styles.infoItem}>
 											<span className={styles.label}>出院带药：</span>
@@ -193,12 +257,12 @@ class SatisfactionDetail extends PureComponent {
 									</div>
 									<div className={styles.line}>
 										<div className={styles.infoItem}>
-											<span className={styles.label}>床号：</span>
-											<span className={styles.text}>0501</span>
+											<span className={styles.label}>病区：</span>
+											<span className={styles.text}>{satisfyDetail.wards}</span>
 										</div>
 										<div className={styles.infoItem}>
-											<span className={styles.label}>住院天数：</span>
-											<span className={styles.text}>4天</span>
+											<span className={styles.label}>出院日期：</span>
+											<span className={styles.text}>{satisfyDetail.dischargeTime}</span>
 										</div>
 										<div className={styles.infoItem}>
 											<span className={styles.label}>随访：</span>
@@ -206,122 +270,172 @@ class SatisfactionDetail extends PureComponent {
 												<span className="aLink">已随访</span>
 												<span style={{display: 'none'}}>未随访</span>
 											</span>
-										</div>									
+										</div>	
 									</div>
 									<div className={styles.line}>
-										<div className={styles.specialLine}>
-											<div className={styles.infoItem}>
-												<span className={styles.label}>住院号：</span>
-												<span className={styles.text}>12136</span>
-											</div>
-											<div className={styles.infoItem}>
-												<span className={styles.label}>主管医生：</span>
-												<span className={styles.text}>何以玫</span>
-											</div>
+										<div className={styles.infoItem}>
+											<span className={styles.label}>床号：</span>
+											<span className={styles.text}>{satisfyDetail.bedNumber}</span>
 										</div>
 										<div className={styles.infoItem}>
-											<span className={styles.label}>出院诊断：</span>
-											<span className={`${styles.text} text-hidden`}>肾小球肾炎肾小球肾炎肾小球肾炎肾小球肾炎</span>
+											<span className={styles.label}>住院天数：</span>
+											<span className={styles.text}>{satisfyDetail.hospitalizationDays}天</span>
 										</div>
 										<div className={styles.infoItem}>
 											<span className={styles.label}>随访备注：</span>
 											<span className={styles.text}>
-												<span style={{display: 'none'}} className="aLink" onClick={this.showComment}>点击备注</span>
-												<span >
-													<span className={styles.remark}>随访状态不符</span>
-													<span className="aLink">点击查看</span>
+												<span style={{display: remarkShow?'none':'inline'}} className="aLink" onClick={this.showComment}>点击备注</span>
+												<span style={{display: remarkShow?'inline':'none'}} >
+													<span className={styles.remark}>
+														{
+															dictionary['REMARK_CAUSE']?
+														      	dictionary['REMARK_CAUSE'].map(item => (
+														      		remarkReason==item.code?item.value:''
+														      	))
+												      		:''
+														}
+													</span>
+													<span className="aLink" onClick={this.showComment}>点击查看</span>
 												</span>
 											</span>
+										</div>								
+									</div>
+									<div className={styles.line}>
+										<div className={styles.infoItem}>
+											<span className={styles.label}>住院号：</span>
+											<span className={`${styles.text} text-hidden`}>{satisfyDetail.inhospitalId}</span>
+										</div>
+										<div className={styles.infoItem}>
+											<span className={styles.label}>出院诊断：</span>
+											<span className={`${styles.text} text-hidden`}>{satisfyDetail.dischargeDiagnosis}</span>
+										</div>
+										
+									</div>
+									<div className={styles.line}>
+										<div className={styles.infoItem}>
+											<span className={styles.label}>主管医生：</span>
+											<span className={styles.text}>{satisfyDetail.resident}</span>
+										</div>
+										<div className={styles.infoItem}>
+											<span className={styles.label}>出院小结：</span>
+											<span className={`${styles.text} aLink`} onClick={this.showConclusion}>点击查看</span>
 										</div>
 									</div>
 								</div>
 							</div>
 							<Modal title="添加备注" closable={false} visible={commentShow} type="small"
 								 onCancel={this.hideComment}>
-								<div className={styles.stopItem}>
-									<span className={styles.label}>备注原因</span>
-									<Select defaultValue="lucy" style={{ width: 353 }}
-										allowClear>
-								      	<Option value="lucy">Lucy</Option>
-								      	<Option value="111">111</Option>
-								      	<Option value="222">222</Option>
-								      	<Option value="333">333</Option>
-								    </Select>
-								</div>
-								<div className={styles.stopItem}>
-									<span className={styles.label}>描&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;述</span>
-									<TextArea style={{ width: 353, height: 120 }} />
-								</div>
-								<div className={styles.stopBtn}>
-									<Button type="primary">确认</Button>
-									<Button onClick={this.hideComment}>取消</Button>								
-								</div>
+								<Form onSubmit={this.addComment}>
+									<FormItem>
+										<div className={styles.stopItem}>
+											<span className={styles.label}>备注原因</span>
+											{
+												getFieldDecorator('reason',{
+													initialValue: remarkReason,
+													rules: [{ required: true, message: '请输入备注原因！'}]
+												})(
+													<Select placeholder="请选择" style={{ width: 353 }}
+														allowClear>
+												      	{
+												      		dictionary['REMARK_CAUSE']?
+														      	dictionary['REMARK_CAUSE'].map(item => (
+														      		<Option key={item.code} value={item.code}>{item.value}</Option>
+														      	))
+												      		:''
+									      				}
+												    </Select>
+												)
+											}
+											
+										</div>
+									</FormItem>
+									<FormItem>
+										<div className={styles.stopItem}>
+											<span className={styles.label}>描述</span>
+											{
+												getFieldDecorator('desc',{
+													initialValue: remarkDes,
+													rules: [{ required: true, message: '请输入描述！'}]
+												})(
+													<TextArea style={{ width: 353, height: 120 }} />
+												)
+											}
+											
+										</div>
+									</FormItem>
+									<div className={styles.stopBtn}>
+											<Button type="primary" htmlType="submit">确认</Button>
+											<Button onClick={this.hideComment}>取消</Button>								
+										</div>
+								</Form>
+								
 							</Modal>
 							<Modal title="出院小结" closable={true} visible={conclusionShow} onCancel={this.hideConclusion}>
 								<div className={styles.conclusionTitle}>
 									<div className={styles.titleItem}>
-										<span className={styles.label}>开方时间：</span>
-										<span className={styles.text}>2018-04-18</span>
+										<span className={styles.label}>病区：</span>
+										<span className={styles.text}>{outSummary.wards}</span>
 									</div>
 									<div className={styles.titleItem}>
-										<span className={styles.label}>医师：</span>
-										<span className={styles.text}>何以玫</span>
+										<span className={styles.label}>床号：</span>
+										<span className={styles.text}>{outSummary.bedNumber}</span>
 									</div>
 								</div>
 								<div className={styles.conclusionContent}>
 									<div>
 										<div className={`${styles.item} ${styles.specialItem}`}>
 											<span className={styles.label}>入院日期：</span>
-											<span className={styles.text}>2018-04-18</span>
+											<span className={styles.text}>{outSummary.admittingTime}</span>
 										</div>
 										<div className={`${styles.item} ${styles.specialItem}`}>
 											<span className={styles.label}>出院日期：</span>
-											<span className={styles.text}>2018-04-18</span>
+											<span className={styles.text}>{outSummary.dischargeTime}</span>
 										</div>
 										
 									</div>
 									<div className={styles.item}>
 										<span className={styles.label}>入院诊断：</span>
-										<span className={styles.text}>1.动脉粥样硬化；2.脑供血不足。</span>
+										<span className={styles.text}>{outSummary.admittingDiagnosis}</span>
 									</div>
 									<div className={styles.item}>
 										<span className={styles.label}>出院诊断：</span>
-										<span className={styles.text}>1.右侧基底节区腔隙性脑梗；2.脑供血不足；3.颈椎病；4.前列腺肥大。</span>
+										<span className={styles.text}>{outSummary.dischargeDiagnosis}</span>
 									</div>
 									<div className={styles.item}>
 										<span className={styles.label}>入院情况：</span>
-										<span className={styles.text}>患者因反复出现头昏、曾在外院诊断为“脑供血不足”，2年来一直未予用药治疗。病程中，头昏症状反反复复出现，尤其起床时症状明显，发作时无黑朦，头昏无头晕，无耳鸣、脑鸣，休息片刻能     自行缓解；偶有胸闷，无视物旋转及晕厥，无肢体麻木、无四肢抽搐。现发作频次较过去是有所增加，故而入住本院检查。目前，患者精神尚好，饮食正常，睡眠尚好，大、小便正常。</span>
+										<span className={styles.text}>{outSummary.admittingDescription}</span>
 									</div>
 									<div className={styles.item}>
 										<span className={styles.label}>住院经过：</span>
-										<span className={styles.text}>入院后健康宣教；完善相关检查；,一般检查无明显异常，DR示：胸部正位片未见异常，颈椎病；头颅CT示：右侧基底节区腔隙性脑梗塞，予以了阿司匹林抗凝、脑心通改善脑部微循环、倍他司汀缓解头昏，非那雄胺改善前列腺。</span>
+										<span className={styles.text}>{outSummary.hospitalizationCourse}</span>
 									</div>
 									<div className={styles.item}>
 										<span className={styles.label}>出院情况：</span>
-										<span className={styles.text}>好转。患者偶尔有头晕头昏，一般情况好，睡眠好，二便正常。查体：BP120/80mmHg，神志清晰，精神尚可，口唇紫绀，颈软，颈静脉无怒张，两肺呼吸音粗，未闻及干湿性罗音。心率68次/分，心律齐，各瓣膜听诊区未闻及病理性杂音，腹软，肠鸣音正常存在， 四肢肌力四级，生理反射存在，病理反射巴氏征等未引出。今日给予办理出院。</span>
+										<span className={styles.text}>{outSummary.dischargeCondition}</span>
 									</div>
 									<div className={styles.item}>
 										<span className={styles.label}>住院医嘱：</span>
-										<span className={styles.text}>1.注意休息；2.清淡饮食；3.适量颈椎运动；4.坚持服药。</span>
+										<span className={styles.text}>{outSummary.doctorAdvance}</span>
 									</div>
 									<div className={styles.sign}>
-										签名：何以玫
+										签名：{outSummary.recordMember}
 									</div>
 								</div>
 							</Modal>
 							<Modal title="出院带药" closable={true} visible={medicineShow} onCancel={this.hideMedicine}>
 								<div className={styles.medicineTitle}>
 									<div className={styles.item}>
-										<span className={styles.label}>病区：</span>
-										<span className={styles.text}>五病区</span>
+										<span className={styles.label}>开方时间：</span>
+										<span className={styles.text}>{medicineSquareTime}</span>
 									</div>
 									<div className={styles.item}>
-										<span className={styles.label}> 床号：</span>
-										<span className={styles.text}>0501</span>
+										<span className={styles.label}>医师：</span>
+										<span className={styles.text}>{medicineResident}</span>
 									</div>
 								</div>
 								<div className={styles.medicineContent}>
-									<Table dataSource={dataSource} columns={columns} pagination={false}/>
+									<Table dataSource={outMedicine} columns={columns} pagination={false}
+										rowKey="incrementId"/>
 								</div>
 							</Modal>
 							<Modal title="随访详情" closable={true} visible={detailShow} onCancel={this.hideDetail}>
@@ -337,4 +451,6 @@ class SatisfactionDetail extends PureComponent {
 	}
 }
 
-export default SatisfactionDetail
+export default connect(({ patientDetail, global }) => ({
+  patientDetail, global
+}))(SatisfactionDetail);

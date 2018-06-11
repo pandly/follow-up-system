@@ -37,7 +37,7 @@
 				padding-top: 8px;
 				line-height: 20px;
 				font-size: 14px;	
-
+	
 				.basicInfo{
 					margin-left: 10px;
 					color: #666;
@@ -124,6 +124,7 @@
 				}
 				.line{
 					display: inline-block;
+					vertical-align: top;
 					&:first-child{
 						margin-right: 50px;
 						.text{
@@ -138,28 +139,18 @@
 					}
 					&:nth-child(3){
 						margin-right: 43px;
-						.text{
-							max-width: 96px;
-						}
 					}
-					&:last-child{
-						.specialLine{
-							.infoItem{
-								display: inline-block;
-								&:first-child{
-									margin-right: 180px;
-								}
-							}
-						}
+					&:nth-child(4){
+						margin-right: 43px;
 						.text{
-							max-width: 225px;
+							max-width: 151px;
 						}
 					}
 				}
 			}
 		}
 		.stopItem{
-			margin-top: 20px;
+			// margin-top: 20px;
 			&:first-child{
 				margin-top: 0;
 			}
@@ -167,6 +158,11 @@
 				margin-right: 10px;
 				color: #333;
 				font-size: 14px;
+				width: 56px;
+				display: inline-block;
+				text-align: right;
+				line-height: 34px;
+				vertical-align: top;
 			}
 		}
 		.stopText{
@@ -177,7 +173,6 @@
 		}
 		.stopBtn{
 			text-align: center;
-			padding-top: 20px;
 			:global{
 				.ant-btn{
 					width: 96px!important;
@@ -188,6 +183,26 @@
 					}
 				}
 			}
+		}
+		:global{
+			.ant-form-item{
+				margin-bottom: 20px!important;
+			}
+			.ant-form-item-with-help{
+				margin-bottom: 0!important;
+			}
+			.ant-form-explain{
+				margin-left: 66px;
+				margin-top: 0px!important;
+				line-height: 20px!important;
+			}
+			.ant-form-item-control{
+				line-height: 34px!important;
+			}
+			.ant-select{
+				vertical-align: top;
+			}
+			
 		}
 		.conclusionTitle{
 			padding-bottom: 10px;

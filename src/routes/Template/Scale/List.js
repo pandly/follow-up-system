@@ -1,57 +1,67 @@
 import { PureComponent } from 'react'
-import { Input, Breadcrumb } from 'antd';
+import { Input, Breadcrumb, Spin, message } from 'antd';
 import styles from './List.less'
 import { routerRedux } from 'dva/router'
 import { connect } from 'dva'
 
 import TableListCard from 'components/TableListCard'
+import Empty from 'components/Empty'
 
 const Search = Input.Search;
 
 class Scale extends PureComponent {
-	state = {}
+	state = {
+		title: ''
+	}
 	goDetail = () => {
 		this.props.dispatch(routerRedux.push('/template/scale/profile'));
 	}
+	searchScale = (value) => {
+		this.setState({
+  			title: value
+  		}, ()=>{
+  			this.getData()
+  		})
+	}
+	getData(){
+		this.props.dispatch({
+			type: 'scale/fetchScaleList',
+			payload: {
+				title: this.state.title
+			}
+		})
+	}
+	sureDelete(data){
+		if(data.useNumber>0){
+			let templateName = ''
+			data.templateName.forEach((item, index) => {
+				templateName = index==data.templateName.length-1?
+					templateName + item
+					:templateName + item + '，'
+			})
+			message.error(`该量表已被模板${templateName}使用，无法删除！`)
+		}else{
+			this.props.dispatch({
+				type: 'scale/deleteScale',
+				payload: data.scaleId
+			}).then(()=>{
+				message.success('删除成功！')
+				this.getData()
+			})
+		}
+		
+	}
+	copyTable(item){
+		console.log(item,'copy')
+	}
+	componentWillMount(){
+		this.getData()
+	}
 	render() {
-		const tableList = [{
-			id:1,
-			name: '感染科结核病患者随访登记表感染科结核病患者随访登记表',
-			question: 20,
-			times: 0,
-			sign: false
-		},{
-			id:2,
-			name: '感染科结核病患者随访登记表感染科结核病患者随访登记表感染科结核病患者随访登记表感染科结核病患者随访登记表',
-			question: 20,
-			times: 0,
-			sign: true
-		},{
-			id:3,
-			name: '调查表',
-			question: 20,
-			times: 0,
-			sign: false
-		},{
-			id:4,
-			name: '浙江省杭州市第一人民医院小儿患病统计调查表',
-			question: 20,
-			times: 4,
-			sign: false
-		},{
-			id:5,
-			name: '调查表结核病登记表',
-			question: 20,
-			times: 6,
-			sign: false
-		},{
-			id:6,
-			name: '结核病患者随访登记表',
-			question: 20,
-			times: 20,
-			sign: false
-		}]
-
+		const {
+			scaleList,
+        	scaleListLoading
+		} = this.props.scale
 
 		return (
 			<div>
@@ -71,15 +81,29 @@ class Scale extends PureComponent {
 							<Search
 								style={{width: 320}}
 						      	placeholder="量表标题"
-						      	onSearch={value => console.log(value)}
+						      	onSearch={this.searchScale}
 						      	enterButton
 						    />
 						</div>
 					</div>
-					<div className={styles.tableWrap}>
-						{ tableList.map(item => (
-							 <TableListCard key={item.id} listData={item} goDetail={this.goDetail}></TableListCard>
-						))}
+					<div className={styles.listWrap}>
+						<Spin spinning={scaleListLoading} size="large">
+							<div className={styles.tableWrap}>
+								{
+									scaleList&&scaleList.length<1&&!scaleListLoading?
+										<Empty></Empty>
+										:
+										scaleList.map(item => (
+											<TableListCard  
+												key={item.scaleId} 
+												listData={item} 
+												goDetail={this.goDetail}
+												sureDelete={()=>this.sureDelete(item)}
+												copyTable={()=>this.copyTable(item)}></TableListCard>
+										))					    					
+								}
+							</div>
+						</Spin>
 					</div>
 				</div>
 			</div>

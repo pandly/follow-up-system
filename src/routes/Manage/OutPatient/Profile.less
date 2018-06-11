@@ -89,6 +89,18 @@
 			display: flex;
 			min-height: 100%;
 			position: relative;
+			:global{
+				.ant-form-inline .ant-form-item{
+					margin-right: 0!important;
+					&:first-child{
+						margin-bottom: 20px!important;
+					}
+				}
+				.ant-form-inline .ant-form-explain{
+					left: 66px;
+				}
+				
+			}
 		}
 		.menuList{
 			width: 180px;
@@ -228,6 +240,7 @@
 				width: 56px;
 				display: inline-block;
 				text-align: right;
+				line-height: 34px;
 			}
 		}
 		.stopText{
@@ -303,6 +316,15 @@
 					.delLink{
 						color: #ccc!important;
 						cursor: default;
+					}
+				}
+				tr{
+					height: 40px!important;
+				}
+				.ant-table-thead > tr > th, .ant-table-tbody > tr > td{
+					padding: 0 0 0 10px!important;
+					&:first-child{
+						padding-left: 20px!important;
 					}
 				}
 			}

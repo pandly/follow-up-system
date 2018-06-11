@@ -50,10 +50,14 @@ export default class ListCard extends Component {
 	    });
 	}
 	sureDelete = (item)=> {
+		this.props.sureDelete()
 		this.setState({ 
 			isPopDeleteHide: false,
 			isBtnShow: false,
 		});
+	}
+	copyTable = () => {
+		this.props.copyTable()
 	}
 	sureSign = (item)=> {
 		console.log(item)
@@ -68,13 +72,13 @@ export default class ListCard extends Component {
 		return (
 			<div className={styles.tableItemWrap} onMouseOver={this.showBtn} onMouseLeave={this.hideBtn} >
 				<div className={styles.tableItem} onClick={this.props.goDetail}>
-					<div className={styles.tableTitle}>{listData.name}</div>
+					<div className={styles.tableTitle}>{listData.title}</div>
 					<div className="clearfix">
 						<div className={styles.info}>
 							<span className={styles.label}>题量：</span>
-							<span className={styles.value}>{listData.question}</span>
+							<span className={styles.value}>{listData.questionAmount}</span>
 							<span className={styles.label}>应用次数：</span>
-							<span className={styles.value}>{listData.times}</span>
+							<span className={styles.value}>{listData.useNumber}</span>
 						</div>
 						
 					</div>
@@ -89,8 +93,9 @@ export default class ListCard extends Component {
 				</PopoverSure>
 		      	<div className={styles.tableBtn} style={{display: isBtnShow?'inline-block':'none'}}  
 					onClick={this.showBtn} onMouseOver={this.showBtn}>
-					<Tooltip placement="top" title={'复制'}>
-				        <i className={`iconfont icon-fuzhiicon ${styles.tableIcon}`}></i>
+					<Tooltip placement="top" title={'复制'} >
+				        <i className={`iconfont icon-fuzhiicon ${styles.tableIcon}`}
+				        	onClick={this.copyTable}></i>
 				    </Tooltip>
 				    <Popover placement="bottomLeft"  content={this.popoverDelDom(listData)} 
 				    	visible={isPopDeleteHide}

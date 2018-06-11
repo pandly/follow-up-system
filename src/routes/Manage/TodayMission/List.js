@@ -1,49 +1,59 @@
 import { PureComponent } from 'react'
-import { Select, Table, Breadcrumb } from 'antd'
+import { Select, Table, Breadcrumb, DatePicker, Spin } from 'antd'
 import { routerRedux } from 'dva/router'
 import { connect } from 'dva'
 import styles from './List.less'
+import moment from 'moment'
+import empty from '../../../assets/noTask.png'
 
 const Option = Select.Option;
+const { RangePicker } = DatePicker;
 
 const statusDom = (text, record) => {
-	switch(text.status){
-		case 'yisuifang':
-			return (
-				<span >
-					<span className={`${styles.status} ${styles.grey}`}></span>
-					<span className={styles.statusText}>已随访</span>
-				</span>
-			)
-		case 'yuqi':
-			return (
-				<span >
-					<span className={`${styles.status} ${styles.red}`}></span>
-					<span className={styles.statusText}>随访逾期</span>
-				</span>
-			)
-		case 'daisuifang':
-			return (
-				<span >
-					<span className={`${styles.status} ${styles.green}`}></span>
-					<span className={styles.statusText}>待随访</span>
-				</span>
-			)
-		case 'weidao':
-			return (
-				<span >
-					<span className={`${styles.status} ${styles.yellow}`}></span>
-					<span className={styles.statusText}>时间未到</span>
-				</span>
-			)
-		default :
-			return (
-				<span >
-					<span className={`${styles.status} ${styles.grey}`}></span>
-					<span className={styles.statusText}>已随访</span>
-				</span>
-			)
+	if(text.task.endStatus==1){
+		return (
+			<span >
+				<span className={`${styles.status} ${styles.grey}`}></span>
+				<span className={styles.statusText}>已结案</span>
+			</span>
+		)
+	}else if(text.task.endStatus==1){
+		switch(text.task.status){
+			case 'COMPLETE':
+				return (
+					<span >
+						<span className={`${styles.status} ${styles.grey}`}></span>
+						<span className={styles.statusText}>已随访</span>
+					</span>
+				)
+			case 'OVERDUE':
+				return (
+					<span >
+						<span className={`${styles.status} ${styles.red}`}></span>
+						<span className={styles.statusText}>随访逾期</span>
+					</span>
+				)
+			case 'WAIT':
+				return (
+					<span >
+						<span className={`${styles.status} ${styles.green}`}></span>
+						<span className={styles.statusText}>待随访</span>
+					</span>
+				)
+			default :
+				return (
+					<span >
+						<span className={`${styles.status} ${styles.grey}`}></span>
+						<span className={styles.statusText}>暂无</span>
+					</span>
+				)
+		}
+	}else{
+		return (
+			<span></span>
+		)
 	}
+	
 		
 }
 
@@ -51,79 +61,139 @@ class TodayMission extends PureComponent {
     
 	state = {
 		missionType: 'wait',
-		dataSource: [{
-			key: '1',
-			name: '小玫瑰',
-			sex: '女',
-			age: '18',
-			dept: '骨科',
-			zhenduan: '小腿骨折',
-			doctor: '黄浩杰',
-			days: '10',
-			status: 'yisuifang'
-		},{
-			key: '2',
-			name: '小玫瑰',
-			sex: '女',
-			age: '18',
-			dept: '骨科',
-			zhenduan: '小腿骨折',
-			doctor: '黄浩杰',
-			days: '10',
-			status: 'yuqi'
-		},{
-			key: '3',
-			name: '小玫瑰',
-			sex: '女',
-			age: '18',
-			dept: '骨科',
-			zhenduan: '小腿骨折',
-			doctor: '黄浩杰',
-			days: '10',
-			status: 'daisuifang'
-		},{
-			key: '4',
-			name: '小玫瑰',
-			sex: '女',
-			age: '18',
-			dept: '骨科',
-			zhenduan: '小腿骨折',
-			doctor: '黄浩杰',
-			days: '10',
-			status: 'weidao'
-		}],
-		
+		currentPage: 1,
+		pageSize: 15,
+		deptChoosed: '',
+		doctorChoosed: '',
+		startTime: '',
+		endTime: ''
 	}
 	
-	checkProfile = () => {
-		this.props.dispatch(routerRedux.push('/manage/todayMission/profile'));
-	}
-    
-	typeChangeText(type){
-		if(type=='yisuifang'){
-			return '已随访'
-		}else if(type=='yuqi'){
-			return '随访逾期'
-		}else if(type=='daisuifang'){
-			return '待随访'
-		}
+	checkProfile(item){
+		this.props.dispatch(routerRedux.push(`/manage/todayMission/profile/${item.inhospitalId}/${item.task.scaleId}`));
 	}
 
 	changeTab(type){
 		this.setState({
-			missionType: type
+			missionType: type,
+			deptChoosed: '',
+			doctorChoosed: '',
+			startTime: '',
+			endTime: '',
+			currentPage: 1
+		}, ()=> {
+			this.getData(0)
 		})
+		
 	}
-	handleChange(value) {
-  		console.log(`selected ${value}`);
+	handleDateChange=(date, dateString)=> {
+  		const startTime = dateString[0]
+  		const endTime = dateString[1]
+  		this.setState({
+  			startTime: startTime,
+  			endTime: endTime
+  		}, ()=>{
+  			this.getData(0)
+  		})
+	}
+	handleDeptChange=(value)=> {
+  		if(value){
+  			this.setState({
+	  			deptChoosed: value
+	  		}, ()=>{
+  				this.getData(0)
+  			})
+  		}else{
+  			this.setState({
+	  			deptChoosed: ''
+	  		}, ()=>{
+	  			this.getData(0)
+	  		})
+  		}
+  		
+	}
+	handleDoctorChange=(value)=> {
+  		if(value){
+  			this.setState({
+	  			doctorChoosed: value
+	  		}, ()=>{
+	  			this.getData(0)
+	  		})
+  		}else{
+  			this.setState({
+	  			doctorChoosed: ''
+	  		}, ()=>{
+	  			this.getData(0)
+	  		})
+  		}
+  		
+	}
+	
+	changePage=(page)=>{
+		const current = (page.current-1)*15
+		this.setState({
+			currentPage: page.current
+		})
+		this.getData(current)
+	}
+
+	getData(start){
+		if(this.state.missionType=='wait'){
+			this.props.dispatch({
+				type: 'todayMission/fetchStay',
+				payload: {
+					startIndex: start,
+					resident: this.state.doctorChoosed,
+					department: this.state.deptChoosed,
+					dischargeStartTime: this.state.startTime,
+					dischargeEndTime: this.state.endTime
+				}
+			})
+		}else if(this.state.missionType=='already'){
+			this.props.dispatch({
+				type: 'todayMission/fetchAlready',
+				payload: {
+					startIndex: start,
+					resident: this.state.doctorChoosed,
+					department: this.state.deptChoosed,
+					dischargeStartTime: this.state.startTime,
+					dischargeEndTime: this.state.endTime
+				}
+			})
+		}
+		
+	}
+
+	disabledDate(current){
+		return current && current>moment().endOf('day')
+	}
+
+	componentDidMount( ){
+		this.props.dispatch({
+			type: 'global/fetchDepartment'
+		})
+		this.props.dispatch({
+			type: 'global/fetchDoctors'
+		})
+		this.getData(0)
 	}
 	
 	render() {
-		const { missionType, dataSource } = this.state
+		const { 
+			missionType, 
+			currentPage, 
+			pageSize,
+			deptChoosed,
+			doctorChoosed,
+			startTime,
+			endTime
+		} = this.state
+		const {stayFollow, alreadyFollow, loading, pageTotal} = this.props.todayMission
+		const {departmentList, doctorList} = this.props.global
 		const columns = [{
 			title: '姓名',
-			dataIndex: 'name',
-			key: 'name'
+			dataIndex: 'patientName',
+			key: 'patientName'
 		},{
 			title: '基本信息',
 			key: 'info',
@@ -132,20 +202,23 @@ class TodayMission extends PureComponent {
 			)
 		},{
 			title: '科室',
-			dataIndex: 'dept',
-			key: 'dept'
+			dataIndex: 'hospitalizationDepartment',
+			key: 'hospitalizationDepartment'
 		},{
 			title: '出院诊断',
-			dataIndex: 'zhenduan',
-			key: 'zhenduan'
+			dataIndex: 'dischargeDiagnosis',
+			key: 'dischargeDiagnosis'
 		},{
 			title: '主管医生',
-			dataIndex: 'doctor',
-			key: 'doctor'
+			dataIndex: 'resident',
+			key: 'resident'
 		},{
 			title: '离院天数',
-			dataIndex: 'days',
-			key: 'days'
+			dataIndex: 'dischargeDays',
+			key: 'dischargeDays',
+			render: (text, record) => (
+				<span>{text}天</span>
+			)
 		},{
 			title: '状态',
 			key: 'status',
@@ -154,7 +227,7 @@ class TodayMission extends PureComponent {
 			title: '操作',
 			key: 'action',
 			render: (text, record) => (
-				<a className="aLink" href="javascript:;" onClick={this.checkProfile}>查看随访</a>
+				<a className="aLink" href="javascript:;" onClick={()=>this.checkProfile(record)}>查看随访</a>
 			)
 		}]
 		
@@ -183,38 +256,74 @@ class TodayMission extends PureComponent {
 						</div>
 						<div className={styles.selectWrap}>
 							<span className={styles.text}>科室</span>
-							<Select defaultValue="lucy" style={{ width: 150 }} onChange={this.handleChange}
-								allowClear>
-						      	<Option value="lucy">Lucy</Option>
-						      	<Option value="111">111</Option>
-						      	<Option value="222">222</Option>
-						      	<Option value="333">333</Option>
+							<Select defaultValue="全部" style={{ width: 150 }} onChange={this.handleDeptChange}
+								value={deptChoosed}>
+						      	<Option value="">全部</Option>
+						      	{departmentList.map(item => (
+						      		<Option key={item.departmentId} value={item.departmentName}>{item.departmentName}</Option>
+						      	))}
 						    </Select>
 							<span className={styles.text}>主管医生</span>
-							<Select defaultValue="lucy" style={{ width: 150 }} onChange={this.handleChange}
-								allowClear>
-						      	<Option value="lucy">Lucy</Option>
-						      	<Option value="111">111</Option>
-						      	<Option value="222">222</Option>
-						      	<Option value="333">333</Option>
+							<Select defaultValue="全部" style={{ width: 150 }} onChange={this.handleDoctorChange}
+								value={doctorChoosed}>
+						      	<Option value="">全部</Option>
+						      	{doctorList.map(item => (
+						      		<Option key={item.workerId} value={item.workerName}>{item.workerName}</Option>
+						      	))}
 						    </Select>
-						    <span className={styles.text}>随访状态</span>
-							<Select defaultValue="lucy" style={{ width: 150 }} onChange={this.handleChange}
-								allowClear>
-						      	<Option value="lucy">Lucy</Option>
-						      	<Option value="111">111</Option>
-						      	<Option value="222">222</Option>
-						      	<Option value="333">333</Option>
-						    </Select>
+						    <span className={styles.text}>出院日期</span>
+							<RangePicker onChange={this.handleDateChange} placeholder={['yyyy-mm-dd', 'yyyy-mm-dd']}
+								style={{ width: 250 }}
+								disabledDate={this.disabledDate}/>
 						</div>
-						<div className={styles.table}>
-							<Table dataSource={dataSource} columns={columns} pagination={{
-								current: 1,
-								pageSize: 12,
-								total: 200,
-								showQuickJumper: true
-							}}/>
-						</div>
+						<Spin spinning={loading} size="large">
+						{
+							missionType==='wait'?
+								<div className={styles.table}>
+									{
+										stayFollow.length<1&&!loading?
+											<div className={styles.emptyWrap}>
+												<img className={styles.img} src={empty} />
+												<div className={styles.text}>非常抱歉，当前页面暂无内容...</div>
+											</div>
+											:
+											<Table dataSource={stayFollow} columns={columns} 
+												pagination={{
+													current: currentPage,
+													pageSize: pageSize,
+													total: pageTotal,
+													showQuickJumper: true
+												}}
+												rowKey="inhospitalId"
+												onChange={this.changePage}
+												/>
+									}
+									
+								</div>
+								:
+								<div className={styles.table}>
+									{
+										alreadyFollow.length<1&&!loading?
+											<div className={styles.emptyWrap}>
+												<img className={styles.img} src={empty} />
+												<div className={styles.text}>非常抱歉，当前页面暂无内容...</div>
+											</div>
+											:
+											<Table dataSource={alreadyFollow} columns={columns} 
+												pagination={{
+													current: currentPage,
+													pageSize: pageSize,
+													total: pageTotal,
+													showQuickJumper: true
+												}}
+												rowKey="inhospitalId"
+												onChange={this.changePage}
+												/>
+									}
+								
+							</div>
+						}
+						</Spin>
 					</div>
 				</div>
 			</div>
@@ -222,6 +331,6 @@ class TodayMission extends PureComponent {
 	}
 }
 
-export default connect(({ todayMission }) => ({
-  todayMission
+export default connect(({ todayMission, global }) => ({
+  todayMission, global
 }))(TodayMission);

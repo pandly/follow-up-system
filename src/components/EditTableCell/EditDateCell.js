@@ -14,10 +14,12 @@ export default class EditDateCell extends Component {
         this.setState({ 
             value: value,
             editable: false
+         },()=>{
+            if (this.props.onChange) {
+                this.props.onChange(this.state.value);
+            }
          });
-        if (this.props.onChange) {
-            this.props.onChange(this.state.value);
-        }
+        
     }
     edit = () => {
         this.setState({ editable: true });
@@ -30,7 +32,7 @@ export default class EditDateCell extends Component {
                     editable ?
                         <div>
                             <DatePicker defaultValue={moment(value, 'YYYY-MM-DD')} onChange={this.handleChange} 
-                                style={{width: 120}}/>
+                                showToday={false} style={{width: 140}} allowClear={false}/>
                         </div>
                         :
                         <div>

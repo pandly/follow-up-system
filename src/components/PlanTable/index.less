@@ -1,0 +1,77 @@
+.myTable{
+	width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    text-align: left;
+    font-size: 12px;
+    color: #666;
+    border-bottom: 1px solid #F5F5F5;
+	:global{
+		thead > tr > th{
+		    -webkit-transition: background .3s ease;
+		    transition: background .3s ease;
+		    text-align: left;
+		    font-weight: 500;
+			background-color: #eee;
+	    	font-size: 14px;
+	    	color: #333;
+		}
+		thead > tr > th, tbody > tr > td{
+			word-break: break-word;
+			padding: 10px 20px;
+		}
+		thead > tr, tbody > tr{
+			-webkit-transition: all .3s;
+    		transition: all .3s;
+		}
+		thead > tr:hover > td, tbody > tr:hover > td{
+			background: #FFFBE0;
+		}
+		tbody tr:nth-child(2n) > td{
+			background: #F5F5F5;
+		}
+	}
+
+}
+.tableItem{
+	:global{
+		.ant-input-number{
+			margin: 0 10px;
+		}
+		.ant-select{
+			font-size: 12px;
+		}
+		.ant-select-selection--single{
+			height: 30px!important;
+		}
+		.ant-select-selection__rendered{
+			line-height: 30px!important;
+		}
+	}
+}
+.deleteBtn{
+	color: #F36969;
+	font-size: 12px;
+	cursor: pointer; 
+}
+.tableFooter{
+	font-size: 12px;
+	color: #06AEA6;
+	background-color: #f5f5f5;
+	padding: 12px 20px;
+	.footerBtn{
+		cursor: pointer;
+	}
+	.tableIcon{
+		font-size: 15px;
+		margin-right: 10px;
+		vertical-align: middle;
+	}
+	span{
+		vertical-align: middle;
+	}			
+}
+.doubleTable{
+	background: #fff;
+	border-bottom: 1px solid #f5f5f5;
+}

@@ -4,6 +4,19 @@
 	bottom: 0;
 	left: 180px;
 	right: 0;
+	:global{
+		.ant-form-inline .ant-form-item{
+			margin-bottom: 20px!important;
+		}
+		.ant-select{
+			vertical-align: top;
+		}
+		.ant-input{
+			height: 34px!important;
+			line-height: 24px!important;
+			vertical-align: top;
+		}
+	}
 }
 .title{
 	font-size: 14px;
@@ -79,11 +92,12 @@
 		left: 0;
 		overflow: auto;
 		padding-top: 20px;
+		padding-bottom: 20px;
 	}
 	.content{
-		margin-bottom: 20px;
+		// margin-bottom: 20px;
 		.item{
-			margin-bottom: 20px;
+			// margin-bottom: 20px;
 			.label{
 				margin-right: 10px;
 				width: 56px;
@@ -92,12 +106,17 @@
 				font-size: 14px;
 				color: #666;
 				position: relative;
-				vertical-align: middle;
+				// vertical-align: middle;
+				display: inline-block;
+				line-height: 34px;
+				vertical-align: top;
 			}
 			.specialLabel{
 				font-size: 12px;
 				width: 36px;
 				margin-left: 20px;
+				line-height: 17px;
+				margin-bottom: 20px;
 			}
 			.required:before{
 				content: '*';
@@ -112,49 +131,12 @@
 		}
 		.specialItem{
 			margin-left: 66px;
+			position: relative;
 			.label{
 				margin-left: 20px;
 			}
 		}
-		.tableItem{
-			:global{
-				.ant-input-number{
-					margin: 0 10px;
-				}
-				.ant-select{
-					font-size: 12px;
-				}
-				.ant-select-selection--single{
-					height: 30px!important;
-				}
-			}
-		}
-		.deleteBtn{
-			color: #F36969;
-			font-size: 12px;
-			cursor: pointer; 
-		}
-		.tableFooter{
-			font-size: 12px;
-			color: #06AEA6;
-			background-color: #f5f5f5;
-			padding: 12px 20px;
-			.footerBtn{
-				cursor: pointer;
-			}
-			.tableIcon{
-				font-size: 15px;
-				margin-right: 10px;
-				vertical-align: middle;
-			}
-			span{
-				vertical-align: middle;
-			}			
-		}
-		.doubleTable{
-			background: #fff;
-			border-bottom: 1px solid #f5f5f5;
-		}
+		
 	}
 	
 }
@@ -207,6 +189,7 @@
 	.footer{
 		.footerItem:first-child{
 			color: #ccc;
+			cursor: default;
 		}
 	}
 	:global{
@@ -227,6 +210,10 @@
 }
 .hidden{
 	display: none!important;
+}
+
+.inline{
+	display: inline-block;
 }
 
 @media screen and(max-width: 1620px) {

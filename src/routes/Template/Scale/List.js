@@ -1,7 +1,6 @@
 import { PureComponent } from 'react'
 import { Input, Breadcrumb, Spin, message } from 'antd';
 import styles from './List.less'
-import { routerRedux } from 'dva/router'
 import { connect } from 'dva'
 
 import TableListCard from 'components/TableListCard'
@@ -13,8 +12,8 @@ class Scale extends PureComponent {
 	state = {
 		title: ''
 	}
-	goDetail = () => {
-		this.props.dispatch(routerRedux.push('/template/scale/profile'));
+	createTemplate = () => {
+		this.props.history.push('/template/scale/profile');
 	}
 	searchScale = (value) => {
 		this.setState({
@@ -75,7 +74,7 @@ class Scale extends PureComponent {
 							<i className={`iconfont icon-tongyongbiaotiicon ${styles.titleIcon}`}></i><span>随访量表</span>
 						</div>
 						<div className={styles.titleBtn}>
-							<span className={styles.addBtn}>
+							<span className={styles.addBtn} onClick={this.createTemplate}>
 								<i className={`iconfont icon-tianjiaicon ${styles.titleIcon}`}></i><span className={styles.text}>创建随访模版</span>
 							</span>
 							<Search

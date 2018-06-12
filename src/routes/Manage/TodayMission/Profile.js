@@ -60,31 +60,6 @@ const statusDom = (text, record) => {
 @Form.create()
 class MissionProfile extends Component {
 	state = {
-		dataSource: [{
-			key: '1',
-			status: 'yisuifang',
-			date: '2017-10-10',
-			way: '到院复查',
-			table: '肝胆外科随访登记表'
-		},{
-			key: '2',
-			status: 'yuqi',
-			date: '2017-10-10',
-			way: '到院复查',
-			table: '肝胆外科随访登记表'
-		},{
-			key: '3',
-			status: 'daisuifang',
-			date: '2017-10-10',
-			way: '到院复查',
-			table: '肝胆外科随访登记表'
-		},{
-			key: '4',
-			status: 'weidao',
-			date: '2017-10-10',
-			way: '到院复查',
-			table: '肝胆外科随访登记表'
-		}],
 		planTaskList: [],
 		status: '',
 		editPlanShow: false,
@@ -100,6 +75,18 @@ class MissionProfile extends Component {
 		choosedPlanId: ''
 	}
 	
+	hideIdCard=(id)=>{
+		if(!id){
+			return
+		}
+		if(id.length==18){
+			return String(id).replace(String(id).substr(4,10),'**********')
+		}else if(id.length==15){
+			return String(id).replace(String(id).substr(4,7),'*******')
+		}else{
+			return id
+		}
+	}
 
 	
 	changeId=(id)=>{
@@ -179,13 +166,11 @@ class MissionProfile extends Component {
 		e.preventDefault();
 		this.props.form.validateFields((err, values) => {
 			if(!err){
-				console.log('wwww', values)
 				const param = {
 					planId: this.props.patientDetail.todayDetail.tasks[0].planId,
 					reason: values.reason,
 					description: values.desc
 				}
-				console.log(param)
 				this.props.dispatch({
 					type: 'patientDetail/stopPlan',
 					payload: param
@@ -203,9 +188,7 @@ class MissionProfile extends Component {
 	}
 
 	onCellChange = (key, dataIndex) => {
-		console.log(key,'key')
 	    return (value) => {
-	    	console.log(value,'value')
 	      	const planTaskList = [...this.state.planTaskList];
 	     	const target = planTaskList.find((item,index) => index === key);
 	      	if (target) {
@@ -213,10 +196,7 @@ class MissionProfile extends Component {
 		        if(dataIndex=='followTime'){
 		        	target.status = moment().format('YYYY-MM-DD') < moment(value).format('YYYY-MM-DD')?'NO_START':'WAIT'
 		        }
-		        console.log(planTaskList,'planTaskListplanTaskList')
-		        this.setState({ planTaskList },()=>{
-		        	console.log(this.state.planTaskList,'planTaskList')
-		        });
+		        this.setState({ planTaskList });
 	      	}
 	    };
   	}
@@ -246,12 +226,17 @@ class MissionProfile extends Component {
   	}
 
   	savePlanTask = () => {
-  		console.log(this.state.planTaskList)
   		let list = [...this.state.planTaskList]
+  		if(list.length<1){
+  			message.error('随访计划中必须至少有一个任务！')
+  			return
+  		}
   		if(list[list.length-1].followTime==''||list[list.length-1].returnType==''){
+  			message.error('请完善任务信息！')
   			return
   		}
   		list.forEach(item=>{
+  			item.scaleName = item.scaleId.label
 			item.scaleId = item.scaleId.key
 		})
   		const param = {
@@ -261,7 +246,6 @@ class MissionProfile extends Component {
   			dischargeTime: this.props.patientDetail.todayDetail.dischargeTime,
   			taskVOS: list
   		}
-  		console.log(param,'ppppp')
   		this.props.dispatch({
   			type: 'plan/updatePlanTask',
   			payload: param
@@ -282,24 +266,39 @@ class MissionProfile extends Component {
 		})
 		this.setState({
 			planTaskList: list,
-			choosedPlanId: this.props.patientDetail.todayDetail.planId
+			choosedPlanId: this.props.patientDetail.todayDetail.planTemplateId
 		})
   		this.hideEditPlan()
   	}
 
-  	hideIdCard=(id)=>{
-		if(!id){
-			return
-		}
-		if(id.length==18){
-			return String(id).replace(String(id).substr(4,10),'**********')
-		}else if(id.length==15){
-			return String(id).replace(String(id).substr(4,7),'*******')
-		}else{
-			return id
-		}
+  	getData=(func)=>{
+		this.props.dispatch({
+			type: 'patientDetail/fetchToday',
+			payload: {
+				inhospitalId: this.state.inhospitalId,
+				scaleId: this.state.scaleId
+			}
+		}).then(()=>{
+			let list = [...this.props.patientDetail.todayDetail.tasks]
+			list.forEach(item=>{
+				item.scaleId = {
+					key: item.scaleId,
+					label: item.scaleName
+				}
+			})
+			const status = this.props.patientDetail.todayDetail.tasks[0].taskId
+			this.setState({
+				status:status,
+				planTaskList: list,
+				choosedPlanId: this.props.patientDetail.todayDetail.planTemplateId
+			})
+			if(func){
+				func()
+			}
+		})
 	}
 
+  	
   	componentDidMount( ){
   		this.props.dispatch({
 			type: 'global/fetchDict'
@@ -338,39 +337,17 @@ class MissionProfile extends Component {
 		this.getData()
 	}
 
-	getData=(func)=>{
+	componentWillUnmount(){
 		this.props.dispatch({
-			type: 'patientDetail/fetchToday',
-			payload: {
-				inhospitalId: this.state.inhospitalId,
-				scaleId: this.state.scaleId
-			}
-		}).then(()=>{
-			let list = [...this.props.patientDetail.todayDetail.tasks]
-			list.forEach(item=>{
-				item.scaleId = {
-					key: item.scaleId,
-					label: item.scaleName
-				}
-			})
-			const status = this.props.patientDetail.todayDetail.tasks[0].taskId
-			this.setState({
-				status:status,
-				planTaskList: list,
-				choosedPlanId: this.props.patientDetail.todayDetail.planTemplateId
-			})
-			if(func){
-				func()
-			}
-		})
+	      	type: 'patientDetail/clear',
+	    });
 	}
 
 	render(){
 		const { 
 			isSummaryShow,
 			status, 
-			editPlanShow, 
-			dataSource, 
+			editPlanShow,
 			stopPlanShow, 
 			conclusionShow, 
 			medicineShow, 
@@ -647,7 +624,7 @@ class MissionProfile extends Component {
 										rowClassName={(record, index) => {
 											return record.status
 										}}/>
-									<div className={`${styles.tableFooter} ${dataSource.length%2==0?styles.doubleTable:''}`}>
+									<div className={`${styles.tableFooter} ${planTaskList.length%2==0?styles.doubleTable:''}`}>
 										<span className={styles.footerBtn} onClick={this.handleAdd}>
 											<i className={`iconfont icon-tianjialiebiao_icon ${styles.tableIcon}`}></i><span>添加计划</span>
 										</span>

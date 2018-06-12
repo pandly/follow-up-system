@@ -116,6 +116,17 @@ export default {
         changePlanTaskLoading(state, action) {
             return { ...state, planTaskLoading:action.payload };
         },
+        clear(){
+            return {
+                todayDetail: {},
+                outSummary: {},
+                outMedicine: [],
+                outDetail: {},
+                satisfyDetail: {},
+                PlanTaskList: [],
+                planTaskLoading: false
+            }
+        }
     },
 
 };

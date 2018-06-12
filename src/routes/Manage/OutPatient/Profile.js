@@ -3,10 +3,13 @@ import styles from './Profile.less'
 import patientInfo from '../../../assets/patient.png'
 import { Select, DatePicker, Table, Input, Button, Breadcrumb, Form, message } from 'antd';
 import { connect } from 'dva'
+import moment from 'moment'
 
 import PlanMenu from 'components/PlanMenu'
 import Modal from 'components/Modal'
 import PopoverSure from 'components/PopoverSure'
+import EditDateCell from 'components/EditTableCell/EditDateCell.js'
+import EditSelectCell from 'components/EditTableCell/EditSelectCell.js'
 
 const Option = Select.Option;
 const { TextArea } = Input;
@@ -15,28 +18,28 @@ const FormItem = Form.Item
 
 const statusDom = (text, record) => {
 	switch(text.status){
-		case 'yisuifang':
+		case 'COMPLETE':
 			return (
 				<span >
 					<span className={`${styles.status} ${styles.grey}`}></span>
 					<span className={styles.statusText}>已随访</span>
 				</span>
 			)
-		case 'yuqi':
+		case 'OVERDUE':
 			return (
 				<span >
 					<span className={`${styles.status} ${styles.red}`}></span>
 					<span className={styles.statusText}>随访逾期</span>
 				</span>
 			)
-		case 'daisuifang':
+		case 'WAIT':
 			return (
 				<span >
 					<span className={`${styles.status} ${styles.green}`}></span>
 					<span className={styles.statusText}>待随访</span>
 				</span>
 			)
-		case 'weidao':
+		case 'NO_START':
 			return (
 				<span >
 					<span className={`${styles.status} ${styles.yellow}`}></span>
@@ -57,31 +60,7 @@ const statusDom = (text, record) => {
 
 class OutPatientProfile extends Component {
 	state = {
-		dataSource: [{
-			key: '1',
-			status: 'yisuifang',
-			date: '2017-10-10',
-			way: '到院复查',
-			table: '肝胆外科随访登记表'
-		},{
-			key: '2',
-			status: 'yuqi',
-			date: '2017-10-10',
-			way: '到院复查',
-			table: '肝胆外科随访登记表'
-		},{
-			key: '3',
-			status: 'daisuifang',
-			date: '2017-10-10',
-			way: '到院复查',
-			table: '肝胆外科随访登记表'
-		},{
-			key: '4',
-			status: 'weidao',
-			date: '2017-10-10',
-			way: '到院复查',
-			table: '肝胆外科随访登记表'
-		}],
+		planTaskList: [],
 		status: '',
 		editPlanShow: false,
 		stopPlanShow: false,
@@ -93,6 +72,7 @@ class OutPatientProfile extends Component {
 		medicineResident: '',
 		stopReason: '',
 		stopDes: '',
+		choosedPlanId: ''
 	}
 	
 	hideIdCard=(id)=>{
@@ -154,34 +134,42 @@ class OutPatientProfile extends Component {
 		})
 	}
 	handleAdd = () => {
-	    const { dataSource } = this.state;
+	    const { planTaskList } = this.state;
+	    const lastObj = planTaskList[planTaskList.length-1]
+	    if(lastObj.followTime==''||lastObj.returnType==''){
+	    	return
+	    }
 	    const newData = {
-			key: dataSource.length+1,
+			taskId: '',
 			status: '',
-			date: '',
-			way: '',
-			table: ''
+			followTime: '',
+			returnType: '',
+			scaleId: {
+				key: '',
+				label: ''
+			},
+			scaleName: '',
+			time: '',
+			timeType: ''
 	    };
 	    this.setState({
-	      	dataSource: [...dataSource, newData]
+	      	planTaskList: [...planTaskList, newData]
 	    });
   	}
-  	deletePlan = (record) => {
-		const dataSource = [...this.state.dataSource];
-		this.setState({ dataSource: dataSource.filter(item => item.key !== record.key) });
+  	deletePlan = (key) => {
+		const planTaskList = [...this.state.planTaskList];
+		this.setState({ planTaskList: planTaskList.filter((item,index) => index !== key) });
 	}
 
 	stopPlan = (e) => {
 		e.preventDefault();
 		this.props.form.validateFields((err, values) => {
 			if(!err){
-				console.log('wwww', values)
 				const param = {
 					planId: this.props.patientDetail.outDetail.tasks[0].planId,
 					reason: values.reason,
 					description: values.desc
 				}
-				console.log(param)
 				this.props.dispatch({
 					type: 'patientDetail/stopPlan',
 					payload: param
@@ -196,6 +184,117 @@ class OutPatientProfile extends Component {
 			}
 		})
 
+	}
+
+	onCellChange = (key, dataIndex) => {
+	    return (value) => {
+	      	const planTaskList = [...this.state.planTaskList];
+	     	const target = planTaskList.find((item,index) => index === key);
+	      	if (target) {
+		        target[dataIndex] = value;
+		        if(dataIndex=='followTime'){
+		        	target.status = moment().format('YYYY-MM-DD') < moment(value).format('YYYY-MM-DD')?'NO_START':'WAIT'
+		        }
+		        this.setState({ planTaskList });
+	      	}
+	    };
+  	}
+
+  	planChange = (value) => {
+  		this.setState({
+  			choosedPlanId: value
+  		})
+  		this.props.dispatch({
+  			type: 'patientDetail/getPlanTask',
+  			payload: {
+  				planTemplateId: value,
+  				dischargeTime: this.props.patientDetail.outDetail.dischargeTime
+  			}
+  		}).then(()=>{
+  			let list = [...this.props.patientDetail.PlanTaskList]
+			list.forEach(item=>{
+				item.scaleId = {
+					key: item.scaleId,
+					label: item.scaleName
+				}
+			})
+  			this.setState({
+  				planTaskList: list
+  			})
+  		})
+  	}
+
+  	savePlanTask = () => {
+  		let list = [...this.state.planTaskList]
+  		if(list.length<1){
+  			message.error('随访计划中必须至少有一个任务！')
+  			return
+  		}
+  		if(list[list.length-1].followTime==''||list[list.length-1].returnType==''){
+  			message.error('请完善任务信息！')
+  			return
+  		}
+  		list.forEach(item=>{
+  			item.scaleName = item.scaleId.label
+			item.scaleId = item.scaleId.key
+		})
+  		const param = {
+  			inhospitalId: this.state.inhospitalId,
+  			planTemplateId: this.props.patientDetail.outDetail.planId==this.state.choosedPlanId?'':this.state.choosedPlanId,
+  			planId: this.props.patientDetail.outDetail.planId,
+  			dischargeTime: this.props.patientDetail.outDetail.dischargeTime,
+  			taskVOS: list
+  		}
+  		this.props.dispatch({
+  			type: 'plan/updatePlanTask',
+  			payload: param
+  		}).then(()=>{
+  			message.success('修改成功！')
+  			this.getData(this.hideEditPlan())
+  		})
+
+  	}
+
+  	cancelPlanTask = () => {
+  		let list = [...this.props.patientDetail.outDetail.tasks]
+		list.forEach(item=>{
+			item.scaleId = {
+				key: item.scaleId,
+				label: item.scaleName
+			}
+		})
+		this.setState({
+			planTaskList: list,
+			choosedPlanId: this.props.patientDetail.outDetail.planTemplateId
+		})
+  		this.hideEditPlan()
+  	}
+
+  	getData=(func)=>{
+		this.props.dispatch({
+			type: 'patientDetail/fetchOut',
+			payload: {
+				inhospitalId: this.state.inhospitalId,
+				scaleId: this.state.scaleId
+			}
+		}).then(()=>{
+			let list = [...this.props.patientDetail.outDetail.tasks]
+			list.forEach(item=>{
+				item.scaleId = {
+					key: item.scaleId,
+					label: item.scaleName
+				}
+			})
+			const status = this.props.patientDetail.outDetail.tasks[0].taskId
+			this.setState({
+				status:status,
+				planTaskList: list,
+				choosedPlanId: this.props.patientDetail.outDetail.planTemplateId
+			})
+			if(func){
+				func()
+			}
+		})
 	}
 
 	componentDidMount( ){
@@ -222,37 +321,39 @@ class OutPatientProfile extends Component {
 				})
   			}
   		})
-		this.props.dispatch({
-			type: 'patientDetail/fetchOut',
-			payload: {
-				inhospitalId: this.state.inhospitalId,
-				scaleId: this.state.scaleId
-			}
-		}).then(()=>{
-			const status = this.props.patientDetail.outDetail.tasks[0].taskId
-			this.setState({
-				status:status
-			})
-		})
+  		this.props.dispatch({
+  			type: 'plan/fetchPlanTwoList'
+  		})
+  		this.props.dispatch({
+  			type: 'scale/fetchScaleList',
+  			payload: {
+  				title: ''
+  			}
+  		})
 		
+		this.getData()
 	}
 
-
-
+	componentWillUnmount(){
+		this.props.dispatch({
+	      	type: 'patientDetail/clear',
+	    });
+	}
 
 	render(){
 		const { 
 			isSummaryShow, 
 			status, 
-			editPlanShow, 
-			dataSource, 
+			editPlanShow,
 			stopPlanShow, 
 			conclusionShow, 
 			medicineShow, 
 			medicineSquareTime,
 			medicineResident,
 			stopReason,
-			stopDes
+			stopDes,
+			planTaskList,
+			choosedPlanId
 		} = this.state
 		const {
 			outDetail,
@@ -261,6 +362,10 @@ class OutPatientProfile extends Component {
 		} = this.props.patientDetail
 
 		const {dictionary} = this.props.global
+
+		const {planTwoList} = this.props.plan
+
+		const {scaleList} = this.props.scale
 
 		const {
 			getFieldDecorator
@@ -272,24 +377,63 @@ class OutPatientProfile extends Component {
 			render: (text, record) => statusDom(text, record)
 		},{
 			title: '随访日期',
-			dataIndex: 'date',
-			key: 'date'
+			width: '150px',
+			dataIndex: 'followTime',
+			key: 'followTime',
+			render: (text, record, key) => (
+				record.status!='COMPLETE'&&record.status!='OVERDUE'?
+				<EditDateCell value={text} onChange={this.onCellChange(key, 'followTime')}
+					haveDisabled={record.status==''?true:false}></EditDateCell>
+				:
+				<span>{text}</span>
+			)
 		},{
 			title: '随访方式',
-			dataIndex: 'way',
-			key: 'way'
+			width: '150px',
+			dataIndex: 'returnType',
+			key: 'returnType',
+			render: (text, record, key) => (
+				record.status!='COMPLETE'&&record.status!='OVERDUE'?
+				<EditSelectCell dataSource={dictionary['RETURN_WAY']} 
+					value={text} allowClear={false} labelInValue={false}
+					onChange={this.onCellChange(key, 'returnType')}
+					valueType={{code:'code',value: 'value'}}
+					styleObj={{ width: 140 }} >
+
+				</EditSelectCell>
+				:
+				<span>
+					{dictionary['RETURN_WAY']?dictionary['RETURN_WAY'].map(item=>(
+						text==item.code?item.value:''
+                    )):''}
+				</span>
+			)
 		},{
 			title: '量表选择',
-			dataIndex: 'table',
-			key: 'table'
+			dataIndex: 'scaleId',
+			width: '190px',
+			key: 'scaleId',
+			render: (text, record, key) => (
+				record.status!='COMPLETE'&&record.status!='OVERDUE'?
+				<EditSelectCell dataSource={scaleList} 
+					value={text} allowClear={true} labelInValue={true}
+					onChange={this.onCellChange(key, 'scaleId')}
+					valueType={{code:'scaleId',value: 'title'}}
+					styleObj={{ width: 180 }}>
+
+				</EditSelectCell>
+				:
+				<span>{text.label?text.label:'暂无'}</span>
+			)
 		},{
 			title: '操作',
 			key: 'action',
-			render: (text, record) => (
-				record.status!='yisuifang'?
+			width: '80px',
+			render: (text, record, key) => (
+				record.status!='COMPLETE'?
 				<PopoverSure title="您确定要删除该表格吗？"
 					text="目标删除后将不可恢复。"
-					sureFunction={()=>this.deletePlan(record)}>
+					sureFunction={()=>this.deletePlan(key)}>
 					<span className="delLink">删除</span>
 				</PopoverSure>
 				:
@@ -364,10 +508,10 @@ class OutPatientProfile extends Component {
 								</div>
 							</div>
 						</div>
-						<div className={styles.call}>
+						{/*<div className={styles.call}>
 							<i className={`iconfont icon-red_phone ${styles.callIcon}`}></i>
 							<div className={styles.text}>拨打电话</div>
-						</div>
+						</div>*/}
 					</div>
 					<div className={styles.mainInfoWrap}>
 						<div className={styles.overFlow}>
@@ -380,7 +524,7 @@ class OutPatientProfile extends Component {
 												随访计划
 											</div>
 											<div className={styles.info}>
-												肾小球肾炎随访的计划
+												{outDetail.planTitle}
 											</div>
 											<div className={`${styles.btnItem} aLink`} onClick={this.showEditPlan}>
 												<i className={`iconfont icon-grey_bianji`}></i><span>编辑计划</span>
@@ -392,7 +536,7 @@ class OutPatientProfile extends Component {
 									</div>
 									
 								</div>
-								<PlanMenu dictionary={dictionary} listData={outDetail.tasks} status={status} changeStatus={this.changeId}></PlanMenu>
+								<PlanMenu dictionary={dictionary} listData={planTaskList} status={status} changeStatus={this.changeId}></PlanMenu>
 							</div>
 							<div className={styles.mainInfo}>
 								<div className={styles.info}>
@@ -461,22 +605,30 @@ class OutPatientProfile extends Component {
 							<Modal title="编辑随访计划" closable={false} visible={editPlanShow} onCancel={this.hideEditPlan}>
 								<div className={styles.planName}>
 									<span className={styles.label}>计划模板</span>
-									<Input defaultValue="肝胆外科随访计划模板" style={{width: 270}}></Input>
+									<Select placeholder="请选择" style={{ width: 270 }}
+										value={choosedPlanId}
+										onChange={this.planChange}>
+								      	{
+								      		planTwoList.map(item => (
+									      		<Option key={item.planTemplateId} value={item.planTemplateId}>{item.title}</Option>
+									      	))
+					      				}
+								    </Select>
 								</div>
 								<div className={styles.table}>
-									<Table dataSource={dataSource} columns={columns} pagination={false}
+									<Table dataSource={planTaskList} columns={columns} pagination={false}
 										rowClassName={(record, index) => {
 											return record.status
 										}}/>
-									<div className={`${styles.tableFooter} ${dataSource.length%2==0?styles.doubleTable:''}`}>
+									<div className={`${styles.tableFooter} ${planTaskList.length%2==0?styles.doubleTable:''}`}>
 										<span className={styles.footerBtn} onClick={this.handleAdd}>
 											<i className={`iconfont icon-tianjialiebiao_icon ${styles.tableIcon}`}></i><span>添加计划</span>
 										</span>
 									</div>
 								</div>
 								<div className={styles.tableBtn}>
-									<Button type="primary">保存</Button>
-									<Button onClick={this.hideEditPlan}>取消</Button>								
+									<Button type="primary" onClick={this.savePlanTask}>保存</Button>
+									<Button onClick={this.cancelPlanTask}>取消</Button>								
 								</div>
 							</Modal>
 							<Modal title="手动结案" closable={false} visible={stopPlanShow} type="small"
@@ -594,17 +746,13 @@ class OutPatientProfile extends Component {
 								</div>
 							</Modal>
 						</div>
-
-						
 					</div>
 				</div>
-				
-				
 			</div>
 		)
 	}
 }
 
-export default connect(({ patientDetail, global }) => ({
-  patientDetail, global
+export default connect(({ patientDetail, global, plan, scale }) => ({
+  patientDetail, global, plan, scale
 }))(OutPatientProfile);

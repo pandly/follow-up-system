@@ -44,7 +44,7 @@ export const getRouterData = (app) => {
     '/satisfaction/returnVisit/list': {
       component: dynamicWrapper(app, ['satisfaction'], () => import('../routes/Satisfaction/ReturnVisit/List')),
     },
-    '/satisfaction/returnVisit/profile/:id': {
+    '/satisfaction/returnVisit/profile/:id/:scaleId': {
       component: dynamicWrapper(app, ['satisfaction','patientDetail','global'], () => import('../routes/Satisfaction/ReturnVisit/Profile')),
     },
     '/template/scale': {

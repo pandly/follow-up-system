@@ -3,6 +3,7 @@ import styles from './Profile.less'
 import patientInfo from '../../../assets/patient.png'
 import { Select, DatePicker, Table, Input, Button, Breadcrumb, Form, message } from 'antd';
 import { connect } from 'dva'
+import moment from 'moment'
 
 import PlanMenu from 'components/PlanMenu'
 import Modal from 'components/Modal'
@@ -147,26 +148,31 @@ class MissionProfile extends Component {
 		})
 	}
 	handleAdd = () => {
-	    const { dataSource } = this.state;
+	    const { planTaskList } = this.state;
+	    const lastObj = planTaskList[planTaskList.length-1]
+	    if(lastObj.followTime==''||lastObj.returnType==''){
+	    	return
+	    }
 	    const newData = {
-			key: dataSource.length+1,
+			taskId: '',
 			status: '',
-			date: '',
-			way: '',
-			table: ''
+			followTime: '',
+			returnType: '',
+			scaleId: {
+				key: '',
+				label: ''
+			},
+			scaleName: '',
+			time: '',
+			timeType: ''
 	    };
 	    this.setState({
-	      	dataSource: [...dataSource, newData]
+	      	planTaskList: [...planTaskList, newData]
 	    });
   	}
-  	deletePlan = (record) => {
-  		if(record.status!='yisuifang'){
-  			const dataSource = [...this.state.dataSource];
-			this.setState({ dataSource: dataSource.filter(item => item.key !== record.key) });
-  		}else{
-  			return
-  		}
-		
+  	deletePlan = (key) => {
+		const planTaskList = [...this.state.planTaskList];
+		this.setState({ planTaskList: planTaskList.filter((item,index) => index !== key) });
 	}
 
 	stopPlan = (e) => {
@@ -204,6 +210,9 @@ class MissionProfile extends Component {
 	     	const target = planTaskList.find((item,index) => index === key);
 	      	if (target) {
 		        target[dataIndex] = value;
+		        if(dataIndex=='followTime'){
+		        	target.status = moment().format('YYYY-MM-DD') < moment(value).format('YYYY-MM-DD')?'NO_START':'WAIT'
+		        }
 		        console.log(planTaskList,'planTaskListplanTaskList')
 		        this.setState({ planTaskList },()=>{
 		        	console.log(this.state.planTaskList,'planTaskList')
@@ -238,6 +247,28 @@ class MissionProfile extends Component {
 
   	savePlanTask = () => {
   		console.log(this.state.planTaskList)
+  		let list = [...this.state.planTaskList]
+  		if(list[list.length-1].followTime==''||list[list.length-1].returnType==''){
+  			return
+  		}
+  		list.forEach(item=>{
+			item.scaleId = item.scaleId.key
+		})
+  		const param = {
+  			inhospitalId: this.state.inhospitalId,
+  			planTemplateId: this.props.patientDetail.todayDetail.planId==this.state.choosedPlanId?'':this.state.choosedPlanId,
+  			planId: this.props.patientDetail.todayDetail.planId,
+  			dischargeTime: this.props.patientDetail.todayDetail.dischargeTime,
+  			taskVOS: list
+  		}
+  		console.log(param,'ppppp')
+  		// this.props.dispatch({
+  		// 	type: 'plan/updatePlanTask',
+  		// 	payload: param
+  		// }).then(()=>{
+  		// 	this.getData(this.hideEditPlan())
+  			
+  		// })
 
   	}
 
@@ -253,9 +284,6 @@ class MissionProfile extends Component {
 			planTaskList: list,
 			choosedPlanId: this.props.patientDetail.todayDetail.planId
 		})
-  		this.setState({
-
-  		})
   		this.hideEditPlan()
   	}
 
@@ -306,6 +334,11 @@ class MissionProfile extends Component {
   				title: ''
   			}
   		})
+		
+		this.getData()
+	}
+
+	getData=(func)=>{
 		this.props.dispatch({
 			type: 'patientDetail/fetchToday',
 			payload: {
@@ -326,8 +359,10 @@ class MissionProfile extends Component {
 				planTaskList: list,
 				choosedPlanId: this.props.patientDetail.todayDetail.planId
 			})
+			if(func){
+				func()
+			}
 		})
-		
 	}
 
 	render(){
@@ -373,7 +408,8 @@ class MissionProfile extends Component {
 			key: 'followTime',
 			render: (text, record, key) => (
 				record.status!='COMPLETE'&&record.status!='OVERDUE'?
-				<EditDateCell value={text} onChange={this.onCellChange(key, 'followTime')}></EditDateCell>
+				<EditDateCell value={text} onChange={this.onCellChange(key, 'followTime')}
+					haveDisabled={record.status==''?true:false}></EditDateCell>
 				:
 				<span>{text}</span>
 			)
@@ -413,17 +449,17 @@ class MissionProfile extends Component {
 
 				</EditSelectCell>
 				:
-				<span>{text.label}</span>
+				<span>{text.label?text.label:'暂无'}</span>
 			)
 		},{
 			title: '操作',
 			key: 'action',
 			width: '80px',
-			render: (text, record) => (
+			render: (text, record, key) => (
 				record.status!='COMPLETE'?
 				<PopoverSure title="您确定要删除该表格吗？"
 					text="目标删除后将不可恢复。"
-					sureFunction={()=>this.deletePlan(record)}>
+					sureFunction={()=>this.deletePlan(key)}>
 					<span className="delLink">删除</span>
 				</PopoverSure>
 				:
@@ -498,10 +534,10 @@ class MissionProfile extends Component {
 								</div>
 							</div>
 						</div>
-						<div className={styles.call}>
+						{/*<div className={styles.call}>
 							<i className={`iconfont icon-red_phone ${styles.callIcon}`}></i>
 							<div className={styles.text}>拨打电话</div>
-						</div>
+						</div>*/}
 					</div>
 					<div className={styles.mainInfoWrap}>
 						<div className={styles.overFlow}>
@@ -526,7 +562,7 @@ class MissionProfile extends Component {
 									</div>
 									
 								</div>
-								<PlanMenu listData={todayDetail.tasks} status={status} changeStatus={this.changeId}></PlanMenu>
+								<PlanMenu dictionary={dictionary} listData={planTaskList} status={status} changeStatus={this.changeId}></PlanMenu>
 							</div>
 							<div className={styles.mainInfo}>
 								<div className={styles.info}>

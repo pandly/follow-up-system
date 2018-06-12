@@ -36,24 +36,31 @@ export default class PlanTable extends Component {
 		let planDetailTask = [...this.state.planDetailTask];
 		if(status!='stoped'){
 			if(planDetailTask.length>1){
+				console.log(planDetailTask,'planDetailTask1')
 				planDetailTask.splice(index, 1);
 		        this.setState({
 		        	planDetailTask
+		        },()=>{
+	        	console.log(planDetailTask,'planDetailTask2')
+		        	if(onChange) {
+						onChange(planDetailTask)
+					}
 		        })		
-				if(onChange) {
-					onChange(planDetailTask)
-				}
+				
 			}else{
 				message.error('最少必须有一条任务！')
 			}
 		}else{
+			
 			planDetailTask.splice(index, 1);
 	        this.setState({
 	        	planDetailTask
+	        },()=>{
+	        	if(onChange) {
+					onChange(planDetailTask)
+				}
 	        })		
-			if(onChange) {
-				onChange(planDetailTask)
-			}
+			
 		}
 		
         
@@ -69,7 +76,8 @@ export default class PlanTable extends Component {
 			timeType: '',
             returnType: 'PHONE',
             scaleId: '',
-            scaleName: ''
+            scaleName: '',
+            taskTemplateId: temp.length+1
 	    };
 	    this.setState({
 	    	planDetailTask: [...this.state.planDetailTask, newData]

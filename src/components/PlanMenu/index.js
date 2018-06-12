@@ -45,7 +45,7 @@ export default class PlanMenu extends Component {
 		}
 	}
 	render(){
-		const {listData, status} = this.props
+		const {listData, status, dictionary} = this.props
 		return(
 			<div>
 				{listData?
@@ -59,7 +59,9 @@ export default class PlanMenu extends Component {
 									{item.followTime}
 								</div>
 								<div className={styles.info}>
-									{item.returnType}
+									{dictionary['RETURN_WAY']?dictionary['RETURN_WAY'].map(dic=>(
+										item.returnType==dic.code?dic.value:''
+				                    )):''}
 								</div>
 								<div className={styles.tags}>
 									<span>{this.typeChangeText(item.status)}</span>

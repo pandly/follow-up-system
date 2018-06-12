@@ -88,6 +88,7 @@ class OutPatientProfile extends Component {
 		conclusionShow: false,
 		medicineShow: false,
 		inhospitalId: this.props.match.params.id,
+		scaleId: this.props.match.params.scaleId,
 		medicineSquareTime: '',
 		medicineResident: '',
 		stopReason: '',
@@ -209,14 +210,24 @@ class OutPatientProfile extends Component {
   			type: 'patientDetail/fetchMedicine',
   			payload: this.state.inhospitalId
   		}).then(()=>{
-  			this.setState({
-				medicineSquareTime: this.props.patientDetail.outMedicine[0].squareTime,
-				medicineResident: this.props.patientDetail.outMedicine[0].resident
-			})
+			if(this.props.patientDetail.outMedicine.length>0){
+  				this.setState({
+					medicineSquareTime: this.props.patientDetail.outMedicine[0].squareTime,
+					medicineResident: this.props.patientDetail.outMedicine[0].resident
+				})
+  			}else{
+  				this.setState({
+					medicineSquareTime: '暂无',
+					medicineResident: '暂无'
+				})
+  			}
   		})
 		this.props.dispatch({
 			type: 'patientDetail/fetchOut',
-			payload: this.state.inhospitalId
+			payload: {
+				inhospitalId: this.state.inhospitalId,
+				scaleId: this.state.scaleId
+			}
 		}).then(()=>{
 			const status = this.props.patientDetail.outDetail.tasks[0].taskId
 			this.setState({
@@ -381,7 +392,7 @@ class OutPatientProfile extends Component {
 									</div>
 									
 								</div>
-								<PlanMenu listData={outDetail.tasks} status={status} changeStatus={this.changeId}></PlanMenu>
+								<PlanMenu dictionary={dictionary} listData={outDetail.tasks} status={status} changeStatus={this.changeId}></PlanMenu>
 							</div>
 							<div className={styles.mainInfo}>
 								<div className={styles.info}>

@@ -61,8 +61,8 @@ class Satisfaction extends PureComponent {
 		searchValue: ''
 	}
 
-	goDetail (id){
-		this.props.dispatch(routerRedux.push('/satisfaction/returnVisit/profile/'+id));
+	goDetail (item){
+		this.props.dispatch(routerRedux.push(`/satisfaction/returnVisit/profile/${item.inhospitalId}/${item.task.scaleId}`));
 	}
 
 	changeType=(key)=> {
@@ -336,7 +336,7 @@ class Satisfaction extends PureComponent {
 			title: '操作',
 			key: 'action',
 			render: (text, record) => (
-				<a className="aLink" href="javascript:;" onClick={()=>this.goDetail(record.inhospitalId)}>开始回访</a>
+				<a className="aLink" href="javascript:;" onClick={()=>this.goDetail(record)}>开始回访</a>
 			)
 		}]
 		const columns2 = [{
@@ -382,7 +382,7 @@ class Satisfaction extends PureComponent {
 			key: 'action',
 			render: (text, record) => (
 				<a className="aLink" href="javascript:;"
-					onClick={()=>this.goDetail(record.inhospitalId)}>查看回访</a>
+					onClick={()=>this.goDetail(record)}>查看回访</a>
 			)
 		}]
 

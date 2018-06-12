@@ -29,7 +29,7 @@ export default class EditSelectCell extends Component {
         const { value } = this.state;
         const { dataSource, labelInValue, valueType } = this.props;
         if(labelInValue){
-            if(value.label!=''){
+            if(value&&value.label&&value.label!=''){
                 return(
                     <span>{value.label}</span>
                 )
@@ -40,7 +40,7 @@ export default class EditSelectCell extends Component {
             }
             
         }else{
-            if(value!=''){
+            if(value&&value!=''){
                 return(
                     <span>
                        { dataSource?dataSource.map(item=>(

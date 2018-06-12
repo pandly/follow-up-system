@@ -28,6 +28,7 @@ class PlanProfile extends PureComponent {
         
         let planDetailTask = [...this.state.planDetailTask];
         planDetailTask.splice(index, 1, newplanDetailTaskObj);
+        console.log(planDetailTask,'planDetailTask3')
         this.setState({
         	planDetailTask
         })
@@ -95,11 +96,11 @@ class PlanProfile extends PureComponent {
 		})
 	}
 
-	initData=()=>{
+	initData=(func)=>{
 		const illness = JSON.parse(this.props.plan.planDetail.illness)
 		if(this.props.plan.planDetail.type=='DEFAULT'||this.props.plan.planDetail.type=='SATISFACTION_SURVEY'){
 			this.setState({				
-				planDetailTask: [...this.props.plan.planDetailTask],
+				planDetailTask: this.props.plan.planDetailTask,
 				planDetail: {...this.props.plan.planDetail, department: 'all',illness: illness},
 				deptDisable: true,
 				illDisable: true,
@@ -112,6 +113,9 @@ class PlanProfile extends PureComponent {
 					haveIllness: this.state.planDetail.haveIllness,
 					illness: this.state.planDetail.illness,
 				})
+				if(func){
+					func()
+				}
 			})
 		}else{
 			let department;
@@ -121,7 +125,7 @@ class PlanProfile extends PureComponent {
 				department = this.props.plan.planDetail.department
 			}
 			this.setState({
-				planDetailTask: [...this.props.plan.planDetailTask],
+				planDetailTask: this.props.plan.planDetailTask,
 				planDetail: {...this.props.plan.planDetail, department: department, illness: illness},
 				deptDisable: false,
 				illDisable: false,
@@ -134,6 +138,9 @@ class PlanProfile extends PureComponent {
 					haveIllness: this.state.planDetail.haveIllness,
 					illness: this.state.planDetail.illness,
 				})
+				if(func){
+					func()
+				}
 			})
 		}	
 	}
@@ -149,13 +156,16 @@ class PlanProfile extends PureComponent {
 						haveIllness: values.haveIllness,
 						title: values.title,
 						type: values.type,
-						illness: JSON.stringify(values.illness)
+						illness: values.illness?JSON.stringify(values.illness):JSON.stringify([])
 
 					},
 					taskTemplates: this.table
 				}
 
 				if(this.props.match.params.id=='add'){
+					this.table.forEach(item=>{
+						delete item.taskTemplateId
+					})
 					this.props.dispatch({
 						type: 'plan/addPlan',
 						payload: param
@@ -165,20 +175,30 @@ class PlanProfile extends PureComponent {
 					})
 				}else{
 					param.planTemplate.planTemplateId = this.state.planDetail.planTemplateId
-					this.props.dispatch({
+					this.setState({
+						planDetailTask: this.table
+					},()=>{
+						this.props.dispatch({
 						type: 'plan/updatePlan',
 						payload: {
 							update: param,
 							planTemplateId: this.props.match.params.id
 						}
 					}).then(()=>{
-						this.initData()
-						message.success('添加成功！')
-						this.setState({
-							planTemplateId: this.props.match.params.id
-						})
+						console.log(this.props.plan.planDetailTask,'11111')
+						this.initData(()=>{
+							console.log(this.props.plan.planDetailTask,'2222')
+							message.success('添加成功！')
+							this.setState({
+								planTemplateId: this.props.match.params.id
+								})
+							})
 						
+						
+						
+						})
 					})
+					
 					
 				}
 				
@@ -588,7 +608,7 @@ class PlanProfile extends PureComponent {
 										<span className={styles.text}>出院时间</span>
 									</div>
 									<Table dataSource={planDetailTask} columns={columns2} pagination={false}
-										rowKey={planTemplateId=='add'?'time':'taskTemplateId'}/>
+										rowKey="taskTemplateId"/>
 								</div>
 							</div>
 						</Spin>	

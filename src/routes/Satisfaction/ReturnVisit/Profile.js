@@ -20,6 +20,7 @@ class SatisfactionDetail extends PureComponent {
 		detailShow: false,
 		remarkShow: false,
 		inhospitalId: this.props.match.params.id,
+		scaleId: this.props.match.params.scaleId,
 		medicineSquareTime: '',
 		medicineResident: '',
 		remarkReason: '',
@@ -118,14 +119,24 @@ class SatisfactionDetail extends PureComponent {
   			type: 'patientDetail/fetchMedicine',
   			payload: this.state.inhospitalId
   		}).then(()=>{
-  			this.setState({
-				medicineSquareTime: this.props.patientDetail.outMedicine[0].squareTime,
-				medicineResident: this.props.patientDetail.outMedicine[0].resident
-			})
+  			if(this.props.patientDetail.outMedicine.length>0){
+  				this.setState({
+					medicineSquareTime: this.props.patientDetail.outMedicine[0].squareTime,
+					medicineResident: this.props.patientDetail.outMedicine[0].resident
+				})
+  			}else{
+  				this.setState({
+					medicineSquareTime: '暂无',
+					medicineResident: '暂无'
+				})
+  			}
   		})
 		this.props.dispatch({
 			type: 'patientDetail/fetchSatisfy',
-			payload: this.state.inhospitalId
+			payload: {
+				inhospitalId: this.state.inhospitalId,
+				scaleId: this.state.scaleId
+			}
 		}).then(()=>{
 			this.setState({
 				remarkShow: this.props.patientDetail.satisfyDetail.satisfyTask.remarkReason?true:false,

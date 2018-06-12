@@ -26,8 +26,8 @@ export const getRouterData = (app) => {
     '/manage/outPatient/list': {
       component: dynamicWrapper(app, ['outPatient'], () => import('../routes/Manage/OutPatient/List')),
     },
-    '/manage/outPatient/profile/:id': {
-      component: dynamicWrapper(app, ['outPatient','patientDetail','global'], () => import('../routes/Manage/OutPatient/Profile')),
+    '/manage/outPatient/profile/:id/:scaleId': {
+      component: dynamicWrapper(app, ['outPatient','patientDetail','global','plan','scale'], () => import('../routes/Manage/OutPatient/Profile')),
     },
     '/manage/specialDisease': {
       component: dynamicWrapper(app, ['specialDisease'], () => import('../routes/Manage/SpecialDisease')),

@@ -58,7 +58,6 @@ export default class EditSelectCell extends Component {
     }
     render() {
         const { value, editable } = this.state;
-        console.log(value,'aaaa')
         const { dataSource, allowClear, labelInValue, valueType, styleObj } = this.props;
         return (
             <div className={styles.editCellWrap}>

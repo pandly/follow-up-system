@@ -149,7 +149,7 @@ class QuestionnairSiderbar extends PureComponent {
 									  	border: 'none',
 									  	cursor: 'move'
 									  }} 
-									  key={data.id}>
+									  key={data.questionId}>
 										<i className={`iconfont ${this.switchIcon(data.type)} ${styles['siderbar-menu-icon']}`}></i>
 										{data.type === 'input' ? (
 											<span className={styles['summary-text']}>{data.completionForwards}____{data.completionBackwards}</span>

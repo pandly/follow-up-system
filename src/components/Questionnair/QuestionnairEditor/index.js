@@ -21,7 +21,6 @@ class QuestionnairEditor extends PureComponent {
     }
     
     state = {
-    	toggleOtherOption: false,
     	toggleMutiOption: false,
 		editor: {...this.props.editor},
 		hover: false,
@@ -92,12 +91,6 @@ class QuestionnairEditor extends PureComponent {
 		this.setState(prevState => ({
 			editor: { ...prevState.editor, options }
 		}))
-    }
-    //点击添加”其他“选项
-    handleOtherOption = (type) => {
-		this.setState({
-			toggleOtherOption: type === 'add' ? true : false
-		})
     }
     /*
      * 以下都是有关于批量编辑的事件
@@ -198,7 +191,6 @@ class QuestionnairEditor extends PureComponent {
 	render() {
 		const { index, curMoveItem, drag } = this.props;
 		const { 
-			toggleOtherOption, 
 			toggleMutiOption, 
 			editor, 
 			hover, 
@@ -215,10 +207,10 @@ class QuestionnairEditor extends PureComponent {
         	remark, 
         	remarkText, 
         	options, 
-        	otherOption, 
         	rows, 
         	textareaHeight, 
-        	maxLength, 
+        	maxLength,
+        	otherOption, 
         	otherOptionForwards, 
         	otherOptionBackwards, 
         	completionForwards, 
@@ -298,7 +290,7 @@ class QuestionnairEditor extends PureComponent {
 						/>
 			        </div>
 				</div>
-				<i className="iconfont icon-chachaicon" onClick={() => this.handleOtherOption('delete')}></i>
+				<i className="iconfont icon-chachaicon" onClick={() => this.handleChange(false, 'otherOption')}></i>
 			</div>
         )
         //填空题
@@ -331,11 +323,11 @@ class QuestionnairEditor extends PureComponent {
 			    <button 
 			      className="control-button"
 			      style={{
-			      	color: toggleOtherOption ? '#CCC' : '#45A8E6',
-			      	cursor: toggleOtherOption ? 'not-allowed' : 'pointer'
+			      	color: otherOption ? '#CCC' : '#45A8E6',
+			      	cursor: otherOption ? 'not-allowed' : 'pointer'
 			      }}
-			      disabled={toggleOtherOption} 
-			      onClick={() => this.handleOtherOption('add')}>
+			      disabled={otherOption} 
+			      onClick={() => this.handleChange(true, 'otherOption')}>
 			    	添加“其他”选项
 			    </button>
 			    <span style={{ margin: '0 10px' }}>|</span>
@@ -383,7 +375,7 @@ class QuestionnairEditor extends PureComponent {
 				<span>{completionBackwards}</span>
 			</div>
 		)
-		const optionsCom = toggleOtherOption ? options.concat(optionsSubOtherEl) : options;
+		const optionsCom = otherOption ? options.concat(optionsSubOtherEl) : options;
         const optionsRadioEl = optionsCom.map(data => {
 			return <Radio key={uuid()} label={data} style={{ width: `${100/parseInt(rows)}%`, marginBottom: 8 }} />;
 		})
@@ -434,14 +426,14 @@ class QuestionnairEditor extends PureComponent {
 										{remark && (
 											<Input
 											  name={'remarkText'}
-											  value={remarkText}
+											  value={remarkText || ''}
 											  onChange={this.handleChange}
 											/>
 										)}
 								    </div>
 								</div>
 								{['radio', 'dropdown', 'checkbox'].includes(type) && optionsEdiEl}
-								{toggleOtherOption && optionsEdiOtherEl}
+								{otherOption && optionsEdiOtherEl}
 								{['radio', 'checkbox'].includes(type) && optionsCtrlEl}
 							    {['radio', 'checkbox'].includes(type) && (
 									<div className="editor-adv">

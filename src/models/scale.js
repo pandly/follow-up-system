@@ -1,6 +1,8 @@
 import {
     getScaleList,
-    deleteScale
+    deleteScale,
+    getScale,
+    saveScale
 } from '../services/api.js'
 export default {
 
@@ -9,6 +11,8 @@ export default {
     state: {
         scaleList: [],
         scaleListLoading: false,
+        scaleInfo: {},
+        whetherSuccessfullySaved: ''
     },
 
     subscriptions: {
@@ -34,6 +38,16 @@ export default {
         },
         *deleteScale({ payload }, { call, put }){
             yield call(deleteScale, payload)
+        },
+        *saveScale({ payload }, { call, put }) {
+            yield call(saveScale, payload)
+        },
+        *getScale({ payload }, { call, put }) {
+            const result = yield call(getScale, payload)
+            yield put({ 
+                type: 'updateScaleInfo',
+                payload: result.results
+            });
         }
     },
 
@@ -43,6 +57,9 @@ export default {
         },
         changeScaleListLoading(state, action){
             return { ...state, scaleListLoading: action.payload}
+        },
+        updateScaleInfo(state, action){
+            return { ...state, scaleInfo: action.payload}
         },
     },
 

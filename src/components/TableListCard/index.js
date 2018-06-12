@@ -66,12 +66,12 @@ export default class ListCard extends Component {
 		});
 	}
 	render(){
-		const {listData} = this.props
+		const { listData, onClick } = this.props
 		const {isPopSignHide, isPopDeleteHide, isBtnShow} = this.state
 		// console.log(this.props)
 		return (
 			<div className={styles.tableItemWrap} onMouseOver={this.showBtn} onMouseLeave={this.hideBtn} >
-				<div className={styles.tableItem} onClick={this.props.goDetail}>
+				<div className={styles.tableItem} onClick={onClick}>
 					<div className={styles.tableTitle}>{listData.title}</div>
 					<div className="clearfix">
 						<div className={styles.info}>

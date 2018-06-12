@@ -33,7 +33,7 @@
 
 .icon-dengpao:before { content: "\e60a"; }
 
-.icon-chachaicon:before { content: "\e60b"; }
+.icon-chachaicon:before { content: "\e60b"; cursor: pointer; margin-left: 10px; color: #979797;}
 
 .icon-fangdajingicon:before { content: "\e60c"; }
 
@@ -51,7 +51,7 @@
 
 .icon-danxuanicon:before { content: "\e614"; }
 
-.icon-danhangicon:before { content: "\e615"; }
+.icon-duohangicon:before { content: "\e615"; }
 
 .icon-bi:before { content: "\e616"; }
 
@@ -93,7 +93,7 @@
 
 .icon-grey_fuzhi:before { content: "\e62e"; }
 
-.icon-Q-icon:before { content: "\e62f"; }
+.icon-Q-icon:before { content: "\e62f"; color: #06AEA6;}
 
 .icon-grey_yanjing:before { content: "\e630"; }
 
@@ -111,13 +111,13 @@
 
 .icon-tongyongbiaotiicon:before { content: "\e611"; }
 
-.icon-xuanxiangicon:before { content: "\e63b"; }
+.icon-xuanxiangicon:before { content: "\e63b"; color: #cdcdcd;}
 
 .icon-zhongxinfabuicon:before { content: "\e63c"; }
 
-.icon-xinjianxuanxiangicon:before { content: "\e63d"; }
+.icon-xinjianxuanxiangicon:before { content: "\e63d"; margin: 0 10px;}
 
 .icon-jieshu:before { content: "\e600"; }
 
-.icon-danhangicon1:before { content: "\e603"; }
+.icon-danhangicon:before { content: "\e603"; }
 

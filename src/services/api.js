@@ -200,6 +200,18 @@ export async function deleteScale(id){
 export async function getScaleUsePlan(id){
 	return request(`/v1/scale/use/${id}`)
 }
+//get 获取量表信息
+export async function getScale(id){
+	return request(`/api/v1/scale/info/${id}`)
+}
+
+//get 保存量表
+export async function saveScale(params){
+	return request('/api/v1/scale/save',{
+		method: 'POST',
+		body: params
+	})
+}
 
 
 

@@ -4,7 +4,10 @@ import QuestionnairEditor from './QuestionnairEditor'
 import QuestionnairSiderbar from './QuestionnairSiderbar'
 import DragSort from '../DragSort'
 import ShakeTransition from 'components/Shake'
+import Input from 'components/Input'
+import { message } from 'antd';
 import uuid from 'utils/utils'
+import { connect } from 'dva'
 
 import styles from './index.less'
 
@@ -12,13 +15,46 @@ class Questionnair extends PureComponent {
 	constructor(props) {
 		super(props)
 		this.editorsEl = [];
+		this.scaleId = '';
 	}
 
     state = {
     	editors: [],
+    	questionnairTitle: '模板标题',
     	curMoveItem: null,
     	drag: false,
     	scrollTo: 0,
+    }
+
+    componentDidMount() {
+    	if(this.props.search) {
+    		const id = this.props.search.replace('?id=', '')
+    		//props改变重新render一次，调用setState又重新渲染一次
+			this.props.dispatch({
+	        	type: 'scale/getScale',
+	        	payload: id
+	        }).then(() => {
+	        	const { questions, title, scaleId } = this.props.scale.scaleInfo;
+	        	this.setState({
+	        		editors: questions,
+	        		questionnairTitle: title
+	        	})
+	        	this.scaleId = scaleId;
+	        })
+    	}
+    }
+
+    updateEditors = () => {
+		this.props.dispatch({
+        	type: 'scale/saveScale',
+        	payload: {
+        		questions: this.state.editors,
+        		scaleId: this.scaleId,
+        		title: this.state.questionnairTitle
+        	}
+        }).then((a, b)=>{
+			message.success('修改成功！')
+		})
     }
     /* 
      * 判断是否有处于编辑状态的题目, activeEditorIndex // -1,没有处于编辑状态的题目
@@ -43,7 +79,7 @@ class Questionnair extends PureComponent {
 			return;
 		}
 		const editor = {
-			id: uuid(), //id
+			questionId: uuid(), //id
 			type: type, //类型
 			title: '', //题目
         	required: false, //是否必填
@@ -53,12 +89,13 @@ class Questionnair extends PureComponent {
 	        rows: 1, //选项占的行数
 	        textareaHeight: 3, //多行文本高度
 	        maxLength: 50, //单行文本限制的字数
+	        otherOption: false, //是否有其他选项
 	        otherOptionForwards: '其他', //”其他“项文本(前)
 	        otherOptionBackwards: '', //”其他“项文本(后)
 	        completionForwards: '题目：', //填空题文本(前)
 	        completionBackwards: '', //填空题文本(后)
             isEditor: true, //编辑状态还是已编辑状态
-            isFirst: true,
+            isFirst: true, //是否是新创建的
             editorShake: ''
 		}
 		this.setState(prevState => ({
@@ -73,7 +110,6 @@ class Questionnair extends PureComponent {
     }
     
     locateEditor = (index) => {
-    	console.log(this.editorsEl, this.editorsEl[index].scrollHeight)
     	this.setState({
     		scrollTo: this.editorsEl[index].offsetTop
     	})
@@ -92,7 +128,10 @@ class Questionnair extends PureComponent {
     	editors.splice(index, 1, newEditor);
     	this.setState({
     		editors
+        }, () => {
+			this.updateEditors();
         })
+ 
     }
     
     againEdit = (index) => {
@@ -108,10 +147,12 @@ class Questionnair extends PureComponent {
     
     copyEdit = (index) => {
 		let editors = JSON.parse(JSON.stringify(this.state.editors));
-		const copyEditor = {...this.state.editors[index], id: uuid()};
+		const copyEditor = {...this.state.editors[index], questionId: uuid()};
     	editors.splice(index+1, 0, copyEditor);
     	this.setState({
        	    editors
+        }, () => {
+        	this.updateEditors();
         })
     }
 
@@ -120,6 +161,8 @@ class Questionnair extends PureComponent {
         editors.splice(index, 1)
         this.setState({
        	    editors
+        }, () => {
+        	this.updateEditors();
         })
     }
     
@@ -135,15 +178,19 @@ class Questionnair extends PureComponent {
 	    this.setState({
 	      curMoveItem: null,
 	      drag: false
-	    })
+	    }, () => {
+        	this.updateEditors();
+        })
 	}
     
-    handleTitle = (val) => {
-		this.questionnairTitle = val 
+    changeQuestionnairTitle = (value) => {
+        this.setState({
+			questionnairTitle: value
+        })
     }
 
 	render() {
-		const { editors, drag, editorShake, scrollTo } = this.state;
+		const { editors, drag, editorShake, scrollTo, questionnairTitle } = this.state;
 		//如果有编辑状态的题目则禁止拖动
 		const hasEditor = editors.some(data => data.isEditor === true);
 		const canDrag = hasEditor ? false : true;
@@ -152,7 +199,7 @@ class Questionnair extends PureComponent {
 	    		<div
 	    		  className="drag-wrapper"
 	    		  ref={el => this.editorsEl[index] = el}
-	    		  key={editor.id}>
+	    		  key={editor.questionId}>
 					<QuestionnairEditor
 					  index={index}
 					  curMoveItem={this.state.curMoveItem}
@@ -166,7 +213,24 @@ class Questionnair extends PureComponent {
 				    />
 			    </div>
 	    	)
-	    })
+	    });
+	    const titleEl = (
+			<div className='title-inner'>
+				<Input
+                  value={questionnairTitle}
+                  onChange={this.changeQuestionnairTitle}
+                  onBlur={this.updateEditors}
+                  style={{
+                  	height: 45,
+                  	borderColor: 'transparent',
+                  	textAlign: 'center',
+                  	fontSize: 18,
+                  	color: '#666',
+                  	fontFamily: 'PingFangSC-Medium'
+                  }}
+				  className={styles['title-input']} />
+			</div>
+	    );
 		return (
 			<div className={styles.questionnair}>
 				<QuestionnairSiderbar 
@@ -179,6 +243,7 @@ class Questionnair extends PureComponent {
 				  length={editors.length}
                   scrollTo={scrollTo}
 				  onChangeTitle={this.handleTitle}>
+				    {titleEl}
 				    {editorsEl.length !== 0 && (
 						<DragSort
 						  onDragEnd={this.handleDragEnd} 
@@ -194,4 +259,6 @@ class Questionnair extends PureComponent {
 	}
 }
 
-export default Questionnair
+export default connect(({ scale }) => ({
+  scale
+}))(Questionnair);

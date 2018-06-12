@@ -29,20 +29,12 @@
     &:hover {
     	border-color: #DBDBDB;
     	background: #FAFAFA;
-    	.title-inner {
-    		border-color: #DBDBDB;
-    	}
+    	:global {
+    		.title-inner {
+	    		border-color: #DBDBDB;
+	    	}
+    	};
     }
-}
-.title-inner {
-	width: 700px;
-    height: 45px;
-	margin: 0 auto;
-    background: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 1px solid transparent;
 }
 .questionnair-page-content {
 	width: 100%;

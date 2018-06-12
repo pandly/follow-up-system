@@ -28,7 +28,6 @@ class PlanProfile extends PureComponent {
         
         let planDetailTask = [...this.state.planDetailTask];
         planDetailTask.splice(index, 1, newplanDetailTaskObj);
-        console.log(planDetailTask,'planDetailTask3')
         this.setState({
         	planDetailTask
         })
@@ -148,7 +147,6 @@ class PlanProfile extends PureComponent {
 	saveForm=(e)=>{
 		e.preventDefault();
 		this.props.form.validateFields((err, values) => {
-			console.log(values)
 			if(!err){
 				let param = {
 					planTemplate: {						
@@ -185,10 +183,8 @@ class PlanProfile extends PureComponent {
 							planTemplateId: this.props.match.params.id
 						}
 					}).then(()=>{
-						console.log(this.props.plan.planDetailTask,'11111')
 						this.initData(()=>{
-							console.log(this.props.plan.planDetailTask,'2222')
-							message.success('添加成功！')
+							message.success('修改成功！')
 							this.setState({
 								planTemplateId: this.props.match.params.id
 								})

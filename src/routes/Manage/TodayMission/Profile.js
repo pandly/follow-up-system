@@ -280,13 +280,16 @@ class MissionProfile extends Component {
 			}
 		}).then(()=>{
 			let list = [...this.props.patientDetail.todayDetail.tasks]
+			let status;
 			list.forEach(item=>{
 				item.scaleTemplateId = {
 					key: item.scaleTemplateId,
 					label: item.scaleName
 				}
+				if(item.now){
+					status = item.taskId
+				}
 			})
-			const status = this.props.patientDetail.todayDetail.tasks[0].taskId
 			const scaleId = this.props.patientDetail.todayDetail.tasks[0].scaleId
 			this.props.dispatch({
 				type: 'scale/getFollowScale',

@@ -279,13 +279,16 @@ class OutPatientProfile extends Component {
 			}
 		}).then(()=>{
 			let list = [...this.props.patientDetail.outDetail.tasks]
+			let status;
 			list.forEach(item=>{
 				item.scaleTemplateId = {
 					key: item.scaleTemplateId,
 					label: item.scaleName
 				}
+				if(item.now){
+					status = item.taskId
+				}
 			})
-			const status = this.props.patientDetail.outDetail.tasks[0].taskId
 			this.setState({
 				status:status,
 				planTaskList: list,

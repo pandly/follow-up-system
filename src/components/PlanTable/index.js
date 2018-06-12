@@ -26,10 +26,12 @@ export default class PlanTable extends Component {
         planDetailTask.splice(index, 1, newPlanDetailTaskObj);
         this.setState({
         	planDetailTask
+        },()=>{
+        	if(onChange) {
+				onChange(planDetailTask)
+			}
         })		
-		if(onChange) {
-			onChange(planDetailTask)
-		}
+		
 	}
 	deleteItem(index){
 		const { onChange, status } = this.props

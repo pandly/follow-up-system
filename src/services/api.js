@@ -212,6 +212,10 @@ export async function saveScale(params){
 		body: params
 	})
 }
+//get 保存量表
+export async function getFollowScale(id){
+	return request(`/api/v1/scale/follow_scale?scaleId=${id}`)
+}
 
 
 

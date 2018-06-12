@@ -262,13 +262,13 @@ class MissionProfile extends Component {
   			taskVOS: list
   		}
   		console.log(param,'ppppp')
-  		// this.props.dispatch({
-  		// 	type: 'plan/updatePlanTask',
-  		// 	payload: param
-  		// }).then(()=>{
-  		// 	this.getData(this.hideEditPlan())
+  		this.props.dispatch({
+  			type: 'plan/updatePlanTask',
+  			payload: param
+  		}).then(()=>{
+  			this.getData(this.hideEditPlan())
   			
-  		// })
+  		})
 
   	}
 
@@ -357,7 +357,7 @@ class MissionProfile extends Component {
 			this.setState({
 				status:status,
 				planTaskList: list,
-				choosedPlanId: this.props.patientDetail.todayDetail.planId
+				choosedPlanId: this.props.patientDetail.todayDetail.planTemplateId
 			})
 			if(func){
 				func()

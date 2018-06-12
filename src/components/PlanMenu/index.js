@@ -10,9 +10,9 @@ export default class PlanMenu extends Component {
 			return styles.grey
 		}else if(type=='OVERDUE'){
 			return styles.red
-		}else if(type=='NO_START'){
+		}else if(type=='WAIT'){
 			return styles.green
-		}else if(type=='weidao'){
+		}else if(type=='NO_START'){
 			return styles.yellow
 		}else{
 			return ''
@@ -23,9 +23,9 @@ export default class PlanMenu extends Component {
 			return 'yisuifang-icon-color'
 		}else if(type=='OVERDUE'){
 			return 'suifangyuqi-icon-color'
-		}else if(type=='NO_START'){
+		}else if(type=='WAIT'){
 			return 'daisuifangicon-color'
-		}else if(type=='weidao'){
+		}else if(type=='NO_START'){
 			return 'shijianweidao-icon-color'
 		}else{
 			return ''
@@ -36,9 +36,9 @@ export default class PlanMenu extends Component {
 			return '已随访'
 		}else if(type=='OVERDUE'){
 			return '随访逾期'
-		}else if(type=='NO_START'){
+		}else if(type=='WAIT'){
 			return '待随访'
-		}else if(type=='weidao'){
+		}else if(type=='NO_START'){
 			return '时间未到'
 		}else{
 			return ''

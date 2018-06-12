@@ -15,6 +15,12 @@ class Scale extends PureComponent {
 	createTemplate = () => {
 		this.props.history.push('/template/scale/profile');
 	}
+	updateTemplate = (id) => {
+		this.props.history.push({
+			pathname: '/template/scale/profile',
+			search: `id=${id}`
+		});
+	}
 	searchScale = (value) => {
 		this.setState({
   			title: value
@@ -96,7 +102,7 @@ class Scale extends PureComponent {
 											<TableListCard  
 												key={item.scaleId} 
 												listData={item} 
-												goDetail={this.goDetail}
+												onClick={() => this.updateTemplate(item.scaleId)}
 												sureDelete={()=>this.sureDelete(item)}
 												copyTable={()=>this.copyTable(item)}></TableListCard>
 										))					    					

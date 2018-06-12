@@ -6,7 +6,6 @@ import Default from 'assets/scale_default.png'
 class QuestionnairContent extends PureComponent {
     state = {
     	mark: false,
-    	title: '模板标题'
     }
     //新增题目时内容页滚动到底部
     componentDidUpdate() {
@@ -21,12 +20,12 @@ class QuestionnairContent extends PureComponent {
     }
     
     componentWillReceiveProps(nextProps) {
-		if(nextProps.length > this.props.length) {
+		if(nextProps.length > this.props.length && this.props.length !== 0) {
 			this.scrollBottom = true;
 		}else {
 			this.scrollBottom = false;
 		}
-
+        console.log(nextProps.scrollTo, this.props.scrollTo)
 		if(nextProps.scrollTo !== this.props.scrollTo) {
 			this.scrollTo = nextProps.scrollTo;
 		}else {
@@ -39,16 +38,6 @@ class QuestionnairContent extends PureComponent {
        	 mark: !prevState.mark
        }))
 	}
-    
-    changeTitle = (value) => {
-    	const { onChangeTitle } = this.props;
-        this.setState({
-			title: value
-        })
-        if(onChangeTitle) {
-        	onChangeTitle(value)
-        }
-    }
 
 	render () {
 		const { mark, title } = this.state;
@@ -62,24 +51,11 @@ class QuestionnairContent extends PureComponent {
 					{/*<span className={styles['banner-text']}><i className="iconfont icon-grey_yanjing"></i>预览</span>*/}
 				</div>
 				<div className={styles['questionnair-page-title']}>
-					<div className={styles['title-inner']}>
-						<Input
-                          value={title}
-                          onChange={this.changeTitle}
-                          style={{
-                          	height: 45,
-                          	borderColor: 'transparent',
-                          	textAlign: 'center',
-                          	fontSize: 18,
-                          	color: '#666',
-                          	fontFamily: 'PingFangSC-Medium'
-                          }}
-						  className={styles['title-input']} />
-					</div>
+					{this.props.children[0]}
 				</div>
 				<div className={styles['questionnair-page-content']} ref={el => this.content = el}>
 					{/*如果组件没有子节点，this.props.children返回false*/}
-					{this.props.children || (
+					{this.props.children[1] || (
 						<div className={styles['questionnair-page-default']}>
 							<img src={Default} style={{ width: 130 }}/>
 							<div className={styles['page-default-text']}>您好没有添加题目哦，请点击左侧控件开始出题吧</div>

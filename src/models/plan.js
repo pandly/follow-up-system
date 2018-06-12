@@ -124,6 +124,16 @@ export default {
         changePlanDetailLoading(state, action){
             return { ...state, planDetailLoading: action.payload}
         },
+        clear(){
+            return {
+                planList: [],
+                planTwoList: [],
+                planListLoading: false,
+                planDetail: [],
+                planDetailTask: [],
+                planDetailLoading: false
+            }
+        }
     },
 
 };

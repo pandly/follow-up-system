@@ -299,6 +299,13 @@ class PlanProfile extends PureComponent {
 		}
 	}
 
+	componentWillUnmount(){
+		this.props.dispatch({
+	      	type: 'plan/clear',
+	    });
+	}
+
+
 	render() {
 		const { 
 			status, 

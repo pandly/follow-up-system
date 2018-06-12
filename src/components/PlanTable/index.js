@@ -89,7 +89,7 @@ export default class PlanTable extends Component {
 
 	render(){
 		const { planDetailTask } = this.state;
-		const { scaleList = [], dictionary = {} } = this.props
+		const { scaleList, dictionary } = this.props
 
 		return (
 			<div>

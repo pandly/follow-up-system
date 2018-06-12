@@ -145,7 +145,7 @@ class MissionProfile extends Component {
 			status: '',
 			followTime: '',
 			returnType: '',
-			scaleId: {
+			scaleTemplateId: {
 				key: '',
 				label: ''
 			},
@@ -214,8 +214,8 @@ class MissionProfile extends Component {
   		}).then(()=>{
   			let list = [...this.props.patientDetail.PlanTaskList]
 			list.forEach(item=>{
-				item.scaleId = {
-					key: item.scaleId,
+				item.scaleTemplateId = {
+					key: item.scaleTemplateId,
 					label: item.scaleName
 				}
 			})
@@ -236,8 +236,8 @@ class MissionProfile extends Component {
   			return
   		}
   		list.forEach(item=>{
-  			item.scaleName = item.scaleId.label
-			item.scaleId = item.scaleId.key
+  			item.scaleName = item.scaleTemplateId.label
+			item.scaleTemplateId = item.scaleTemplateId.key
 		})
   		const param = {
   			inhospitalId: this.state.inhospitalId,
@@ -259,8 +259,8 @@ class MissionProfile extends Component {
   	cancelPlanTask = () => {
   		let list = [...this.props.patientDetail.todayDetail.tasks]
 		list.forEach(item=>{
-			item.scaleId = {
-				key: item.scaleId,
+			item.scaleTemplateId = {
+				key: item.scaleTemplateId,
 				label: item.scaleName
 			}
 		})
@@ -281,8 +281,8 @@ class MissionProfile extends Component {
 		}).then(()=>{
 			let list = [...this.props.patientDetail.todayDetail.tasks]
 			list.forEach(item=>{
-				item.scaleId = {
-					key: item.scaleId,
+				item.scaleTemplateId = {
+					key: item.scaleTemplateId,
 					label: item.scaleName
 				}
 			})
@@ -413,14 +413,14 @@ class MissionProfile extends Component {
 			)
 		},{
 			title: '量表选择',
-			dataIndex: 'scaleId',
+			dataIndex: 'scaleTemplateId',
 			width: '190px',
-			key: 'scaleId',
+			key: 'scaleTemplateId',
 			render: (text, record, key) => (
 				record.status!='COMPLETE'&&record.status!='OVERDUE'?
 				<EditSelectCell dataSource={scaleList} 
 					value={text} allowClear={true} labelInValue={true}
-					onChange={this.onCellChange(key, 'scaleId')}
+					onChange={this.onCellChange(key, 'scaleTemplateId')}
 					valueType={{code:'scaleId',value: 'title'}}
 					styleObj={{ width: 180 }}>
 

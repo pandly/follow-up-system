@@ -217,7 +217,7 @@ class QuestionnairEditor extends PureComponent {
         	completionBackwards,
         	editorShake
         } = editor;
-        //题目
+        //编辑状态下的题目
         const titleEdiEl = (
 			<div className="editor-row">
 				<label className="editor-row-title">题目</label>
@@ -235,7 +235,7 @@ class QuestionnairEditor extends PureComponent {
 				</div>				
 			</div>
         )
-        //选项框
+        //编辑状态下的选项框
         const optionsArr = options.map((option, index) => {
 			return (
 				<div className="editor-row" key={index}>
@@ -254,7 +254,7 @@ class QuestionnairEditor extends PureComponent {
 				</div>
 			)
 		})
-        //选项框和新建框
+        //编辑状态下的选项框和新建框
         const optionsEdiEl = (
 			<div>
 			    { optionsArr }
@@ -269,7 +269,7 @@ class QuestionnairEditor extends PureComponent {
 				</div>
 			</div>
         )
-        //”其他“选项
+        //编辑状态下的”其他“选项
         const optionsEdiOtherEl = (
 			<div className="editor-row">	        
 			    <div className="editor-row-content">
@@ -293,7 +293,7 @@ class QuestionnairEditor extends PureComponent {
 				<i className="iconfont icon-chachaicon" onClick={() => this.handleChange(false, 'otherOption')}></i>
 			</div>
         )
-        //填空题
+        //编辑状态下的填空题
         const completionEdiEl = (
 			<div className="editor-row">
 			    <label className="editor-row-title">内容</label>	        
@@ -343,7 +343,7 @@ class QuestionnairEditor extends PureComponent {
 			    </button>
 			</div>
         )
-        //单选、多选其他选项
+        //编辑状态下的单选、多选其他选项
         const optionsSubOtherEl = (
 			<div className="subject-other-option">
 				<span>{otherOptionForwards}</span>
@@ -359,7 +359,7 @@ class QuestionnairEditor extends PureComponent {
 				<span>{otherOptionBackwards}</span>
 			</div>
 		)
-		//填空题目
+		//编辑状态下的填空题目
 		const subCompletionEl = (
 			<div className="subject-other-option">
 				<span>{completionForwards}</span>
@@ -375,6 +375,7 @@ class QuestionnairEditor extends PureComponent {
 				<span>{completionBackwards}</span>
 			</div>
 		)
+		//编辑完成以后的选项
 		const optionsCom = otherOption ? options.concat(optionsSubOtherEl) : options;
         const optionsRadioEl = optionsCom.map(data => {
 			return <Radio key={uuid()} label={data} style={{ width: `${100/parseInt(rows)}%`, marginBottom: 8 }} />;
@@ -382,6 +383,7 @@ class QuestionnairEditor extends PureComponent {
 		const optionsCheckboxEl = optionsCom.map(data => {
 			return <Checkbox key={uuid()} label={data} style={{ width: `${100/parseInt(rows)}%`, marginBottom: 8 }} />;
 		})
+		
 		const optionsSelectEl = <Select options={options}/>
 		const optionsEl = type === 'dropdown' ? optionsSelectEl : (type === 'radio' ? optionsRadioEl : optionsCheckboxEl)
         

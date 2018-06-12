@@ -2,7 +2,8 @@ import {
     getScaleList,
     deleteScale,
     getScale,
-    saveScale
+    saveScale,
+    getFollowScale
 } from '../services/api.js'
 export default {
 
@@ -12,6 +13,7 @@ export default {
         scaleList: [],
         scaleListLoading: false,
         scaleInfo: {},
+        followScaleInfo: {},
         whetherSuccessfullySaved: ''
     },
 
@@ -48,6 +50,13 @@ export default {
                 type: 'updateScaleInfo',
                 payload: result.results
             });
+        },
+        *getFollowScale({ payload }, { call, put }) {
+            const result = yield call(getFollowScale, payload)
+            yield put({ 
+                type: 'updateFollowScaleInfo',
+                payload: result.results
+            });
         }
     },
 
@@ -60,6 +69,9 @@ export default {
         },
         updateScaleInfo(state, action){
             return { ...state, scaleInfo: action.payload}
+        },
+        updateFollowScaleInfo(state, action){
+            return { ...state, followScaleInfo: action.payload}
         },
     },
 

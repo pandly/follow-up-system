@@ -25,7 +25,7 @@ class QuestionnairContent extends PureComponent {
 		}else {
 			this.scrollBottom = false;
 		}
-        console.log(nextProps.scrollTo, this.props.scrollTo)
+
 		if(nextProps.scrollTo !== this.props.scrollTo) {
 			this.scrollTo = nextProps.scrollTo;
 		}else {

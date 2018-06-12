@@ -41,6 +41,7 @@ class Input extends PureComponent {
 			    ) : (
 					<input {...otherProps}
 					  type={type || 'text'}
+					  maxlength={maxLength}
 					  name={name}
 					  value={value}
 					  disabled={disabled}

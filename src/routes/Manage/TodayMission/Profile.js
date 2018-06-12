@@ -287,6 +287,11 @@ class MissionProfile extends Component {
 				}
 			})
 			const status = this.props.patientDetail.todayDetail.tasks[0].taskId
+			const scaleId = this.props.patientDetail.todayDetail.tasks[0].scaleId
+			this.props.dispatch({
+				type: 'scale/getFollowScale',
+				payload: scaleId
+			})
 			this.setState({
 				status:status,
 				planTaskList: list,

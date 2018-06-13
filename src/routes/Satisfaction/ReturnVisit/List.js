@@ -47,10 +47,10 @@ class Satisfaction extends PureComponent {
 		pageSize: 15,
 		deptChoosed: '',
 		doctorChoosed: '',
-		dischargeStartTime: '',
-		dischargeEndTime: '',
-		followStartTime: '',
-		followEndTime: '',
+		dischargeStartTime: null,
+		dischargeEndTime: null,
+		followStartTime: null,
+		followEndTime: null,
 		tabPanes: [{
 			title: '待回访',
 			key: 'wait'
@@ -62,25 +62,39 @@ class Satisfaction extends PureComponent {
 	}
 
 	goDetail (item){
-		this.props.dispatch(routerRedux.push(`/satisfaction/returnVisit/profile/${item.inhospitalId}/${item.task.scaleId}`));
+		this.props.dispatch(routerRedux.push(`/satisfaction/returnVisit/profile/${item.inhospitalId}`));
 	}
 
 	changeType=(key)=> {
   		if(key!='search'){
-  			console.log('1111')
-  			this.setState({
-		  		tabType: key,
-		  		deptChoosed: '',
-				doctorChoosed: '',
-				// dischargeStartTime: '',
-				// dischargeEndTime: '',
-				followStartTime: '',
-				followEndTime: ''
-		  	}, ()=> {
-				this.getData(0)
-			})
+  			const now = new Date()
+			if(now.getDate()>7){
+				this.setState({
+			  		tabType: key,
+			  		deptChoosed: '',
+					doctorChoosed: '',
+					dischargeStartTime: moment(now).startOf('month').subtract(1,'months'),
+					dischargeEndTime: moment(now).endOf('month').subtract(1,'months'),
+					followStartTime: null,
+					followEndTime: null
+			  	}, ()=> {
+					this.getData(0)
+				})
+			}else{
+				this.setState({
+			  		tabType: key,
+			  		deptChoosed: '',
+					doctorChoosed: '',
+					dischargeStartTime: moment(now).startOf('month').subtract(2,'months'),
+					dischargeEndTime: moment(now).endOf('month').subtract(2,'months'),
+					followStartTime: null,
+					followEndTime: null
+			  	}, ()=> {
+					this.getData(0)
+				})
+			}
   		}else{
-  			console.log('search')
+  			
   		}
 	  	
 	}
@@ -89,8 +103,8 @@ class Satisfaction extends PureComponent {
   		const startTime = dateString[0]
   		const endTime = dateString[1]
   		this.setState({
-  			dischargeStartTime: startTime,
-  			dischargeEndTime: endTime
+  			dischargeStartTime: moment(startTime),
+  			dischargeEndTime: moment(endTime)
   		}, ()=>{
   			this.getData(0)
   		})
@@ -99,8 +113,8 @@ class Satisfaction extends PureComponent {
   		const startTime = dateString[0]
   		const endTime = dateString[1]
   		this.setState({
-  			followStartTime: startTime,
-  			followEndTime: endTime
+  			followStartTime: moment(startTime),
+  			followEndTime: moment(endTime)
   		}, ()=>{
   			this.getData(0)
   		})
@@ -249,15 +263,15 @@ class Satisfaction extends PureComponent {
 		const now = new Date()
 		if(now.getDate()>7){
 			this.setState({
-				dischargeStartTime: moment(now).startOf('month').subtract(1,'months').format('YYYY-MM-DD'),
-				dischargeEndTime: moment(now).endOf('month').subtract(1,'months').format('YYYY-MM-DD')
+				dischargeStartTime: moment(now).startOf('month').subtract(1,'months'),
+				dischargeEndTime: moment(now).endOf('month').subtract(1,'months')
 			},()=>{
 				this.getData(0)
 			})
 		}else{
 			this.setState({
-				dischargeStartTime: moment(now).startOf('month').subtract(2,'months').format('YYYY-MM-DD'),
-				dischargeEndTime: moment(now).endOf('month').subtract(2,'months').format('YYYY-MM-DD')
+				dischargeStartTime: moment(now).startOf('month').subtract(2,'months'),
+				dischargeEndTime: moment(now).endOf('month').subtract(2,'months')
 			},()=>{
 				this.getData(0)
 			})
@@ -440,6 +454,7 @@ class Satisfaction extends PureComponent {
 							    		<div className={styles.selectItem}>
 							    			<span className={styles.text}>随访日期</span>
 											<RangePicker onChange={this.handleFollowDateChange} placeholder={['yyyy-mm-dd', 'yyyy-mm-dd']}
+												value={[followStartTime,followEndTime]}
 												style={{ width: 250 }}
 												disabledDate={this.disabledDate}/>
 							    		</div>
@@ -448,7 +463,7 @@ class Satisfaction extends PureComponent {
 											<RangePicker onChange={this.handleOutDateChange} placeholder={['yyyy-mm-dd', 'yyyy-mm-dd']}
 												style={{ width: 250 }}
 												disabledDate={this.disabledDate}
-												value={[moment(dischargeStartTime), moment(dischargeEndTime)]}/>
+												value={[dischargeStartTime,dischargeEndTime]}/>
 							    		</div>
 							    	</div>
 							    	<div className={styles.infoWrap}>

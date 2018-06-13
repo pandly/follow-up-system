@@ -67,7 +67,7 @@ class MissionProfile extends Component {
 		conclusionShow: false,
 		medicineShow: false,
 		inhospitalId: this.props.match.params.id,
-		scaleId: this.props.match.params.scaleId,
+		// scaleId: this.props.match.params.scaleId,
 		medicineSquareTime: '',
 		medicineResident: '',
 		stopReason: '',
@@ -241,7 +241,7 @@ class MissionProfile extends Component {
 		})
   		const param = {
   			inhospitalId: this.state.inhospitalId,
-  			planTemplateId: this.props.patientDetail.todayDetail.planId==this.state.choosedPlanId?'':this.state.choosedPlanId,
+  			planTemplateId: this.props.patientDetail.todayDetail.planTemplateId==this.state.choosedPlanId?'':this.state.choosedPlanId,
   			planId: this.props.patientDetail.todayDetail.planId,
   			dischargeTime: this.props.patientDetail.todayDetail.dischargeTime,
   			taskVOS: list
@@ -250,6 +250,7 @@ class MissionProfile extends Component {
   			type: 'plan/updatePlanTask',
   			payload: param
   		}).then(()=>{
+  			message.success('保存成功！')
   			this.getData(this.hideEditPlan())
   			
   		})
@@ -276,7 +277,7 @@ class MissionProfile extends Component {
 			type: 'patientDetail/fetchToday',
 			payload: {
 				inhospitalId: this.state.inhospitalId,
-				scaleId: this.state.scaleId
+				// scaleId: this.state.scaleId
 			}
 		}).then(()=>{
 			let list = [...this.props.patientDetail.todayDetail.tasks]
@@ -442,7 +443,7 @@ class MissionProfile extends Component {
 			width: '80px',
 			render: (text, record, key) => (
 				record.status!='COMPLETE'?
-				<PopoverSure title="您确定要删除该表格吗？"
+				<PopoverSure title="您确定要删除该任务吗？"
 					text="目标删除后将不可恢复。"
 					sureFunction={()=>this.deletePlan(key)}>
 					<span className="delLink">删除</span>

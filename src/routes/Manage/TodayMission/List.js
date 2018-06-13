@@ -65,12 +65,12 @@ class TodayMission extends PureComponent {
 		pageSize: 15,
 		deptChoosed: '',
 		doctorChoosed: '',
-		startTime: '',
-		endTime: ''
+		startTime: null,
+		endTime: null
 	}
 	
 	checkProfile(item){
-		this.props.dispatch(routerRedux.push(`/manage/todayMission/profile/${item.inhospitalId}/${item.task.scaleId}`));
+		this.props.dispatch(routerRedux.push(`/manage/todayMission/profile/${item.inhospitalId}`));
 	}
 
 	changeTab(type){
@@ -78,8 +78,8 @@ class TodayMission extends PureComponent {
 			missionType: type,
 			deptChoosed: '',
 			doctorChoosed: '',
-			startTime: '',
-			endTime: '',
+			startTime: null,
+			endTime: null,
 			currentPage: 1
 		}, ()=> {
 			this.getData(0)
@@ -90,8 +90,8 @@ class TodayMission extends PureComponent {
   		const startTime = dateString[0]
   		const endTime = dateString[1]
   		this.setState({
-  			startTime: startTime,
-  			endTime: endTime
+  			startTime: moment(startTime),
+  			endTime: moment(endTime)
   		}, ()=>{
   			this.getData(0)
   		})
@@ -145,8 +145,8 @@ class TodayMission extends PureComponent {
 					startIndex: start,
 					resident: this.state.doctorChoosed,
 					department: this.state.deptChoosed,
-					dischargeStartTime: this.state.startTime,
-					dischargeEndTime: this.state.endTime
+					dischargeStartTime: this.state.startTime==null?'':this.state.startTime,
+					dischargeEndTime: this.state.endTime==null?'':this.state.endTime
 				}
 			})
 		}else if(this.state.missionType=='already'){
@@ -156,8 +156,8 @@ class TodayMission extends PureComponent {
 					startIndex: start,
 					resident: this.state.doctorChoosed,
 					department: this.state.deptChoosed,
-					dischargeStartTime: this.state.startTime,
-					dischargeEndTime: this.state.endTime
+					dischargeStartTime: this.state.startTime==null?'':this.state.startTime,
+					dischargeEndTime: this.state.endTime==null?'':this.state.endTime
 				}
 			})
 		}
@@ -273,6 +273,7 @@ class TodayMission extends PureComponent {
 						    </Select>
 						    <span className={styles.text}>出院日期</span>
 							<RangePicker onChange={this.handleDateChange} placeholder={['yyyy-mm-dd', 'yyyy-mm-dd']}
+								value={[startTime,endTime]}
 								style={{ width: 250 }}
 								disabledDate={this.disabledDate}/>
 						</div>

@@ -40,10 +40,10 @@ class OutPatient extends PureComponent {
 		pageSize: 15,
 		deptChoosed: '',
 		doctorChoosed: '',
-		dischargeStartTime: '',
-		dischargeEndTime: '',
-		followStartTime: '',
-		followEndTime: '',
+		dischargeStartTime: null,
+		dischargeEndTime: null,
+		followStartTime: null,
+		followEndTime: null,
 		tabPanes: [{
 			title: '待随访',
 			key: 'wait'
@@ -54,24 +54,23 @@ class OutPatient extends PureComponent {
 		searchValue: ''
   	}
   	goDetail(item){
-  		this.props.dispatch(routerRedux.push(`/manage/outPatient/profile/${item.inhospitalId}/${item.task.scaleId}`));
+  		this.props.dispatch(routerRedux.push(`/manage/outPatient/profile/${item.inhospitalId}`));
   	}
   	changeType=(key)=> {
   		if(key!='search'){
-  			console.log('1111')
   			this.setState({
 		  		tabType: key,
 		  		deptChoosed: '',
 				doctorChoosed: '',
-				dischargeStartTime: '',
-				dischargeEndTime: '',
-				followStartTime: '',
-				followEndTime: ''
+				dischargeStartTime: null,
+				dischargeEndTime: null,
+				followStartTime: null,
+				followEndTime: null
 		  	}, ()=> {
 				this.getData(0)
 			})
   		}else{
-  			console.log('search')
+  			
   		}
 	  	
 	}
@@ -80,8 +79,8 @@ class OutPatient extends PureComponent {
   		const startTime = dateString[0]
   		const endTime = dateString[1]
   		this.setState({
-  			dischargeStartTime: startTime,
-  			dischargeEndTime: endTime
+  			dischargeStartTime: moment(startTime),
+  			dischargeEndTime: moment(endTime)
   		}, ()=>{
   			this.getData(0)
   		})
@@ -90,8 +89,8 @@ class OutPatient extends PureComponent {
   		const startTime = dateString[0]
   		const endTime = dateString[1]
   		this.setState({
-  			followStartTime: startTime,
-  			followEndTime: endTime
+  			followStartTime: moment(startTime),
+  			followEndTime: moment(endTime)
   		}, ()=>{
   			this.getData(0)
   		})
@@ -137,10 +136,10 @@ class OutPatient extends PureComponent {
 					startIndex: start,
 					resident: this.state.doctorChoosed,
 					department: this.state.deptChoosed,
-					dischargeStartTime: this.state.dischargeStartTime,
-					dischargeEndTime: this.state.dischargeEndTime,
-					followStartTime: this.state.followStartTime,
-					followEndTime: this.state.followEndTime
+					dischargeStartTime: this.state.dischargeStartTime==null?'':this.state.dischargeStartTime,
+					dischargeEndTime: this.state.dischargeEndTime==null?'':this.state.dischargeEndTime,
+					followStartTime: this.state.followStartTime==null?'':this.state.followStartTime,
+					followEndTime: this.state.followEndTime==null?'':this.state.followEndTime
 				}
 			})
 		}else if(this.state.tabType=='already'){
@@ -150,10 +149,10 @@ class OutPatient extends PureComponent {
 					startIndex: start,
 					resident: this.state.doctorChoosed,
 					department: this.state.deptChoosed,
-					dischargeStartTime: this.state.dischargeStartTime,
-					dischargeEndTime: this.state.dischargeEndTime,
-					followStartTime: this.state.followStartTime,
-					followEndTime: this.state.followEndTime
+					dischargeStartTime: this.state.dischargeStartTime==null?'':this.state.dischargeStartTime,
+					dischargeEndTime: this.state.dischargeEndTime==null?'':this.state.dischargeEndTime,
+					followStartTime: this.state.followStartTime==null?'':this.state.followStartTime,
+					followEndTime: this.state.followEndTime==null?'':this.state.followEndTime
 				}
 			})
 		}
@@ -403,12 +402,14 @@ class OutPatient extends PureComponent {
 						    		<div className={styles.selectItem}>
 						    			<span className={styles.text}>随访日期</span>
 										<RangePicker onChange={this.handleFollowDateChange} placeholder={['yyyy-mm-dd', 'yyyy-mm-dd']}
+											value={[followStartTime,followEndTime]}
 											style={{ width: 250 }}
 											disabledDate={this.disabledDate}/>
 						    		</div>
 						    		<div className={styles.selectItem}>
 						    			<span className={styles.text}>出院日期</span>
 										<RangePicker onChange={this.handleOutDateChange} placeholder={['yyyy-mm-dd', 'yyyy-mm-dd']}
+											value={[dischargeStartTime,dischargeEndTime]}
 											style={{ width: 250 }}
 											disabledDate={this.disabledDate}/>
 						    		</div>

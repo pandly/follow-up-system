@@ -20,7 +20,7 @@ class SatisfactionDetail extends PureComponent {
 		detailShow: false,
 		remarkShow: false,
 		inhospitalId: this.props.match.params.id,
-		scaleId: this.props.match.params.scaleId,
+		// scaleId: this.props.match.params.scaleId,
 		medicineSquareTime: '',
 		medicineResident: '',
 		remarkReason: '',
@@ -135,7 +135,7 @@ class SatisfactionDetail extends PureComponent {
 			type: 'patientDetail/fetchSatisfy',
 			payload: {
 				inhospitalId: this.state.inhospitalId,
-				scaleId: this.state.scaleId
+				// scaleId: this.state.scaleId
 			}
 		}).then(()=>{
 			this.setState({

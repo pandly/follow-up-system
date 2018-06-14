@@ -3,6 +3,7 @@ import styles from './Profile.less'
 import patientInfo from '../../../assets/patient.png'
 import { Select, Table, Input, Button, Breadcrumb, Form, message } from 'antd';
 import { connect } from 'dva'
+import { routerRedux } from 'dva/router'
 
 import Modal from 'components/Modal'
 
@@ -20,7 +21,7 @@ class SatisfactionDetail extends PureComponent {
 		detailShow: false,
 		remarkShow: false,
 		inhospitalId: this.props.match.params.id,
-		scaleId: this.props.match.params.scaleId,
+		// scaleId: this.props.match.params.scaleId,
 		medicineSquareTime: '',
 		medicineResident: '',
 		remarkReason: '',
@@ -107,6 +108,10 @@ class SatisfactionDetail extends PureComponent {
 
 	}
 
+	goList=()=>{
+  		this.props.dispatch(routerRedux.push(`/satisfaction/returnVisit/list`));
+  	}
+
 	componentDidMount( ){
 		this.props.dispatch({
 			type: 'global/fetchDict'
@@ -135,7 +140,7 @@ class SatisfactionDetail extends PureComponent {
 			type: 'patientDetail/fetchSatisfy',
 			payload: {
 				inhospitalId: this.state.inhospitalId,
-				scaleId: this.state.scaleId
+				// scaleId: this.state.scaleId
 			}
 		}).then(()=>{
 			this.setState({
@@ -197,7 +202,9 @@ class SatisfactionDetail extends PureComponent {
 				<div className={styles.contentWrap}>
 					<Breadcrumb separator=">">
 					    <Breadcrumb.Item>满意度</Breadcrumb.Item>
-					    <Breadcrumb.Item>满意度回访</Breadcrumb.Item>
+					    <Breadcrumb.Item onClick={this.goList}>
+					    	<a>满意度回访</a>
+					    </Breadcrumb.Item>
 					    <Breadcrumb.Item>开始回访</Breadcrumb.Item>
 				  	</Breadcrumb>
 					<div className={`${styles.patientInfo} clearfix`}>

@@ -4,6 +4,7 @@ import patientInfo from '../../../assets/patient.png'
 import { Select, DatePicker, Table, Input, Button, Breadcrumb, Form, message } from 'antd';
 import { connect } from 'dva'
 import moment from 'moment'
+import { routerRedux } from 'dva/router'
 
 import PlanMenu from 'components/PlanMenu'
 import Modal from 'components/Modal'
@@ -67,12 +68,13 @@ class OutPatientProfile extends Component {
 		conclusionShow: false,
 		medicineShow: false,
 		inhospitalId: this.props.match.params.id,
-		scaleId: this.props.match.params.scaleId,
+		// scaleId: this.props.match.params.scaleId,
 		medicineSquareTime: '',
 		medicineResident: '',
 		stopReason: '',
 		stopDes: '',
-		choosedPlanId: ''
+		choosedPlanId: '',
+		canPlanEdit: true
 	}
 	
 	hideIdCard=(id)=>{
@@ -240,7 +242,7 @@ class OutPatientProfile extends Component {
 		})
   		const param = {
   			inhospitalId: this.state.inhospitalId,
-  			planTemplateId: this.props.patientDetail.outDetail.planId==this.state.choosedPlanId?'':this.state.choosedPlanId,
+  			planTemplateId: this.props.patientDetail.outDetail.planTemplateId==this.state.choosedPlanId?'':this.state.choosedPlanId,
   			planId: this.props.patientDetail.outDetail.planId,
   			dischargeTime: this.props.patientDetail.outDetail.dischargeTime,
   			taskVOS: list
@@ -249,7 +251,7 @@ class OutPatientProfile extends Component {
   			type: 'plan/updatePlanTask',
   			payload: param
   		}).then(()=>{
-  			message.success('修改成功！')
+  			message.success('保存成功！')
   			this.getData(this.hideEditPlan())
   		})
 
@@ -275,17 +277,25 @@ class OutPatientProfile extends Component {
 			type: 'patientDetail/fetchOut',
 			payload: {
 				inhospitalId: this.state.inhospitalId,
-				scaleId: this.state.scaleId
+				// scaleId: this.state.scaleId
 			}
 		}).then(()=>{
 			let list = [...this.props.patientDetail.outDetail.tasks]
+			let status;
 			list.forEach(item=>{
+				if(item.status=='COMPLETE'){
+					this.setState({
+						canPlanEdit: false
+					})
+				}
 				item.scaleTemplateId = {
 					key: item.scaleTemplateId,
 					label: item.scaleName
 				}
+				if(item.isNow){
+					status = item.taskId
+				}
 			})
-			const status = this.props.patientDetail.outDetail.tasks[0].taskId
 			this.setState({
 				status:status,
 				planTaskList: list,
@@ -296,6 +306,10 @@ class OutPatientProfile extends Component {
 			}
 		})
 	}
+
+	goList=()=>{
+  		this.props.dispatch(routerRedux.push(`/manage/outPatient/list`));
+  	}
 
 	componentDidMount( ){
 		this.props.dispatch({
@@ -353,7 +367,8 @@ class OutPatientProfile extends Component {
 			stopReason,
 			stopDes,
 			planTaskList,
-			choosedPlanId
+			choosedPlanId,
+			canPlanEdit
 		} = this.state
 		const {
 			outDetail,
@@ -465,7 +480,9 @@ class OutPatientProfile extends Component {
 				<div className={styles.contentWrap}>
 					<Breadcrumb separator=">">
 					    <Breadcrumb.Item>随访管理</Breadcrumb.Item>
-					    <Breadcrumb.Item href="">出院随访</Breadcrumb.Item>
+					    <Breadcrumb.Item onClick={this.goList}>
+					    	<a>出院随访</a>
+					    </Breadcrumb.Item>
 					    <Breadcrumb.Item>查看详情</Breadcrumb.Item>
 				  	</Breadcrumb>
 					<div className={`${styles.patientInfo} clearfix`}>
@@ -606,6 +623,7 @@ class OutPatientProfile extends Component {
 								<div className={styles.planName}>
 									<span className={styles.label}>计划模板</span>
 									<Select placeholder="请选择" style={{ width: 270 }}
+										disabled={!canPlanEdit}
 										value={choosedPlanId}
 										onChange={this.planChange}>
 								      	{
@@ -617,6 +635,7 @@ class OutPatientProfile extends Component {
 								</div>
 								<div className={styles.table}>
 									<Table dataSource={planTaskList} columns={columns} pagination={false}
+										rowKey="taskId"
 										rowClassName={(record, index) => {
 											return record.status
 										}}/>

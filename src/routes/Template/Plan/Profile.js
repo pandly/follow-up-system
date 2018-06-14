@@ -28,7 +28,6 @@ class PlanProfile extends PureComponent {
         
         let planDetailTask = [...this.state.planDetailTask];
         planDetailTask.splice(index, 1, newplanDetailTaskObj);
-        console.log(planDetailTask,'planDetailTask3')
         this.setState({
         	planDetailTask
         })
@@ -148,7 +147,6 @@ class PlanProfile extends PureComponent {
 	saveForm=(e)=>{
 		e.preventDefault();
 		this.props.form.validateFields((err, values) => {
-			console.log(values)
 			if(!err){
 				let param = {
 					planTemplate: {						
@@ -185,10 +183,8 @@ class PlanProfile extends PureComponent {
 							planTemplateId: this.props.match.params.id
 						}
 					}).then(()=>{
-						console.log(this.props.plan.planDetailTask,'11111')
 						this.initData(()=>{
-							console.log(this.props.plan.planDetailTask,'2222')
-							message.success('添加成功！')
+							message.success('修改成功！')
 							this.setState({
 								planTemplateId: this.props.match.params.id
 								})
@@ -266,6 +262,10 @@ class PlanProfile extends PureComponent {
     updateTable=(data) => {
     	this.table = data;
     }
+
+    goList=()=>{
+  		this.props.dispatch(routerRedux.push(`/template/plan/list`));
+  	}
 
 	componentDidMount(){
 		this.props.dispatch({
@@ -382,8 +382,14 @@ class PlanProfile extends PureComponent {
 				{/*{this.props.match.params.id}*/}
 				<Breadcrumb separator=">">
 				    <Breadcrumb.Item>随访模板</Breadcrumb.Item>
-				    <Breadcrumb.Item>随访计划</Breadcrumb.Item>
-				    <Breadcrumb.Item>查看随访计划</Breadcrumb.Item>
+				    <Breadcrumb.Item onClick={this.goList}>
+				    	<a>随访计划</a>
+				    </Breadcrumb.Item>
+				    <Breadcrumb.Item>
+				    	{
+				    		status=='detail'?'创建随访计划':'查看随访计划'
+				    	}
+				    </Breadcrumb.Item>
 			  	</Breadcrumb>
 
 				<div className={`${styles.contentWrap} ${planTemplateId=='add'?'':styles.hidden}`}>

@@ -37,7 +37,7 @@ export async function getTodayAlreadyFollow(params){
 
 //get 今日任务患者详情
 export async function getTodayDetail(params){
-	return request(`/api/v1/patient/get_patient?inhospitalId=${params.inhospitalId}&scaleId=${params.scaleId}`)
+	return request(`/api/v1/patient/get_patient?inhospitalId=${params.inhospitalId}`)
 }
 
 //POST  出院随访待随访列表
@@ -56,7 +56,7 @@ export async function getOutAlreadyFollow(params){
 }
 //get 出院随访患者详情
 export async function getOutDetail(params){
-	return request(`/api/v1/discharge/get_patient?inhospitalId=${params.inhospitalId}&scaleId=${params.scaleId}`)
+	return request(`/api/v1/discharge/get_patient?inhospitalId=${params.inhospitalId}`)
 }
 //POST  根据患者姓名或住院号获取患者随访任务列表
 export async function getOutSearch(params){
@@ -82,7 +82,7 @@ export async function getSatisfyAlreadyFollow(params){
 }
 //get 满意度回访患者详情
 export async function getSatisfyDetail(params){
-	return request(`/api/v1/satisfy/get_patient?inhospitalId=${params.inhospitalId}&scaleId=${params.scaleId}`)
+	return request(`/api/v1/satisfy/get_patient?inhospitalId=${params.inhospitalId}`)
 }
 //POST  保存备注
 export async function addRemark(params){

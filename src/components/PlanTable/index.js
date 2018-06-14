@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import styles from './index.less';
 import {InputNumber, Select, message } from 'antd'
+
+import PopoverSure from 'components/PopoverSure'
+
 const Option = Select.Option;
+
 export default class PlanTable extends Component {
 	state={
 		planDetailTask: []
@@ -26,10 +30,12 @@ export default class PlanTable extends Component {
         planDetailTask.splice(index, 1, newPlanDetailTaskObj);
         this.setState({
         	planDetailTask
+        },()=>{
+        	if(onChange) {
+				onChange(planDetailTask)
+			}
         })		
-		if(onChange) {
-			onChange(planDetailTask)
-		}
+		
 	}
 	deleteItem(index){
 		const { onChange, status } = this.props
@@ -146,7 +152,12 @@ export default class PlanTable extends Component {
 										</span>
 									</td>
 									<td>
-										<span className={styles.deleteBtn} onClick={() => this.deleteItem(index)}>删除</span>
+										<PopoverSure title="您确定要删除该任务吗？"
+											text="目标删除后将不可恢复。"
+											sureFunction={()=>this.deleteItem(index)}>
+											<span className={styles.deleteBtn}>删除</span>
+										</PopoverSure>
+										
 									</td>
 								</tr>
 							))

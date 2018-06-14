@@ -4,6 +4,7 @@ import patientInfo from '../../../assets/patient.png'
 import { Select, DatePicker, Table, Input, Button, Breadcrumb, Form, message } from 'antd';
 import { connect } from 'dva'
 import moment from 'moment'
+import { routerRedux } from 'dva/router'
 
 import PlanMenu from 'components/PlanMenu'
 import Modal from 'components/Modal'
@@ -69,13 +70,14 @@ class MissionProfile extends Component {
 		conclusionShow: false,
 		medicineShow: false,
 		inhospitalId: this.props.match.params.id,
-		scaleId: this.props.match.params.scaleId,
+		// scaleId: this.props.match.params.scaleId,
 		medicineSquareTime: '',
 		medicineResident: '',
 		stopReason: '',
 		stopDes: '',
 		choosedPlanId: '',
-		toggleAnswer: true
+		toggleAnswer: true,
+		canPlanEdit: true
 	}
 	
 	hideIdCard=(id)=>{
@@ -244,7 +246,7 @@ class MissionProfile extends Component {
 		})
   		const param = {
   			inhospitalId: this.state.inhospitalId,
-  			planTemplateId: this.props.patientDetail.todayDetail.planId==this.state.choosedPlanId?'':this.state.choosedPlanId,
+  			planTemplateId: this.props.patientDetail.todayDetail.planTemplateId==this.state.choosedPlanId?'':this.state.choosedPlanId,
   			planId: this.props.patientDetail.todayDetail.planId,
   			dischargeTime: this.props.patientDetail.todayDetail.dischargeTime,
   			taskVOS: list
@@ -253,6 +255,7 @@ class MissionProfile extends Component {
   			type: 'plan/updatePlanTask',
   			payload: param
   		}).then(()=>{
+  			message.success('保存成功！')
   			this.getData(this.hideEditPlan())
   			
   		})
@@ -279,17 +282,25 @@ class MissionProfile extends Component {
 			type: 'patientDetail/fetchToday',
 			payload: {
 				inhospitalId: this.state.inhospitalId,
-				scaleId: this.state.scaleId
+				// scaleId: this.state.scaleId
 			}
 		}).then(()=>{
 			let list = [...this.props.patientDetail.todayDetail.tasks]
+			let status;
 			list.forEach(item=>{
+				if(item.status=='COMPLETE'){
+					this.setState({
+						canPlanEdit: false
+					})
+				}
 				item.scaleTemplateId = {
 					key: item.scaleTemplateId,
 					label: item.scaleName
 				}
+				if(item.isNow){
+					status = item.taskId
+				}
 			})
-			const status = this.props.patientDetail.todayDetail.tasks[0].taskId
 			const scaleId = this.props.patientDetail.todayDetail.tasks[0].scaleId
 			this.props.dispatch({
 				type: 'scale/getFollowScale',
@@ -338,6 +349,9 @@ class MissionProfile extends Component {
         	toggleAnswer: true
         })
     }
+  	goList=()=>{
+  		this.props.dispatch(routerRedux.push(`/manage/todayMission/list`));
+  	}
 
   	componentDidMount( ){
   		this.props.dispatch({
@@ -397,7 +411,8 @@ class MissionProfile extends Component {
 			stopDes,
 			planTaskList,
 			choosedPlanId,
-			toggleAnswer
+			toggleAnswer,
+			canPlanEdit
 		} = this.state
 		const {
 			todayDetail,
@@ -475,7 +490,7 @@ class MissionProfile extends Component {
 			width: '80px',
 			render: (text, record, key) => (
 				record.status!='COMPLETE'?
-				<PopoverSure title="您确定要删除该表格吗？"
+				<PopoverSure title="您确定要删除该任务吗？"
 					text="目标删除后将不可恢复。"
 					sureFunction={()=>this.deletePlan(key)}>
 					<span className="delLink">删除</span>
@@ -509,7 +524,9 @@ class MissionProfile extends Component {
 				<div className={styles.contentWrap}>
 					<Breadcrumb separator=">">
 					    <Breadcrumb.Item>随访管理</Breadcrumb.Item>
-					    <Breadcrumb.Item href="">今日任务</Breadcrumb.Item>
+					    <Breadcrumb.Item onClick={this.goList}>
+					    	<a>今日任务</a>
+					    </Breadcrumb.Item>
 					    <Breadcrumb.Item>开始随访</Breadcrumb.Item>
 				  	</Breadcrumb>
 					<div className={`${styles.patientInfo} clearfix`}>
@@ -690,6 +707,7 @@ class MissionProfile extends Component {
 								<div className={styles.planName}>
 									<span className={styles.label}>计划模板</span>
 									<Select placeholder="请选择" style={{ width: 270 }}
+										disabled={!canPlanEdit}
 										value={choosedPlanId}
 										onChange={this.planChange}>
 								      	{

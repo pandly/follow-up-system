@@ -17,7 +17,7 @@ export const getRouterData = (app) => {
     '/manage/todayMission/list': {
       component: dynamicWrapper(app, ['todayMission'], () => import('../routes/Manage/TodayMission/List')),
     },
-    '/manage/todayMission/profile/:id/:scaleId': {
+    '/manage/todayMission/profile/:id': {
       component: dynamicWrapper(app, ['todayMission','patientDetail','global','plan','scale'], () => import('../routes/Manage/TodayMission/Profile')),
     },
     '/manage/outPatient': {
@@ -26,7 +26,7 @@ export const getRouterData = (app) => {
     '/manage/outPatient/list': {
       component: dynamicWrapper(app, ['outPatient'], () => import('../routes/Manage/OutPatient/List')),
     },
-    '/manage/outPatient/profile/:id/:scaleId': {
+    '/manage/outPatient/profile/:id': {
       component: dynamicWrapper(app, ['outPatient','patientDetail','global','plan','scale'], () => import('../routes/Manage/OutPatient/Profile')),
     },
     '/manage/specialDisease': {
@@ -44,7 +44,7 @@ export const getRouterData = (app) => {
     '/satisfaction/returnVisit/list': {
       component: dynamicWrapper(app, ['satisfaction'], () => import('../routes/Satisfaction/ReturnVisit/List')),
     },
-    '/satisfaction/returnVisit/profile/:id/:scaleId': {
+    '/satisfaction/returnVisit/profile/:id': {
       component: dynamicWrapper(app, ['satisfaction','patientDetail','global'], () => import('../routes/Satisfaction/ReturnVisit/Profile')),
     },
     '/template/scale': {

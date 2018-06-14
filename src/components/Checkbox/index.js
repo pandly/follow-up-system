@@ -3,22 +3,28 @@ import { PureComponent } from 'react'
 import styles from './index.less'
 
 class Checkbox extends PureComponent {
+    
+    static defaultProps = {
+		value: '',
+		name: ''
+    }
 
 	handleChange = (e) => {
-		const { onChange } = this.props;
+		const { onChange, index } = this.props;
 		if(onChange) {
-			onChange(e.target.checked, e.target.name)
+			onChange(e, index)
 		}
 	}
 
 	render() {
-		const { checked, name, label, style } = this.props;
+		const { defaultChecked, value, name, label, style } = this.props;
 		return (
 			<label className="wowjoy-checkbox" style={style}>
 				<input 
 				  type="checkbox"
-				  name={name} 
-				  checked={checked}
+				  name={name}
+				  value={value}
+				  defaultChecked={defaultChecked}
 				  onChange={this.handleChange}
 				  style={{ display: 'none' }}/>
 					<span className="wowjoy-checkbox__inner"></span>

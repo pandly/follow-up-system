@@ -11,14 +11,14 @@ class Input extends PureComponent {
 	handleChange = (e) => {
 		const { onChange, index } = this.props;
 		if(onChange) {
-			onChange(e.target.value, e.target.name, index)
+			onChange(e, index)
 		}
 	}
     
     handleBlur = (e) => {
 		const { onBlur, index } = this.props;
 		if(onBlur) {
-			onBlur(e.target.value, e.target.name, index)
+			onBlur(e, index)
 		}
     }
 
@@ -41,7 +41,7 @@ class Input extends PureComponent {
 			    ) : (
 					<input {...otherProps}
 					  type={type || 'text'}
-					  maxlength={maxLength}
+					  maxLength={maxLength}
 					  name={name}
 					  value={value}
 					  disabled={disabled}

@@ -13,7 +13,7 @@ export default {
         scaleList: [],
         scaleListLoading: false,
         scaleInfo: {},
-        followScaleInfo: {},
+        followScaleInfo: [],
         whetherSuccessfullySaved: ''
     },
 

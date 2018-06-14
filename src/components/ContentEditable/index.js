@@ -30,7 +30,7 @@ export default class ContentEditable extends React.Component {
           data-name={name} 
           ref={(e) => this.htmlEl = e}
           onInput={this.emitChange} 
-          onBlur={this.props.onBlur || this.emitChange}
+          //onBlur={this.props.onBlur || this.emitChange}
           contentEditable={!this.props.disabled}
           dangerouslySetInnerHTML={{__html: html}}>
           {this.props.children}
@@ -80,12 +80,13 @@ export default class ContentEditable extends React.Component {
     if (this.props.onChange && html !== this.lastHtml) {
       // Clone event with Object.assign to avoid 
       // "Cannot assign to read only property 'target' of object"
-      // var evt = Object.assign({}, evt, { 
-      //   target: { 
-      //     value: html 
-      //   } 
-      // });
-      this.props.onChange(html, name);
+      var evt = Object.assign({}, evt, { 
+        target: { 
+          value: html,
+          name: name
+        } 
+      });
+      this.props.onChange(evt);
     }
     this.lastHtml = html;
   }

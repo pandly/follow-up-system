@@ -10,6 +10,8 @@ import Modal from 'components/Modal'
 import PopoverSure from 'components/PopoverSure'
 import EditDateCell from 'components/EditTableCell/EditDateCell.js'
 import EditSelectCell from 'components/EditTableCell/EditSelectCell.js'
+import QuestionnairEditor from 'components/Questionnair/QuestionnairEditor'
+// import myButton from 'components/Button'
 
 const Option = Select.Option;
 const { TextArea } = Input;
@@ -72,7 +74,8 @@ class MissionProfile extends Component {
 		medicineResident: '',
 		stopReason: '',
 		stopDes: '',
-		choosedPlanId: ''
+		choosedPlanId: '',
+		toggleAnswer: true
 	}
 	
 	hideIdCard=(id)=>{
@@ -291,6 +294,8 @@ class MissionProfile extends Component {
 			this.props.dispatch({
 				type: 'scale/getFollowScale',
 				payload: scaleId
+			}).then(() => {
+				this.temp = JSON.parse(JSON.stringify(this.props.scale.followScaleInfo))
 			})
 			this.setState({
 				status:status,
@@ -303,7 +308,37 @@ class MissionProfile extends Component {
 		})
 	}
 
-  	
+  	handleAnswer = (obj, index) => {
+        this.temp.splice(index, 1, obj)
+        console.log(this.temp)
+  	}
+    
+    submitAnswer = () => {
+    	console.log(this.temp)
+		// let x = this.temp.some(data => {
+		// 	console.log(data)
+		// 	let y = false;
+		// 	for(let value of Object.values(data.answer)) {
+		// 		if(value !== '' || value.length !== 0) {
+		// 			y = true;
+		// 		}
+		// 	}
+		// 	return data.required && y
+		// })
+		// if(x) {
+		// 	message.warming('请完成必填项')
+		// }
+        this.setState({
+        	toggleAnswer: false
+        })
+    }
+    
+    editAnswer = () => {
+    	this.setState({
+        	toggleAnswer: true
+        })
+    }
+
   	componentDidMount( ){
   		this.props.dispatch({
 			type: 'global/fetchDict'
@@ -361,7 +396,8 @@ class MissionProfile extends Component {
 			stopReason,
 			stopDes,
 			planTaskList,
-			choosedPlanId
+			choosedPlanId,
+			toggleAnswer
 		} = this.state
 		const {
 			todayDetail,
@@ -373,7 +409,7 @@ class MissionProfile extends Component {
 
 		const {planTwoList} = this.props.plan
 
-		const {scaleList} = this.props.scale
+		const { scaleList, followScaleInfo } = this.props.scale
 
 		const {
 			getFieldDecorator
@@ -606,9 +642,49 @@ class MissionProfile extends Component {
 										</div>
 									</div>
 								</div>
-								<div>
-									status：{status}
+								<div className={styles.info}>
+								    <div className={styles.title}>
+										<i className={`iconfont icon-tongyongbiaotiicon ${styles.titleIcon}`}></i><span>随访内容</span>
+										{!toggleAnswer && <span className={`${styles.text} aLink`} style={{ marginLeft: 10 }} onClick={this.editAnswer}>编辑</span>}
+									</div>
+									{toggleAnswer ? (followScaleInfo.map((editor, index) => {
+										return (
+											<QuestionnairEditor
+											  onAnswer={this.handleAnswer}
+											  acitveEditor={true}
+											  key={editor.questionId}
+											  index={index}
+											  editor={editor}
+										    />
+										)
+									})) : (
+										this.temp.map((data, index) => {
+	                                    	return (
+	                                    		<div>
+													<div>{`${index + 1}.${data.type === 'input' ? data.completionForwards : data.title}：`}</div>
+													<div>{typeof data.answer[data.type] !== 'string' ? (
+														data.answer[data.type].map(item => {
+															return (
+																<span>{item}</span>
+															)
+														})
+													) : data.answer[data.type]}</div>
+												</div>
+	                                    	)
+                                        }))
+                                    }
 								</div>
+								{toggleAnswer && (
+									<div>
+									    <Button type="primary" onClick={this.save}>暂存草稿</Button>
+									    <span style={{
+									    	display: 'inline-block',
+									    	width: 20,
+									    	height: 10
+									    }}></span>
+										<Button type="primary" onClick={this.submitAnswer}>提交</Button>
+									</div>
+								)}
 							</div>
 							<Modal title="编辑随访计划" closable={false} visible={editPlanShow} onCancel={this.hideEditPlan}>
 								<div className={styles.planName}>
@@ -755,8 +831,6 @@ class MissionProfile extends Component {
 								</div>
 							</Modal>
 						</div>
-
-						
 					</div>
 				</div>
 				

@@ -18,10 +18,10 @@ class Plan extends PureComponent {
 		planList: []
 	}
 	handleTypeChange=(value)=> {
-  		console.log(`selected ${value}`);
   		if(value){
   			this.setState({
-	  			type: value
+	  			type: value,
+	  			title: ''
 	  		}, ()=>{
 	  			this.getData()
 	  		})
@@ -34,10 +34,10 @@ class Plan extends PureComponent {
   		}
 	}
 	handleStatusChange=(value)=> {
-  		console.log(`selected ${value}`);
   		if(value){
   			this.setState({
-	  			isUse: value=='true'?true:value=='false'?false:''
+	  			isUse: value,
+	  			title: ''
 	  		}, ()=>{
 	  			this.getData()
 	  		})
@@ -51,10 +51,17 @@ class Plan extends PureComponent {
 	}
 	searchPlan=(value)=>{
 		this.setState({
-  			title: value
+  			title: value,
+  			type: '',
+  			isUse: ''
   		}, ()=>{
   			this.getData()
   		})
+	}
+	searchChange=(e)=>{
+		this.setState({
+			title: e.target.value
+		})
 	}
 	goDetail(id, type){
 		let detailType = ''
@@ -89,7 +96,7 @@ class Plan extends PureComponent {
 		this.props.dispatch({
 			type: 'plan/fetchPlanList',
 			payload: {
-				isUse: this.state.isUse,
+				isUse: this.state.isUse=='true'?true:this.state.isUse=='false'?false:'',
 				title: this.state.title,
 				type: this.state.type
 			}
@@ -117,7 +124,7 @@ class Plan extends PureComponent {
 	}
 
 	render() {
-		const { planList } = this.state
+		const { planList, type, isUse, title } = this.state
 		const {
 			// planList, 
 			planListLoading
@@ -139,6 +146,8 @@ class Plan extends PureComponent {
 								<i className={`iconfont icon-tianjiaicon ${styles.titleIcon}`}></i><span className={styles.text}>创建随访计划</span>
 							</span>
 							<Search
+								value={title}
+								onChange={this.searchChange}
 								style={{width: 320}}
 						      	placeholder="模版标题"
 						      	onSearch={this.searchPlan}
@@ -148,7 +157,7 @@ class Plan extends PureComponent {
 					</div>
 					<div className={styles.selectWrap}>
 						<span className={styles.text}>类型</span>
-						<Select defaultValue="" style={{ width: 250 }} onChange={this.handleTypeChange}
+						<Select value={type} style={{ width: 250 }} onChange={this.handleTypeChange}
 							allowClear>
 							<Option value="">全部</Option>
 					      	{
@@ -160,7 +169,7 @@ class Plan extends PureComponent {
 		      				}
 					    </Select>
 					    <span className={styles.text}>状态</span>
-						<Select defaultValue="" style={{ width: 250 }} onChange={this.handleStatusChange}
+						<Select value={isUse} style={{ width: 250 }} onChange={this.handleStatusChange}
 							allowClear>
 							<Option value="">全部</Option>
 					      	<Option value="true">正在使用</Option>

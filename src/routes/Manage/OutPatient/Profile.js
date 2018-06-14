@@ -73,7 +73,8 @@ class OutPatientProfile extends Component {
 		medicineResident: '',
 		stopReason: '',
 		stopDes: '',
-		choosedPlanId: ''
+		choosedPlanId: '',
+		canPlanEdit: true
 	}
 	
 	hideIdCard=(id)=>{
@@ -282,6 +283,11 @@ class OutPatientProfile extends Component {
 			let list = [...this.props.patientDetail.outDetail.tasks]
 			let status;
 			list.forEach(item=>{
+				if(item.status=='COMPLETE'){
+					this.setState({
+						canPlanEdit: false
+					})
+				}
 				item.scaleTemplateId = {
 					key: item.scaleTemplateId,
 					label: item.scaleName
@@ -361,7 +367,8 @@ class OutPatientProfile extends Component {
 			stopReason,
 			stopDes,
 			planTaskList,
-			choosedPlanId
+			choosedPlanId,
+			canPlanEdit
 		} = this.state
 		const {
 			outDetail,
@@ -616,6 +623,7 @@ class OutPatientProfile extends Component {
 								<div className={styles.planName}>
 									<span className={styles.label}>计划模板</span>
 									<Select placeholder="请选择" style={{ width: 270 }}
+										disabled={!canPlanEdit}
 										value={choosedPlanId}
 										onChange={this.planChange}>
 								      	{

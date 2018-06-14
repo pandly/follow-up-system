@@ -12,7 +12,6 @@ class Scale extends PureComponent {
   	}
 	render() {
 		const { search } = this.props.location
-		console.log(this.props)
 		return (
 			<div className={styles.scaleWrap}>
 				<Breadcrumb separator=">">

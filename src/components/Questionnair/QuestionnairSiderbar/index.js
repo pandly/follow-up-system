@@ -19,7 +19,7 @@ const subjects = [
 	},
 	{
 		name: '下拉题',
-		type: 'dropdown',
+		type: 'select',
 		icon: 'icon-xialaicon'
 	},
 	{
@@ -70,7 +70,7 @@ class QuestionnairSiderbar extends PureComponent {
     switchIcon = (type) => {
 		switch(type) {
 			case 'radio': return 'icon-danxuanicon';
-			case 'dropdown': return 'icon-xialaicon';
+			case 'select': return 'icon-xialaicon';
 			case 'checkbox': return 'icon-duoxuan-icon';
 			case 'textarea': return 'icon-duohangicon';
 			case 'text': return 'icon-danhangicon';

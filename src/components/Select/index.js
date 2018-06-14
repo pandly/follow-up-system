@@ -7,7 +7,7 @@ class Select extends PureComponent {
 	handleChange = (e) => {
 		const { onChange } = this.props;
 		if(onChange) {
-			onChange(e.target.value, e.target.name)
+			onChange(e)
 		}
 	}
 

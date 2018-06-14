@@ -263,6 +263,10 @@ class PlanProfile extends PureComponent {
     	this.table = data;
     }
 
+    goList=()=>{
+  		this.props.dispatch(routerRedux.push(`/template/plan/list`));
+  	}
+
 	componentDidMount(){
 		this.props.dispatch({
 			type: 'scale/fetchScaleList',
@@ -378,8 +382,14 @@ class PlanProfile extends PureComponent {
 				{/*{this.props.match.params.id}*/}
 				<Breadcrumb separator=">">
 				    <Breadcrumb.Item>随访模板</Breadcrumb.Item>
-				    <Breadcrumb.Item>随访计划</Breadcrumb.Item>
-				    <Breadcrumb.Item>查看随访计划</Breadcrumb.Item>
+				    <Breadcrumb.Item onClick={this.goList}>
+				    	<a>随访计划</a>
+				    </Breadcrumb.Item>
+				    <Breadcrumb.Item>
+				    	{
+				    		status=='detail'?'创建随访计划':'查看随访计划'
+				    	}
+				    </Breadcrumb.Item>
 			  	</Breadcrumb>
 
 				<div className={`${styles.contentWrap} ${planTemplateId=='add'?'':styles.hidden}`}>

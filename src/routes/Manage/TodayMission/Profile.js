@@ -4,6 +4,7 @@ import patientInfo from '../../../assets/patient.png'
 import { Select, DatePicker, Table, Input, Button, Breadcrumb, Form, message } from 'antd';
 import { connect } from 'dva'
 import moment from 'moment'
+import { routerRedux } from 'dva/router'
 
 import PlanMenu from 'components/PlanMenu'
 import Modal from 'components/Modal'
@@ -287,7 +288,7 @@ class MissionProfile extends Component {
 					key: item.scaleTemplateId,
 					label: item.scaleName
 				}
-				if(item.now){
+				if(item.isNow){
 					status = item.taskId
 				}
 			})
@@ -307,7 +308,10 @@ class MissionProfile extends Component {
 		})
 	}
 
-  	
+  	goList=()=>{
+  		this.props.dispatch(routerRedux.push(`/manage/todayMission/list`));
+  	}
+
   	componentDidMount( ){
   		this.props.dispatch({
 			type: 'global/fetchDict'
@@ -477,7 +481,9 @@ class MissionProfile extends Component {
 				<div className={styles.contentWrap}>
 					<Breadcrumb separator=">">
 					    <Breadcrumb.Item>随访管理</Breadcrumb.Item>
-					    <Breadcrumb.Item href="">今日任务</Breadcrumb.Item>
+					    <Breadcrumb.Item onClick={this.goList}>
+					    	<a>今日任务</a>
+					    </Breadcrumb.Item>
 					    <Breadcrumb.Item>开始随访</Breadcrumb.Item>
 				  	</Breadcrumb>
 					<div className={`${styles.patientInfo} clearfix`}>

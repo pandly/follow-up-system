@@ -17,13 +17,14 @@ class Checkbox extends PureComponent {
 	}
 
 	render() {
-		const { defaultChecked, value, name, label, style } = this.props;
+		const { defaultChecked, value, name, index, label, style } = this.props;
 		return (
 			<label className="wowjoy-checkbox" style={style}>
 				<input 
 				  type="checkbox"
 				  name={name}
 				  value={value}
+				  data-index={index}
 				  defaultChecked={defaultChecked}
 				  onChange={this.handleChange}
 				  style={{ display: 'none' }}/>

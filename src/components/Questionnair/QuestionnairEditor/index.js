@@ -2,7 +2,7 @@ import { PureComponent } from 'react'
 import Input from 'components/Input'
 import Checkbox from 'components/Checkbox'
 import Radio from 'components/Radio'
-import Select from 'components/Select'
+import Dropdown from 'components/Dropdown'
 import Button from 'components/Button'
 import ContentEditable from 'components/ContentEditable'
 import ShakeTransition from 'components/Shake'
@@ -17,14 +17,6 @@ class QuestionnairEditor extends PureComponent {
 		super(props)
 		this.temp = '';
 		this.otherOptionInput = '';
-		this.answer = {
-			radio: '',
-	    	select: '',
-	    	checkbox: [],
-	    	text: '',
-	    	textarea: '',
-	    	input: '',
-		};
     }
     
     static defaultProps = {
@@ -39,8 +31,12 @@ class QuestionnairEditor extends PureComponent {
 		hasTitle: true,
 		dialogVisible: false,
 		mutiOption: '',
-		otherOptionInput: ''
-    }   
+		otherOptionInput: '',
+		otherOptionForwards: ''
+    }
+    // shouldComponentUpdate() {
+
+    // }   
     /* 首先有点乱。。。
      * 由于每次每个题目的操作实际上都是在操作整个题目数组，题目数组交给了题目组件的父组件来管理
      * 所以每次题目操作完以后更新父组件的题目数组，父组件更新会触发题目组件的componentWillReceiveProps生命周期函数
@@ -66,7 +62,7 @@ class QuestionnairEditor extends PureComponent {
     switchEditor = (type) => {
 		switch(type) {
 			case 'radio': return '单选题';
-			case 'select': return '下拉题';
+			case 'dropdown': return '下拉题';
 			case 'checkbox': return '多选题';
 			case 'textarea': return '多行文本题';
 			case 'text': return '单行文本题';
@@ -98,14 +94,24 @@ class QuestionnairEditor extends PureComponent {
     }
     //填写答案时触发的事件
     handleAnswerChange = (e, index) => {
-    	const { type, otherOptionForwards, otherOptionBackwards } = this.state.editor;
+    	let { type } = this.state.editor;
     	let value = e.target.value;
-    	if(value === '[object Object]') {
-			value = `${otherOptionForwards}${this.otherOptionInput}${otherOptionBackwards}`
+    	this.optionIndex = e.target.dataset.index;
+    	if(value === 'undefined') {
+			value = this.otherOptionValue
 		}
     	if(type === 'checkbox') {
-    		let valueIn = this.answer.checkbox.includes(value);
-    		this.answer.checkbox[index] = valueIn ? null : value;
+    		let valueIn = this.answer.checkbox.optionValue.includes(value);
+    		let indexIn = this.answer.checkbox.optionIndex.includes(this.optionIndex);
+    		this.answer.checkbox.optionValue[this.optionIndex] = valueIn ? null : value;
+    		this.answer.checkbox.optionIndex[this.optionIndex] = indexIn ? null : this.optionIndex;
+    		this.answer.checkbox.otherOptionValue = this.otherOptionValue;
+    	}else if(type === 'radio'){
+    		this.answer[type] = {
+    			optionValue: value,
+    			optionIndex: this.optionIndex,
+    			otherOptionValue: this.otherOptionValue
+    		};
     	}else {
     		this.answer[type] = value;
     	}
@@ -115,15 +121,21 @@ class QuestionnairEditor extends PureComponent {
     //填写radio、checkbox'其他'选项时触发的方法
     handleOtherOptionInputChange = (e) => {
     	const { type, otherOptionForwards, otherOptionBackwards } = this.state.editor;
-		this.otherOptionInput = e.target.innerHTML;
-		const value = `${otherOptionForwards}${this.otherOptionInput}${otherOptionBackwards}`;
+		this.otherOptionValue = e.target.innerHTML;
+		this.allValue = otherOptionForwards + this.otherOptionValue + otherOptionBackwards;
+		this.optionIndex = e.target.dataset.index;
 		if(type === 'checkbox') {
-			const length = this.answer.checkbox.length;
-			this.answer.checkbox[length - 1] = this.answer.checkbox[length - 1] === null ? null : value;
-		}else if(type === 'radio') {
-			this.answer[type] = value;
+			const length = this.answer.checkbox.optionValue.length;
+			this.answer.checkbox.optionValue[length - 1] = this.answer.checkbox.optionValue[length - 1] === null ? null : this.allValue;
+    		this.answer.checkbox.otherOptionValue = this.otherOptionValue;
+		}else if(type === 'radio'){
+			this.answer[type] = {
+				optionValue: this.allValue,
+    			optionIndex: this.optionIndex,
+    			otherOptionValue: this.otherOptionValue
+			};
 		}else {
-			this.answer[type] = this.otherOptionInput;
+			this.answer[type] = this.otherOptionValue;
 		}
 		const answerEditor = { ...this.state.editor, answer: this.answer }
         this.props.onAnswer(answerEditor, this.props.index)
@@ -153,10 +165,10 @@ class QuestionnairEditor extends PureComponent {
         })
     }
     //批量编辑textarea中的change
-    handleMutiTextarea = (val) => {
-    	this.mutiTextareaValue = val;
+    handleMutiTextarea = (e) => {
+    	this.mutiTextareaValue = e.target.value;
         this.setState({
-        	mutiOption: val
+        	mutiOption: e.target.value
         })
     }
     //关闭批量编辑的弹窗
@@ -249,7 +261,7 @@ class QuestionnairEditor extends PureComponent {
 			dialogVisible,
 			mutiOption,
 		} = this.state;
-        const { 
+        let { 
         	type, 
         	isEditor, 
         	title, 
@@ -268,6 +280,9 @@ class QuestionnairEditor extends PureComponent {
         	editorShake,
         	answer
         } = editor;
+        this.answer = answer && JSON.parse(JSON.stringify(answer));
+        this.otherOptionValue = answer && this.answer[type].otherOptionValue;
+        console.log(this.answer)
         /*
          * 
          * 以下元素为编辑状态下的元素
@@ -412,12 +427,13 @@ class QuestionnairEditor extends PureComponent {
 				  className='other-option-input'
 				  onInput={this.handleOtherOptionInputChange}
 				  contentEditable
-				  dangerouslySetInnerHTML={{__html: 'defalut'}}>
+				  dangerouslySetInnerHTML={{ __html: answer && this.answer[type] }}>
 				</div>
 				<span>{completionBackwards}</span>
 			</div>
 		)
 		//填写状态下的单选、多选其他选项
+
         const subOtherOptionsEl = (
 			<div className="subject-other-option">
 				<span>{otherOptionForwards}</span>
@@ -425,50 +441,91 @@ class QuestionnairEditor extends PureComponent {
 				  className='other-option-input'
 				  onInput={this.handleOtherOptionInputChange}
 				  contentEditable
-				  dangerouslySetInnerHTML={{__html: 'defalut'}}>
+				  dangerouslySetInnerHTML={{ __html: this.otherOptionInput }}>
 				</div>
 				<span>{otherOptionBackwards}</span>
 			</div>
 		)
-		//填写状态下的单选、多徐昂
-		const optionsCom = otherOption ? options.concat(subOtherOptionsEl) : options;
+		//填写状态下的单选、多选
+		const optionsCom = otherOption ? options.concat('undefined') : options
         const subRadioEl = (
 			<div className="radio-group">
-				{optionsCom.map((el, index) => {
+				{optionsCom.map((data, index) => {
 					return (
-						<Radio
-						  key={uuid()} 
-						  label={el} 
+						<label 
+						  className="wowjoy-radio"
 						  style={{ width: `${100/parseInt(rows)}%`, marginBottom: 8 }}
-						  value={el}
-						  name={'radio'}
-						  onChange={this.handleAnswerChange} 
-						/>
+						  key={uuid()}>
+							<input 
+							  type="radio"
+							  name="radio"
+							  data-index={index}
+							  value={data} 
+							  defaultChecked={answer && this.answer.radio.optionIndex === index+''}
+							  onChange={this.handleAnswerChange}
+							  style={{ display: 'none' }}/>
+							<span className="wowjoy-radio__inner"></span>
+						    <span className="wowjoy-radio__text">
+						    	{data === 'undefined' ? (
+									<div className="subject-other-option">
+										<span>{otherOptionForwards}</span>
+											<div
+											  data-index={index}
+											  className='other-option-input'
+											  onInput={this.handleOtherOptionInputChange}
+											  contentEditable
+											  dangerouslySetInnerHTML={{ __html: this.otherOptionValue }}>
+											</div>
+										<span>{otherOptionBackwards}</span>
+									</div>
+						    	) : data}
+						    </span>
+						</label> 
 					)
 				})}
 			</div>
         )
 		const subCheckboxEl = (
 			<div className="checkbox-group">
-				{optionsCom.map((el, index) => {
+				{optionsCom.map((data, index) => {
 					return (
-						<Checkbox 
+						<label 
+						  className="wowjoy-checkbox"
 						  key={uuid()}
-						  index={index}
-						  label={el} 
-						  style={{ width: `${100/parseInt(rows)}%`, marginBottom: 8 }}
-						  value={el}
-						  name={'checkbox'}
-						  onChange={this.handleAnswerChange} 
-						/>
+						  style={{ width: `${100/parseInt(rows)}%`, marginBottom: 8 }}>
+							<input 
+							  type="checkbox"
+							  name="checkbox"
+							  value={data}
+							  data-index={index}
+							  defaultChecked={answer && this.answer.checkbox.optionIndex.includes(index+'')}
+							  onChange={this.handleAnswerChange}
+							  style={{ display: 'none' }}/>
+								<span className="wowjoy-checkbox__inner"></span>
+						    	<span className="wowjoy-checkbox__text">
+									{data === 'undefined' ? (
+										<div className="subject-other-option">
+											<span>{otherOptionForwards}</span>
+												<div
+												  data-index={index}
+												  className='other-option-input'
+												  onInput={this.handleOtherOptionInputChange}
+												  contentEditable
+												  dangerouslySetInnerHTML={{ __html: this.otherOptionValue }}>
+												</div>
+											<span>{otherOptionBackwards}</span>
+										</div>
+							    	) : data}
+						    	</span>
+						</label>
 					)
 				})}
 			</div>
 		)
         //填写状态下的下拉框
-		const subSelectEl = (
+		const subDropdownEl = (
 			<select 
-              defaultValue="default"
+              defaultValue={ answer && this.answer[type] }
 			  onChange={this.handleAnswerChange}>
 			  {options.map((option, index) => {
 			  	return <option key={index} value={option}>{option}</option>
@@ -476,10 +533,10 @@ class QuestionnairEditor extends PureComponent {
 			</select>
 		)
 		//填写状态下的单行文本、多行文本
-		const optionsEl = type === 'select' ? subSelectEl : (type === 'radio' ? subRadioEl : subCheckboxEl)
+		const optionsEl = type === 'dropdown' ? subDropdownEl : (type === 'radio' ? subRadioEl : subCheckboxEl)
         const subTextEl = (
 			<input
-			  defaultValue="default"
+			  defaultValue={ answer && this.answer[type] }
 			  className="subject-input"
 			  style={{ height: 36 }}
 			  onChange={this.handleAnswerChange}
@@ -487,7 +544,7 @@ class QuestionnairEditor extends PureComponent {
         )
         const subTextareaEl = (
 			<textarea
-			  defaultValue="default" 
+			  defaultValue={ answer && this.answer[type] } 
 			  className="subject-input"
 			  name={'textarea'}
 			  onChange={this.handleAnswerChange} 
@@ -538,14 +595,14 @@ class QuestionnairEditor extends PureComponent {
 										)}
 								    </div>
 								</div>
-								{['radio', 'select', 'checkbox'].includes(type) && ediOptionsEl}
+								{['radio', 'dropdown', 'checkbox'].includes(type) && ediOptionsEl}
 								{otherOption && ediOtherOptionsEl}
 								{['radio', 'checkbox'].includes(type) && ediCtrlOptionsEl}
 							    {['radio', 'checkbox'].includes(type) && (
 									<div className="editor-adv">
 										<span className="adv-option">
 											每行显示
-											<Select
+											<Dropdown
 											  name={'rows'}
 										      value={rows} 
 											  options={rowOptions}
@@ -621,7 +678,7 @@ class QuestionnairEditor extends PureComponent {
 							</div>
 							{remark && <div className="subject-row subject-remarks">{remarkText}</div>}
 							<div className="subject-row">
-								{['radio', 'select', 'checkbox'].includes(type) && optionsEl}
+								{['radio', 'dropdown', 'checkbox'].includes(type) && optionsEl}
 								{type === 'text' && subTextEl}
 								{type === 'textarea' && subTextareaEl}
 							</div>

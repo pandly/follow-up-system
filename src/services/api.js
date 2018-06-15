@@ -216,8 +216,18 @@ export async function saveScale(params){
 export async function getFollowScale(id){
 	return request(`/api/v1/scale/follow_scale?scaleId=${id}`)
 }
+//get 获取完整量表信息
+export async function getEntireScale(id){
+	return request(`/api/v1/scale/${id}`)
+}
 
-
+//post 保存答案
+export async function saveAnswer(params){
+	return request(`/api/v1/scale/answer`, {
+		method: 'POST',
+		body: params
+	})
+}
 
 
 

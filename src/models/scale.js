@@ -3,7 +3,9 @@ import {
     deleteScale,
     getScale,
     saveScale,
-    getFollowScale
+    getFollowScale,
+    getEntireScale,
+    saveAnswer
 } from '../services/api.js'
 export default {
 
@@ -14,6 +16,7 @@ export default {
         scaleListLoading: false,
         scaleInfo: {},
         followScaleInfo: [],
+        entireScaleInfo: [],
         whetherSuccessfullySaved: ''
     },
 
@@ -57,6 +60,16 @@ export default {
                 type: 'updateFollowScaleInfo',
                 payload: result.results
             });
+        },
+        *getEntireScale({ payload }, { call, put }) {
+            const result = yield call(getEntireScale, payload)
+            yield put({ 
+                type: 'updateEntireScaleInfo',
+                payload: result.results.answerVOList
+            });
+        },
+        *saveAnswer({ payload }, { call, put }) {
+            yield call(saveAnswer, payload)
         }
     },
 
@@ -72,6 +85,9 @@ export default {
         },
         updateFollowScaleInfo(state, action){
             return { ...state, followScaleInfo: action.payload}
+        },
+        updateEntireScaleInfo(state, action){
+            return { ...state, entireScaleInfo: action.payload}
         },
     },
 

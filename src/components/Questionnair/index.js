@@ -96,15 +96,7 @@ class Questionnair extends PureComponent {
 	        completionBackwards: '', //填空题文本(后)
             isEditor: true, //编辑状态还是已编辑状态
             isFirst: true, //是否是新创建的
-            editorShake: '',
-            answer: {
-            	radio: '',
-            	select: '',
-            	checkbox: '',
-            	text: '',
-            	textarea: '',
-            	input: ''
-            }
+            editorShake: ''
 		}
 		this.setState(prevState => ({
 			editors: [...prevState.editors, editor]
@@ -139,7 +131,6 @@ class Questionnair extends PureComponent {
         }, () => {
 			this.updateEditors();
         })
- 
     }
     
     againEdit = (index) => {

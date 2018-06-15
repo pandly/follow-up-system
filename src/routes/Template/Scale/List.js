@@ -59,7 +59,7 @@ class Scale extends PureComponent {
 	copyTable(item){
 		console.log(item,'copy')
 	}
-	componentWillMount(){
+	componentDidMount(){
 		this.getData()
 	}
 	render() {
@@ -67,7 +67,7 @@ class Scale extends PureComponent {
 			scaleList,
         	scaleListLoading
 		} = this.props.scale
-
+        console.log(scaleList)
 		return (
 			<div>
 				<div className={styles.content}>
@@ -95,8 +95,8 @@ class Scale extends PureComponent {
 						<Spin spinning={scaleListLoading} size="large">
 							<div className={styles.tableWrap}>
 								{
-									scaleList&&scaleList.length<1&&!scaleListLoading?
-										<Empty></Empty>
+									!scaleList ?
+									    <Empty></Empty>
 										:
 										scaleList.map(item => (
 											<TableListCard  

@@ -12,7 +12,7 @@ import PopoverSure from 'components/PopoverSure'
 import EditDateCell from 'components/EditTableCell/EditDateCell.js'
 import EditSelectCell from 'components/EditTableCell/EditSelectCell.js'
 import QuestionnairEditor from 'components/Questionnair/QuestionnairEditor'
-// import myButton from 'components/Button'
+import uuid from 'utils/utils'
 
 const Option = Select.Option;
 const { TextArea } = Input;
@@ -62,6 +62,11 @@ const statusDom = (text, record) => {
 
 @Form.create()
 class MissionProfile extends Component {
+	constructor(props) {
+		super(props)
+		this.entireScaleInfoTemp = []
+	}
+
 	state = {
 		planTaskList: [],
 		status: '',
@@ -77,9 +82,10 @@ class MissionProfile extends Component {
 		stopDes: '',
 		choosedPlanId: '',
 		toggleAnswer: true,
-		canPlanEdit: true
+		canPlanEdit: true,
+		entireScaleInfo: []
 	}
-	
+
 	hideIdCard=(id)=>{
 		if(!id){
 			return
@@ -94,10 +100,11 @@ class MissionProfile extends Component {
 	}
 
 	
-	changeId=(id)=>{
+	changeId=(taskId, scaleId)=>{
 		this.setState({
-			status: id
+			status: taskId
 		})
+        this.getEditor(scaleId);
 	}
 	showConclusion=()=>{
 		this.setState({
@@ -276,7 +283,37 @@ class MissionProfile extends Component {
 		})
   		this.hideEditPlan()
   	}
-
+    
+    getEditor = (id) => {
+    	this.props.dispatch({
+			type: 'scale/getEntireScale',
+			payload: id
+		}).then(() => {
+			const { entireScaleInfo } = this.props.scale;
+			this.entireScaleInfoTemp = entireScaleInfo ? JSON.parse(JSON.stringify(entireScaleInfo)) : [];
+	        this.entireScaleInfoTemp.map(data => {
+				if(data.answer.checkbox === '') {
+					data.answer.checkbox = {
+		        		optionValue: [],
+		        		optionIndex: [],
+		        		otherOptionValue: ''
+		        	}
+				}else {
+					data.answer.checkbox = JSON.parse(data.answer.checkbox);
+				}
+				if(data.answer.radio === ''){
+		        	data.answer.radio = {
+		        		optionValue: '',
+		        		optionIndex: '',
+		        		otherOptionValue: ''
+		        	}
+		        }
+		        else {
+		        	data.answer.radio = JSON.parse(data.answer.radio);
+		        }
+	        })
+		})
+    }
   	getData=(func)=>{
 		this.props.dispatch({
 			type: 'patientDetail/fetchToday',
@@ -301,13 +338,8 @@ class MissionProfile extends Component {
 					status = item.taskId
 				}
 			})
-			const scaleId = this.props.patientDetail.todayDetail.tasks[0].scaleId
-			this.props.dispatch({
-				type: 'scale/getFollowScale',
-				payload: scaleId
-			}).then(() => {
-				this.temp = JSON.parse(JSON.stringify(this.props.scale.followScaleInfo))
-			})
+			this.scaleId = this.props.patientDetail.todayDetail.tasks[0].scaleId
+			this.getEditor(this.scaleId);
 			this.setState({
 				status:status,
 				planTaskList: list,
@@ -320,12 +352,26 @@ class MissionProfile extends Component {
 	}
 
   	handleAnswer = (obj, index) => {
-        this.temp.splice(index, 1, obj)
-        console.log(this.temp)
+        this.entireScaleInfoTemp.splice(index, 1, obj)
+        console.log(this.entireScaleInfoTemp)
   	}
     
     submitAnswer = () => {
-    	console.log(this.temp)
+    	let answers = [];
+    	this.entireScaleInfoTemp.forEach(data => {
+    		answers.push({
+    			"answerId": uuid(),
+			    "checkbox": JSON.stringify(data.answer.checkbox),
+			    "dropdown": data.answer.dropdown,
+			    "input": data.answer.input,
+			    "questionId": data.questionId,
+			    "radio": JSON.stringify(data.answer.radio),
+			    "scaleId": data.scaleId,
+			    "text": data.answer.text,
+			    "textarea": data.answer.textarea
+    		})
+    	})
+    	//console.log(answers)
 		// let x = this.temp.some(data => {
 		// 	console.log(data)
 		// 	let y = false;
@@ -339,16 +385,28 @@ class MissionProfile extends Component {
 		// if(x) {
 		// 	message.warming('请完成必填项')
 		// }
+		this.props.dispatch({
+  			type: 'scale/saveAnswer',
+  			payload: {
+  				answers
+  			}
+  		})
         this.setState({
         	toggleAnswer: false
         })
     }
     
     editAnswer = () => {
-    	this.setState({
-        	toggleAnswer: true
-        })
+    	this.props.dispatch({
+			type: 'scale/getEntireScale',
+			payload: this.scaleId
+		}).then(() => {
+			this.setState({
+	        	toggleAnswer: true
+	        })
+		})
     }
+
   	goList=()=>{
   		this.props.dispatch(routerRedux.push(`/manage/todayMission/list`));
   	}
@@ -398,6 +456,7 @@ class MissionProfile extends Component {
 	}
 
 	render(){
+		console.log(this.entireScaleInfoTemp, '123123')
 		const { 
 			isSummaryShow,
 			status, 
@@ -424,8 +483,8 @@ class MissionProfile extends Component {
 
 		const {planTwoList} = this.props.plan
 
-		const { scaleList, followScaleInfo } = this.props.scale
-
+		const { scaleList, entireScaleInfo } = this.props.scale
+        
 		const {
 			getFieldDecorator
 		} = this.props.form
@@ -664,32 +723,41 @@ class MissionProfile extends Component {
 										<i className={`iconfont icon-tongyongbiaotiicon ${styles.titleIcon}`}></i><span>随访内容</span>
 										{!toggleAnswer && <span className={`${styles.text} aLink`} style={{ marginLeft: 10 }} onClick={this.editAnswer}>编辑</span>}
 									</div>
-									{toggleAnswer ? (followScaleInfo.map((editor, index) => {
-										return (
-											<QuestionnairEditor
-											  onAnswer={this.handleAnswer}
-											  acitveEditor={true}
-											  key={editor.questionId}
-											  index={index}
-											  editor={editor}
-										    />
-										)
-									})) : (
-										this.temp.map((data, index) => {
-	                                    	return (
-	                                    		<div>
-													<div>{`${index + 1}.${data.type === 'input' ? data.completionForwards : data.title}：`}</div>
-													<div>{typeof data.answer[data.type] !== 'string' ? (
-														data.answer[data.type].map(item => {
-															return (
-																<span>{item}</span>
-															)
-														})
-													) : data.answer[data.type]}</div>
-												</div>
-	                                    	)
-                                        }))
-                                    }
+									<div style={{ display: toggleAnswer ? 'block' : 'none'}}>
+										{
+											this.entireScaleInfoTemp.map((editor, index) => {
+												return (
+													<QuestionnairEditor
+													  onAnswer={this.handleAnswer}
+													  acitveEditor={true}
+													  key={editor.questionId}
+													  index={index}
+													  editor={editor}
+												    />
+												)
+											})
+										}
+									</div>
+									<div style={{ display: toggleAnswer ? 'none' : 'block'}}>
+										{
+											this.entireScaleInfoTemp.map((data, index) => {
+		                                    	return (
+		                                    		<div key={index} style={{ minHeight: 60 }}>
+														<div style={{ color: '#666' }}>{`${index + 1}.${data.type === 'input' ? data.completionForwards : data.title + ':'}`}</div>
+														<div style={{ paddingLeft: 12, color: '#151515' }}>{typeof data.answer[data.type] !== 'string' ? (
+															typeof data.answer[data.type].optionValue !== 'string' ? (
+																data.answer[data.type].optionValue.map((item, index) => {
+																	return (
+																		<span key={index} style={{ marginRight: 15 }}>{item}</span>
+																	)
+																})
+															) : data.answer[data.type].optionValue
+														) : data.answer[data.type]}</div>
+													</div>
+		                                    	)
+	                                        })
+										}
+									</div>
 								</div>
 								{toggleAnswer && (
 									<div>

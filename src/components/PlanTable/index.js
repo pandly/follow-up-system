@@ -40,7 +40,7 @@ export default class PlanTable extends Component {
 	deleteItem(index){
 		const { onChange, status } = this.props
 		let planDetailTask = [...this.state.planDetailTask];
-		if(status!='stoped'){
+		if(status!=='stoped'){
 			if(planDetailTask.length>1){
 				planDetailTask.splice(index, 1);
 		        this.setState({
@@ -71,7 +71,7 @@ export default class PlanTable extends Component {
 	}
 	handleAdd = () => {
 		const temp = this.state.planDetailTask
-		if(temp[temp.length-1].time==''||temp[temp.length-1].timeType==''){
+		if(temp[temp.length-1].time===''||temp[temp.length-1].timeType===''){
 			return
 		}
 		const { onChange } = this.props
@@ -165,7 +165,7 @@ export default class PlanTable extends Component {
 						
 					</tbody>
 				</table>
-				<div className={`${styles.tableFooter} ${planDetailTask.length%2==0?styles.doubleTable:''}`}>
+				<div className={`${styles.tableFooter} ${planDetailTask.length%2===0?styles.doubleTable:''}`}>
 					<span className={styles.footerBtn} onClick={this.handleAdd}>
 						<i className={`iconfont icon-tianjialiebiao_icon ${styles.tableIcon}`}></i><span>添加随访任务</span>
 					</span>

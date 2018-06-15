@@ -61,13 +61,11 @@ export default class ListCard extends Component {
 	}
 	sureSign = (item)=> {
 		console.log(item)
-		this.setState({ 
-			isPopSignHide: false,
-		});
+		
 	}
 	render(){
 		const { listData, onClick } = this.props
-		const {isPopSignHide, isPopDeleteHide, isBtnShow} = this.state
+		const { isPopDeleteHide, isBtnShow} = this.state
 		// console.log(this.props)
 		return (
 			<div className={styles.tableItemWrap} onMouseOver={this.showBtn} onMouseLeave={this.hideBtn} >

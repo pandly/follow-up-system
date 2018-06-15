@@ -1,4 +1,3 @@
-import { stringify } from 'qs';
 import request from '../utils/request';
 
 //POST  获取科室列表

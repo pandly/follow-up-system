@@ -75,6 +75,8 @@ class Plan extends PureComponent {
 			case 'detail':
 				detailType = 'detail'
 				break;
+			default:
+				detailType = ''
 		}
 		this.props.dispatch(routerRedux.push(`/template/plan/profile/${detailType}/${id}`));
 	}
@@ -96,7 +98,7 @@ class Plan extends PureComponent {
 		this.props.dispatch({
 			type: 'plan/fetchPlanList',
 			payload: {
-				isUse: this.state.isUse=='true'?true:this.state.isUse=='false'?false:'',
+				isUse: this.state.isUse==='true'?true:this.state.isUse==='false'?false:'',
 				title: this.state.title,
 				type: this.state.type
 			}

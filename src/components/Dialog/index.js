@@ -10,7 +10,7 @@ class Dialog extends PureComponent {
     }
     
     componentWillReceiveProps(nextProps) {
-    	if(nextProps.visible != this.props.visible) {
+    	if(nextProps.visible !== this.props.visible) {
     		this.setState({
 				visible: nextProps.visible
 			})

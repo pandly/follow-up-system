@@ -21,7 +21,7 @@ class Scale extends PureComponent {
 				    </Breadcrumb.Item>
 				    <Breadcrumb.Item>
 				    	{
-				    		search==''?'创建随访量表':'查看随访量表'
+				    		search===''?'创建随访量表':'查看随访量表'
 				    	}
 				    </Breadcrumb.Item>
 			  	</Breadcrumb>

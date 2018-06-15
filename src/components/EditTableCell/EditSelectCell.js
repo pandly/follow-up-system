@@ -1,7 +1,6 @@
 import { Component } from 'react'
-import { Input, Icon, Select } from 'antd';
+import { Select } from 'antd';
 import styles from './index.less'
-import moment from 'moment'
 
 const Option = Select.Option;
 
@@ -11,7 +10,6 @@ export default class EditSelectCell extends Component {
         editable: false,
     }
     handleChange = (value) => {
-        const { labelInValue } = this.props;
         this.setState({ 
             value: value,
             editable: false
@@ -29,7 +27,7 @@ export default class EditSelectCell extends Component {
         const { value } = this.state;
         const { dataSource, labelInValue, valueType } = this.props;
         if(labelInValue){
-            if(value&&value.label&&value.label!=''){
+            if(value&&value.label&&value.label!==''){
                 return(
                     <span>{value.label}</span>
                 )
@@ -40,11 +38,11 @@ export default class EditSelectCell extends Component {
             }
             
         }else{
-            if(value&&value!=''){
+            if(value&&value!==''){
                 return(
                     <span>
                        { dataSource?dataSource.map(item=>(
-                           value==item[valueType.code]?item[valueType.value]: ''
+                           value===item[valueType.code]?item[valueType.value]: ''
                        )):''}
                     </span>
                 )

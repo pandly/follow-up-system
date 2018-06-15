@@ -32,9 +32,9 @@ class SatisfactionDetail extends PureComponent {
 		if(!id){
 			return
 		}
-		if(id.length==18){
+		if(id.length===18){
 			return String(id).replace(String(id).substr(4,10),'**********')
-		}else if(id.length==15){
+		}else if(id.length===15){
 			return String(id).replace(String(id).substr(4,7),'*******')
 		}else{
 			return id
@@ -308,7 +308,7 @@ class SatisfactionDetail extends PureComponent {
 														{
 															dictionary['REMARK_CAUSE']?
 														      	dictionary['REMARK_CAUSE'].map(item => (
-														      		remarkReason==item.code?item.value:''
+														      		remarkReason===item.code?item.value:''
 														      	))
 												      		:''
 														}
@@ -392,51 +392,51 @@ class SatisfactionDetail extends PureComponent {
 								<div className={styles.conclusionTitle}>
 									<div className={styles.titleItem}>
 										<span className={styles.label}>病区：</span>
-										<span className={styles.text}>{outSummary.wards}</span>
+										<span className={styles.text}>{outSummary?outSummary.wards:'暂无'}</span>
 									</div>
 									<div className={styles.titleItem}>
 										<span className={styles.label}>床号：</span>
-										<span className={styles.text}>{outSummary.bedNumber}</span>
+										<span className={styles.text}>{outSummary?outSummary.bedNumber:'暂无'}</span>
 									</div>
 								</div>
 								<div className={styles.conclusionContent}>
 									<div>
 										<div className={`${styles.item} ${styles.specialItem}`}>
 											<span className={styles.label}>入院日期：</span>
-											<span className={styles.text}>{outSummary.admittingTime}</span>
+											<span className={styles.text}>{outSummary?outSummary.admittingTime:'暂无'}</span>
 										</div>
 										<div className={`${styles.item} ${styles.specialItem}`}>
 											<span className={styles.label}>出院日期：</span>
-											<span className={styles.text}>{outSummary.dischargeTime}</span>
+											<span className={styles.text}>{outSummary?outSummary.dischargeTime:'暂无'}</span>
 										</div>
 										
 									</div>
 									<div className={styles.item}>
 										<span className={styles.label}>入院诊断：</span>
-										<span className={styles.text}>{outSummary.admittingDiagnosis}</span>
+										<span className={styles.text}>{outSummary?outSummary.admittingDiagnosis:'暂无'}</span>
 									</div>
 									<div className={styles.item}>
 										<span className={styles.label}>出院诊断：</span>
-										<span className={styles.text}>{outSummary.dischargeDiagnosis}</span>
+										<span className={styles.text}>{outSummary?outSummary.dischargeDiagnosis:'暂无'}</span>
 									</div>
 									<div className={styles.item}>
 										<span className={styles.label}>入院情况：</span>
-										<span className={styles.text}>{outSummary.admittingDescription}</span>
+										<span className={styles.text}>{outSummary?outSummary.admittingDescription:'暂无'}</span>
 									</div>
 									<div className={styles.item}>
 										<span className={styles.label}>住院经过：</span>
-										<span className={styles.text}>{outSummary.hospitalizationCourse}</span>
+										<span className={styles.text}>{outSummary?outSummary.hospitalizationCourse:'暂无'}</span>
 									</div>
 									<div className={styles.item}>
 										<span className={styles.label}>出院情况：</span>
-										<span className={styles.text}>{outSummary.dischargeCondition}</span>
+										<span className={styles.text}>{outSummary?outSummary.dischargeCondition:'暂无'}</span>
 									</div>
 									<div className={styles.item}>
 										<span className={styles.label}>住院医嘱：</span>
-										<span className={styles.text}>{outSummary.doctorAdvance}</span>
+										<span className={styles.text}>{outSummary?outSummary.doctorAdvance:'暂无'}</span>
 									</div>
 									<div className={styles.sign}>
-										签名：{outSummary.recordMember}
+										签名：{outSummary?outSummary.recordMember:'暂无'}
 									</div>
 								</div>
 							</Modal>

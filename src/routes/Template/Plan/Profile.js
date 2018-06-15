@@ -1,5 +1,5 @@
 import { PureComponent } from 'react'
-import { Select, Input, InputNumber, Table, Button, Popover, Breadcrumb, Spin, message, Form } from 'antd'
+import { Select, Input, Table, Button, Breadcrumb, Spin, message, Form } from 'antd'
 import styles from './Profile.less'
 import { routerRedux } from 'dva/router'
 import { connect } from 'dva'
@@ -44,7 +44,7 @@ class PlanProfile extends PureComponent {
 		})
 	}
 	editType=()=>{
-		if(this.state.status!='stoped'){
+		if(this.state.status!=='stoped'){
 			this.setState({
 		    	planTemplateId: 'add'
 			})
@@ -97,7 +97,7 @@ class PlanProfile extends PureComponent {
 
 	initData=(func)=>{
 		const illness = JSON.parse(this.props.plan.planDetail.illness)
-		if(this.props.plan.planDetail.type=='DEFAULT'||this.props.plan.planDetail.type=='SATISFACTION_SURVEY'){
+		if(this.props.plan.planDetail.type==='DEFAULT'||this.props.plan.planDetail.type==='SATISFACTION_SURVEY'){
 			this.setState({				
 				planDetailTask: this.props.plan.planDetailTask,
 				planDetail: {...this.props.plan.planDetail, department: 'all',illness: illness},
@@ -118,7 +118,7 @@ class PlanProfile extends PureComponent {
 			})
 		}else{
 			let department;
-			if(this.props.plan.planDetail.department==''){
+			if(this.props.plan.planDetail.department===''){
 				department = 'all'
 			}else{
 				department = this.props.plan.planDetail.department
@@ -150,7 +150,7 @@ class PlanProfile extends PureComponent {
 			if(!err){
 				let param = {
 					planTemplate: {						
-						department: values.department=='all'?'':values.department,
+						department: values.department==='all'?'':values.department,
 						haveIllness: values.haveIllness,
 						title: values.title,
 						type: values.type,
@@ -160,7 +160,7 @@ class PlanProfile extends PureComponent {
 					taskTemplates: this.table
 				}
 
-				if(this.props.match.params.id=='add'){
+				if(this.props.match.params.id==='add'){
 					this.table.forEach(item=>{
 						delete item.taskTemplateId
 					})
@@ -203,7 +203,7 @@ class PlanProfile extends PureComponent {
 	}
 	cancelForm=()=>{
 		let id = this.props.match.params.id
-		if(id=='add'){
+		if(id==='add'){
 			this.props.dispatch(routerRedux.push('/template/plan/list'));
 		}else{
 			this.initData()
@@ -214,7 +214,7 @@ class PlanProfile extends PureComponent {
 	}
 
 	changeType=(value)=>{
-		if(value=='DEFAULT'||value=='SATISFACTION_SURVEY'){
+		if(value==='DEFAULT'||value==='SATISFACTION_SURVEY'){
 			this.setState({
 				planDetail: {
 					...this.state.planDetail,
@@ -226,7 +226,7 @@ class PlanProfile extends PureComponent {
 				illDisable: true,
 				haveIllDisable: true,
 			})
-		}else if(value=='OUT_HOSPITAL'){
+		}else if(value==='OUT_HOSPITAL'){
 			this.setState({
 				planDetail: {
 					...this.state.planDetail,
@@ -241,7 +241,7 @@ class PlanProfile extends PureComponent {
 		}
 	}
 	changeHaveIllness=(value)=>{
-		if(value=='RESTRICT'){
+		if(value==='RESTRICT'){
 			this.setState({
 				planDetail: {
 					...this.state.planDetail,
@@ -280,7 +280,7 @@ class PlanProfile extends PureComponent {
 		this.props.dispatch({
 			type: 'global/fetchDepartment'
 		})
-		if(this.state.planTemplateId!='add'){
+		if(this.state.planTemplateId!=='add'){
 			this.getDetail()
 		}else{
 			this.setState({				
@@ -342,7 +342,7 @@ class PlanProfile extends PureComponent {
 					{						
 						dictionary['DATE_TYPE']?
 							dictionary['DATE_TYPE'].map(item => (
-				      			record.timeType==item.code?item.value:''
+				      			record.timeType===item.code?item.value:''
 			      		)):''
 			      	}
 				</span>
@@ -356,7 +356,7 @@ class PlanProfile extends PureComponent {
 					{						
 						dictionary['RETURN_WAY']?
 							dictionary['RETURN_WAY'].map(item => (
-				      			record.returnType==item.code?item.value:''
+				      			record.returnType===item.code?item.value:''
 			      		)):''
 			      	}
 				</span>
@@ -387,12 +387,12 @@ class PlanProfile extends PureComponent {
 				    </Breadcrumb.Item>
 				    <Breadcrumb.Item>
 				    	{
-				    		status=='detail'?'创建随访计划':'查看随访计划'
+				    		status==='detail'?'创建随访计划':'查看随访计划'
 				    	}
 				    </Breadcrumb.Item>
 			  	</Breadcrumb>
 
-				<div className={`${styles.contentWrap} ${planTemplateId=='add'?'':styles.hidden}`}>
+				<div className={`${styles.contentWrap} ${planTemplateId==='add'?'':styles.hidden}`}>
 					<Form onSubmit={this.saveForm} layout="inline">
 						<div className={styles.main}>	
 							<div className={styles.contentItem}>
@@ -543,7 +543,7 @@ class PlanProfile extends PureComponent {
 						</div>
 					</Form>
 				</div>
-				<div className={`${styles.checkContent} ${status=='stoped'?styles.stopContent:''} ${planTemplateId=='add'?styles.hidden:''}`}>
+				<div className={`${styles.checkContent} ${status==='stoped'?styles.stopContent:''} ${planTemplateId==='add'?styles.hidden:''}`}>
 					<div className={styles.main}>	
 						<Spin spinning={planDetailLoading} size="large">
 							<div className={styles.contentItem}>
@@ -559,7 +559,7 @@ class PlanProfile extends PureComponent {
 											{
 									      		dictionary['PLAN_TEMPLATE_TYPE']?
 											      	dictionary['PLAN_TEMPLATE_TYPE'].map(item => (
-											      		planDetail.type==item.code?item.value:''
+											      		planDetail.type===item.code?item.value:''
 											      	))
 									      		:''
 						      				}
@@ -582,20 +582,20 @@ class PlanProfile extends PureComponent {
 										<span className={styles.label}>科室：</span>
 										<span className={styles.text}>
 											{
-												planDetail.department=='all'?'全部':
+												planDetail.department==='all'?'全部':
 													departmentList.map(item => (
-											      		planDetail.department==item.departmentId?item.departmentName:''
+											      		planDetail.department===item.departmentId?item.departmentName:''
 									      	))}
 										</span>
 									</div>
 									{
-										planDetail.haveIllness!='RESTRICT'?
+										planDetail.haveIllness!=='RESTRICT'?
 										<div className={styles.item}>
-											<span className={styles.label}>{planDetail.haveIllness=='HAVE'?'包含诊断':'不包含诊断'}：</span>
+											<span className={styles.label}>{planDetail.haveIllness==='HAVE'?'包含诊断':'不包含诊断'}：</span>
 											<span className={styles.text}>
 												{
-													planDetail.illness&&planDetail.illness.length!=0?planDetail.illness.map((ill,index)=>(
-														index==planDetail.illness.length-1?
+													planDetail.illness&&planDetail.illness.length!==0?planDetail.illness.map((ill,index)=>(
+														index===planDetail.illness.length-1?
 													      	ill:ill+'，'
 													)):'暂无'
 							      				}
@@ -634,7 +634,7 @@ class PlanProfile extends PureComponent {
 						<PopoverSure title="您确定要暂停该计划吗？"
 							text="目标暂停后可重新发布。"
 							sureFunction={()=>this.sureStop()}>
-							<div className={`${styles.footerItem} aLink ${status=='used'?'':styles.hidden}`}>
+							<div className={`${styles.footerItem} aLink ${status==='used'?'':styles.hidden}`}>
 								<i className={`iconfont icon-lansezantingshiyong ${styles.footerIcon}`}></i>
 								<span>暂停使用</span>
 							</div>
@@ -643,7 +643,7 @@ class PlanProfile extends PureComponent {
 				      	<PopoverSure title="您确定要重新发布该计划吗？"
 							text="目标重新发布后可进行再次编辑。"
 							sureFunction={()=>this.sureRestart()}>
-							<div className={`${styles.footerItem} aLink ${status=='stoped'?'':styles.hidden}`}>
+							<div className={`${styles.footerItem} aLink ${status==='stoped'?'':styles.hidden}`}>
 								<i className={`iconfont icon-zhongxinfabuicon ${styles.footerIcon}`}></i>
 								<span>重新发布</span>
 							</div>
@@ -651,7 +651,7 @@ class PlanProfile extends PureComponent {
 				      	<PopoverSure title="您确定要删除该计划吗？"
 							text="目标删除后将不可恢复。"
 							sureFunction={()=>this.sureDelete()}>
-							<div className={`${styles.footerItem} ${status=='stoped'?'':styles.hidden}`}>
+							<div className={`${styles.footerItem} ${status==='stoped'?'':styles.hidden}`}>
 								<i className={`iconfont icon-hongselajixiang ${styles.footerIcon}`}></i>
 								<span>删除</span>
 							</div>

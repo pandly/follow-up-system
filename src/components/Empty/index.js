@@ -6,7 +6,7 @@ export default class Empty extends Component {
 	render(){
 		return (
 			<div className={styles.emptyWrap}>
-				<img className={styles.img} src={empty} />
+				<img className={styles.img} src={empty} alt="" />
 				<div className={styles.text}>非常抱歉，当前页面暂无内容...</div>
 			</div>
 		)

@@ -40,7 +40,7 @@ class Scale extends PureComponent {
 		if(data.useNumber>0){
 			let templateName = ''
 			data.templateName.forEach((item, index) => {
-				templateName = index==data.templateName.length-1?
+				templateName = index===data.templateName.length-1?
 					templateName + item
 					:templateName + item + '，'
 			})

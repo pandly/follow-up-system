@@ -10,14 +10,14 @@ const Option = Select.Option;
 const { RangePicker } = DatePicker;
 
 const statusDom = (text, record) => {
-	if(text.task.endStatus==1){
+	if(text.task.endStatus===1){
 		return (
 			<span >
 				<span className={`${styles.status} ${styles.grey}`}></span>
 				<span className={styles.statusText}>已结案</span>
 			</span>
 		)
-	}else if(text.task.endStatus==1){
+	}else if(text.task.endStatus===1){
 		switch(text.task.status){
 			case 'COMPLETE':
 				return (
@@ -138,7 +138,7 @@ class TodayMission extends PureComponent {
 	}
 
 	getData(start){
-		if(this.state.missionType=='wait'){
+		if(this.state.missionType==='wait'){
 			this.props.dispatch({
 				type: 'todayMission/fetchStay',
 				payload: {
@@ -149,7 +149,7 @@ class TodayMission extends PureComponent {
 					dischargeEndTime: this.state.endTime==null?'':this.state.endTime
 				}
 			})
-		}else if(this.state.missionType=='already'){
+		}else if(this.state.missionType==='already'){
 			this.props.dispatch({
 				type: 'todayMission/fetchAlready',
 				payload: {
@@ -227,7 +227,7 @@ class TodayMission extends PureComponent {
 			title: '操作',
 			key: 'action',
 			render: (text, record) => (
-				<a className="aLink" href="javascript:;" onClick={()=>this.checkProfile(record)}>查看随访</a>
+				<a className="aLink" onClick={()=>this.checkProfile(record)}>查看随访</a>
 			)
 		}]
 		
@@ -284,7 +284,7 @@ class TodayMission extends PureComponent {
 									{
 										stayFollow.length<1&&!loading?
 											<div className={styles.emptyWrap}>
-												<img className={styles.img} src={empty} />
+												<img className={styles.img} src={empty} alt="" />
 												<div className={styles.text}>非常抱歉，当前页面暂无内容...</div>
 											</div>
 											:
@@ -306,7 +306,7 @@ class TodayMission extends PureComponent {
 									{
 										alreadyFollow.length<1&&!loading?
 											<div className={styles.emptyWrap}>
-												<img className={styles.img} src={empty} />
+												<img className={styles.img} src={empty} alt="" />
 												<div className={styles.text}>非常抱歉，当前页面暂无内容...</div>
 											</div>
 											:

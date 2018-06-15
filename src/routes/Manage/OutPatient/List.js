@@ -57,7 +57,7 @@ class OutPatient extends PureComponent {
   		this.props.dispatch(routerRedux.push(`/manage/outPatient/profile/${item.inhospitalId}`));
   	}
   	changeType=(key)=> {
-  		if(key!='search'){
+  		if(key!=='search'){
   			this.setState({
 		  		tabType: key,
 		  		deptChoosed: '',
@@ -129,7 +129,7 @@ class OutPatient extends PureComponent {
 	}
 
 	getData(start){
-		if(this.state.tabType=='wait'){
+		if(this.state.tabType==='wait'){
 			this.props.dispatch({
 				type: 'outPatient/fetchStay',
 				payload: {
@@ -142,7 +142,7 @@ class OutPatient extends PureComponent {
 					followEndTime: this.state.followEndTime==null?'':this.state.followEndTime
 				}
 			})
-		}else if(this.state.tabType=='already'){
+		}else if(this.state.tabType==='already'){
 			this.props.dispatch({
 				type: 'outPatient/fetchAlready',
 				payload: {
@@ -296,7 +296,7 @@ class OutPatient extends PureComponent {
 			title: '操作',
 			key: 'action',
 			render: (text, record) => (
-				<a className="aLink" href="javascript:;" onClick={()=>this.goDetail(record)}>开始随访</a>
+				<a className="aLink" onClick={()=>this.goDetail(record)}>开始随访</a>
 			)
 		}]
 		const columns2 = [{
@@ -345,7 +345,7 @@ class OutPatient extends PureComponent {
 			title: '操作',
 			key: 'action',
 			render: (text, record) => (
-				<a className="aLink" href="javascript:;"
+				<a className="aLink"
 					onClick={()=>this.goDetail(record)}>开始随访</a>
 			)
 		}]
@@ -376,7 +376,7 @@ class OutPatient extends PureComponent {
 							))}
 					  	</Tabs>
 					  	{
-					  		tabType=='search'?''
+					  		tabType==='search'?''
 					  		:
 						  		<div className={styles.selectWrap}>
 						    		<div className={styles.selectItem}>
@@ -417,7 +417,7 @@ class OutPatient extends PureComponent {
 					  	}
 					  	
 				    	{
-				    		tabType=='wait'?
+				    		tabType==='wait'?
 				    			<Spin spinning={stayLoading} size="large">
 					    			<div className={styles.table}>
 					    				{
@@ -436,7 +436,7 @@ class OutPatient extends PureComponent {
 									</div>
 								</Spin>
 								:
-								tabType=='already'?
+								tabType==='already'?
 								<Spin spinning={alreadyLoading} size="large">
 					    			<div className={styles.table}>
 					    				{

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tooltip, Popover, Button } from 'antd';
+import { Popover, Button } from 'antd';
 // import styles from './index.less';
 
 export default class PopoverSure extends Component {

@@ -1,12 +1,12 @@
 import { Component } from 'react'
-import { Input, Icon, DatePicker } from 'antd';
+import { DatePicker } from 'antd';
 import styles from './index.less'
 import moment from 'moment'
 
 
 export default class EditDateCell extends Component {
     state = {
-        value: this.props.value==''?null:moment(this.props.value,'yyyy-mm-dd'),
+        value: this.props.value===''?null:moment(this.props.value,'yyyy-mm-dd'),
         editable: false,
     }
     handleChange = (date, dateString) => {

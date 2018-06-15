@@ -42,7 +42,7 @@ export default class PlanListCard extends Component {
 						{
 				      		dictionary['PLAN_TEMPLATE_TYPE']?
 						      	dictionary['PLAN_TEMPLATE_TYPE'].map(item => (
-						      		listData.type==item.code?item.value:''
+						      		listData.type===item.code?item.value:''
 						      	))
 				      		:''
 	      				}
@@ -53,7 +53,7 @@ export default class PlanListCard extends Component {
 					<span className={styles.text}>
 						{
 							departmentList.map(item => (
-								listData.department==item.departmentId?item.departmentName:''
+								listData.department===item.departmentId?item.departmentName:''
 					      	))
 				      	}
 					</span>
@@ -62,12 +62,12 @@ export default class PlanListCard extends Component {
 					<span className={styles.label}>病区：</span>
 					<span className={`${styles.text} text-hidden`}>{listData.inpatientWard}</span>
 				</div>
-				<div className={`${styles.itemInfo} ${listData.illness.length!=0?'':styles.itemInfoHidden}`}>
+				<div className={`${styles.itemInfo} ${listData.illness.length!==0?'':styles.itemInfoHidden}`}>
 					<span className={styles.label}>疾病诊断：</span>
 					<span className={`${styles.text} text-hidden`}>
 						{
-							listData.illness&&listData.illness.length!=0?listData.illness.map((ill,index)=>(
-								index==listData.illness.length-1?
+							listData.illness&&listData.illness.length!==0?listData.illness.map((ill,index)=>(
+								index===listData.illness.length-1?
 							      	ill:ill+'，'
 							)):'暂无'
 	      				}

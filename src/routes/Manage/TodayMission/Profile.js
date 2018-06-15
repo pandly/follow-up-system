@@ -1,7 +1,7 @@
 import { Component } from 'react'
 import styles from './Profile.less'
 import patientInfo from '../../../assets/patient.png'
-import { Select, DatePicker, Table, Input, Button, Breadcrumb, Form, message } from 'antd';
+import { Select, Table, Input, Button, Breadcrumb, Form, message } from 'antd';
 import { connect } from 'dva'
 import moment from 'moment'
 import { routerRedux } from 'dva/router'
@@ -90,9 +90,9 @@ class MissionProfile extends Component {
 		if(!id){
 			return
 		}
-		if(id.length==18){
+		if(id.length===18){
 			return String(id).replace(String(id).substr(4,10),'**********')
-		}else if(id.length==15){
+		}else if(id.length===15){
 			return String(id).replace(String(id).substr(4,7),'*******')
 		}else{
 			return id
@@ -149,7 +149,7 @@ class MissionProfile extends Component {
 	handleAdd = () => {
 	    const { planTaskList } = this.state;
 	    const lastObj = planTaskList[planTaskList.length-1]
-	    if(lastObj.followTime==''||lastObj.returnType==''){
+	    if(lastObj.followTime===''||lastObj.returnType===''){
 	    	return
 	    }
 	    const newData = {
@@ -205,7 +205,7 @@ class MissionProfile extends Component {
 	     	const target = planTaskList.find((item,index) => index === key);
 	      	if (target) {
 		        target[dataIndex] = value;
-		        if(dataIndex=='followTime'){
+		        if(dataIndex==='followTime'){
 		        	target.status = moment().format('YYYY-MM-DD') < moment(value).format('YYYY-MM-DD')?'NO_START':'WAIT'
 		        }
 		        this.setState({ planTaskList });
@@ -243,7 +243,7 @@ class MissionProfile extends Component {
   			message.error('随访计划中必须至少有一个任务！')
   			return
   		}
-  		if(list[list.length-1].followTime==''||list[list.length-1].returnType==''){
+  		if(list[list.length-1].followTime===''||list[list.length-1].returnType===''){
   			message.error('请完善任务信息！')
   			return
   		}
@@ -253,7 +253,7 @@ class MissionProfile extends Component {
 		})
   		const param = {
   			inhospitalId: this.state.inhospitalId,
-  			planTemplateId: this.props.patientDetail.todayDetail.planTemplateId==this.state.choosedPlanId?'':this.state.choosedPlanId,
+  			planTemplateId: this.props.patientDetail.todayDetail.planTemplateId===this.state.choosedPlanId?'':this.state.choosedPlanId,
   			planId: this.props.patientDetail.todayDetail.planId,
   			dischargeTime: this.props.patientDetail.todayDetail.dischargeTime,
   			taskVOS: list
@@ -325,7 +325,7 @@ class MissionProfile extends Component {
 			let list = [...this.props.patientDetail.todayDetail.tasks]
 			let status;
 			list.forEach(item=>{
-				if(item.status=='COMPLETE'){
+				if(item.status==='COMPLETE'){
 					this.setState({
 						canPlanEdit: false
 					})
@@ -458,7 +458,6 @@ class MissionProfile extends Component {
 	render(){
 		console.log(this.entireScaleInfoTemp, '123123')
 		const { 
-			isSummaryShow,
 			status, 
 			editPlanShow,
 			stopPlanShow, 
@@ -499,9 +498,9 @@ class MissionProfile extends Component {
 			dataIndex: 'followTime',
 			key: 'followTime',
 			render: (text, record, key) => (
-				record.status!='COMPLETE'&&record.status!='OVERDUE'?
+				record.status!=='COMPLETE'&&record.status!=='OVERDUE'?
 				<EditDateCell value={text} onChange={this.onCellChange(key, 'followTime')}
-					haveDisabled={record.status==''?true:false}></EditDateCell>
+					haveDisabled={record.status===''?true:false}></EditDateCell>
 				:
 				<span>{text}</span>
 			)
@@ -511,7 +510,7 @@ class MissionProfile extends Component {
 			dataIndex: 'returnType',
 			key: 'returnType',
 			render: (text, record, key) => (
-				record.status!='COMPLETE'&&record.status!='OVERDUE'?
+				record.status!=='COMPLETE'&&record.status!=='OVERDUE'?
 				<EditSelectCell dataSource={dictionary['RETURN_WAY']} 
 					value={text} allowClear={false} labelInValue={false}
 					onChange={this.onCellChange(key, 'returnType')}
@@ -522,7 +521,7 @@ class MissionProfile extends Component {
 				:
 				<span>
 					{dictionary['RETURN_WAY']?dictionary['RETURN_WAY'].map(item=>(
-						text==item.code?item.value:''
+						text===item.code?item.value:''
                     )):''}
 				</span>
 			)
@@ -532,7 +531,7 @@ class MissionProfile extends Component {
 			width: '190px',
 			key: 'scaleTemplateId',
 			render: (text, record, key) => (
-				record.status!='COMPLETE'&&record.status!='OVERDUE'?
+				record.status!=='COMPLETE'&&record.status!=='OVERDUE'?
 				<EditSelectCell dataSource={scaleList} 
 					value={text} allowClear={true} labelInValue={true}
 					onChange={this.onCellChange(key, 'scaleTemplateId')}
@@ -548,7 +547,7 @@ class MissionProfile extends Component {
 			key: 'action',
 			width: '80px',
 			render: (text, record, key) => (
-				record.status!='COMPLETE'?
+				record.status!=='COMPLETE'?
 				<PopoverSure title="您确定要删除该任务吗？"
 					text="目标删除后将不可恢复。"
 					sureFunction={()=>this.deletePlan(key)}>
@@ -791,7 +790,7 @@ class MissionProfile extends Component {
 										rowClassName={(record, index) => {
 											return record.status
 										}}/>
-									<div className={`${styles.tableFooter} ${planTaskList.length%2==0?styles.doubleTable:''}`}>
+									<div className={`${styles.tableFooter} ${planTaskList.length%2===0?styles.doubleTable:''}`}>
 										<span className={styles.footerBtn} onClick={this.handleAdd}>
 											<i className={`iconfont icon-tianjialiebiao_icon ${styles.tableIcon}`}></i><span>添加计划</span>
 										</span>
@@ -853,50 +852,50 @@ class MissionProfile extends Component {
 								<div className={styles.conclusionTitle}>
 									<div className={styles.titleItem}>
 										<span className={styles.label}>病区：</span>
-										<span className={styles.text}>{outSummary.wards}</span>
+										<span className={styles.text}>{outSummary?outSummary.wards:'暂无'}</span>
 									</div>
 									<div className={styles.titleItem}>
 										<span className={styles.label}>床号：</span>
-										<span className={styles.text}>{outSummary.bedNumber}</span>
+										<span className={styles.text}>{outSummary?outSummary.bedNumber:'暂无'}</span>
 									</div>
 								</div>
 								<div className={styles.conclusionContent}>
 									<div>
 										<div className={`${styles.item} ${styles.specialItem}`}>
 											<span className={styles.label}>入院日期：</span>
-											<span className={styles.text}>{outSummary.admittingTime}</span>
+											<span className={styles.text}>{outSummary?outSummary.admittingTime:'暂无'}</span>
 										</div>
 										<div className={`${styles.item} ${styles.specialItem}`}>
 											<span className={styles.label}>出院日期：</span>
-											<span className={styles.text}>{outSummary.dischargeTime}</span>
+											<span className={styles.text}>{outSummary?outSummary.dischargeTime:'暂无'}</span>
 										</div>
 									</div>
 									<div className={styles.item}>
 										<span className={styles.label}>入院诊断：</span>
-										<span className={styles.text}>{outSummary.admittingDiagnosis}</span>
+										<span className={styles.text}>{outSummary?outSummary.admittingDiagnosis:'暂无'}</span>
 									</div>
 									<div className={styles.item}>
 										<span className={styles.label}>出院诊断：</span>
-										<span className={styles.text}>{outSummary.dischargeDiagnosis}</span>
+										<span className={styles.text}>{outSummary?outSummary.dischargeDiagnosis:'暂无'}</span>
 									</div>
 									<div className={styles.item}>
 										<span className={styles.label}>入院情况：</span>
-										<span className={styles.text}>{outSummary.admittingDescription}</span>
+										<span className={styles.text}>{outSummary?outSummary.admittingDescription:'暂无'}</span>
 									</div>
 									<div className={styles.item}>
 										<span className={styles.label}>住院经过：</span>
-										<span className={styles.text}>{outSummary.hospitalizationCourse}</span>
+										<span className={styles.text}>{outSummary?outSummary.hospitalizationCourse:'暂无'}</span>
 									</div>
 									<div className={styles.item}>
 										<span className={styles.label}>出院情况：</span>
-										<span className={styles.text}>{outSummary.dischargeCondition}</span>
+										<span className={styles.text}>{outSummary?outSummary.dischargeCondition:'暂无'}</span>
 									</div>
 									<div className={styles.item}>
 										<span className={styles.label}>住院医嘱：</span>
-										<span className={styles.text}>{outSummary.doctorAdvance}</span>
+										<span className={styles.text}>{outSummary?outSummary.doctorAdvance:'暂无'}</span>
 									</div>
 									<div className={styles.sign}>
-										签名：{outSummary.recordMember}
+										签名：{outSummary?outSummary.recordMember:'暂无'}
 									</div>
 								</div>
 							</Modal>

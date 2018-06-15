@@ -29,7 +29,7 @@ export default {
             const result1 = yield call(getSatisfyStayFollow, payload)
             const result2 = yield call(getSatisfyAlreadyFollow, payload)
             let rate = 0
-            if(result1.total+result2.total!=0){
+            if(result1.total+result2.total!==0){
                 rate = (result2.total*100/(result1.total+result2.total)).toFixed(2)
             }
             console.log(rate,'rate')

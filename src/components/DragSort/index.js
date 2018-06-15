@@ -56,7 +56,7 @@ export default function DragSort(props){
 }
 
 function arrMove(arr, fromIndex, toIndex){
-  if(fromIndex != toIndex) {
+  if(fromIndex !== toIndex) {
     arr = arr.concat();
     let item = arr.splice(fromIndex, 1)[0];
     arr.splice(toIndex , 0, item);

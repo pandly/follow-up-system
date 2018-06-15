@@ -50,13 +50,8 @@ export default class PlanMenu extends Component {
 			<div>
 				{listData?
 					listData.map(item => (
-<<<<<<< HEAD
 					<div key={item.taskId} className={`${styles.menuItemWrap} ${this.colorChange(item.status)} ${status==item.taskId?styles.menuItemChoosed:''}`}
 						onClick={() => this.props.changeStatus(item.taskId, item.scaleId)}>
-=======
-					<div key={item.taskId} className={`${styles.menuItemWrap} ${this.colorChange(item.status)} ${status===item.taskId?styles.menuItemChoosed:''}`}
-						onClick={() => this.props.changeStatus(item.taskId)}>
->>>>>>> 8798ecf967c2125beaeb43d36b14bd68c9a52ccd
 						<div className={styles.menuItem}>
 							<i className={`iconfont icon-${this.iconChange(item.status)} ${styles.itemIcon}`}></i>
 							<div className={styles.content}>

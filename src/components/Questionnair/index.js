@@ -24,6 +24,7 @@ class Questionnair extends PureComponent {
     	curMoveItem: null,
     	drag: false,
     	scrollTo: 0,
+    	newEditor: true
     }
 
     componentDidMount() {
@@ -99,7 +100,7 @@ class Questionnair extends PureComponent {
             editorShake: ''
 		}
 		this.setState(prevState => ({
-			editors: [...prevState.editors, editor]
+			editors: [...prevState.editors, editor],
 		}))
 	}
     
@@ -194,6 +195,8 @@ class Questionnair extends PureComponent {
 		//如果有编辑状态的题目则禁止拖动
 		const hasEditor = editors.some(data => data.isEditor === true);
 		const canDrag = hasEditor ? false : true;
+
+		const isFirst = editors.length !== 0 && editors[editors.length - 1].isFirst
 		const editorsEl = editors.map((editor, index) => {
 	    	return (
 	    		<div
@@ -240,7 +243,7 @@ class Questionnair extends PureComponent {
 				  editors={editors} 
 				/>
 				<QuestionnairContent
-				  length={editors.length}
+				  isFirst={isFirst}
                   scrollTo={scrollTo}
 				  onChangeTitle={this.handleTitle}>
 				    {titleEl}

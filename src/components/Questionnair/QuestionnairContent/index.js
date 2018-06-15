@@ -20,7 +20,7 @@ class QuestionnairContent extends PureComponent {
     }
     
     componentWillReceiveProps(nextProps) {
-		if(nextProps.length > this.props.length && this.props.length !== 0) {
+		if(nextProps.isFirst) {
 			this.scrollBottom = true;
 		}else {
 			this.scrollBottom = false;

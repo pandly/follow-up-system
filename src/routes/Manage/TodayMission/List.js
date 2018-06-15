@@ -17,7 +17,7 @@ const statusDom = (text, record) => {
 				<span className={styles.statusText}>已结案</span>
 			</span>
 		)
-	}else if(text.task.endStatus===1){
+	}else if(text.task.endStatus===0||text.task.endStatus===null){
 		switch(text.task.status){
 			case 'COMPLETE':
 				return (

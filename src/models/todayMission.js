@@ -6,6 +6,8 @@ export default {
     state: {
         stayFollow: [],
         alreadyFollow: [],
+        stayFollowTotal: 0,
+        alreadyFollowTotal: 0,
         loading: true,
         pageTotal: 0
     },
@@ -56,6 +58,38 @@ export default {
                 });
             
         },
+        *fetchInit({ payload }, { call, put }){
+            yield put({ 
+                type: 'changeLoading',
+                payload: true
+                });
+            const result1 = yield call(getTodayStayFollow, payload)
+            const result2 = yield call(getTodayAlreadyFollow, payload)
+            yield put({ 
+                type: 'changeLoading',
+                payload: false
+                });
+            yield put({ 
+                type: 'setPageTotal',
+                payload: result1.total
+                });
+            yield put({ 
+                type: 'saveStay',
+                payload: result1.results
+                });
+            yield put({ 
+                type: 'saveAlready',
+                payload: result2.results
+                });
+            yield put({
+                type: 'setStayNumberTotal',
+                payload: result1.total
+            })
+            yield put({
+                type: 'setAlreadyNumberTotal',
+                payload: result2.total
+            })
+        }
     },
 
     reducers: {
@@ -70,7 +104,19 @@ export default {
         },
         setPageTotal(state, action){
             return { ...state, pageTotal: action.payload }
-        }
+        },
+        setStayNumberTotal(state, action){
+            return { 
+                ...state, 
+                stayFollowTotal: action.payload
+            }
+        },
+        setAlreadyNumberTotal(state, action){
+            return { 
+                ...state, 
+                alreadyFollowTotal: action.payload
+            }
+        },
     },
 
 };

@@ -1,5 +1,6 @@
 import dva from 'dva';
 import './index.less';
+import 'moment/locale/zh-cn';
 
 // 1. Initialize
 const app = dva({

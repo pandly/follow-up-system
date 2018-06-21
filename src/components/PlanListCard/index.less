@@ -15,14 +15,20 @@
 	line-height: 17px;
 	position: relative;
 	cursor: pointer;
-	&:nth-of-type(4n){
-		margin-right: 0;
-	}
 	.listTitle{
 		font-size: 14px;
 		color: #666666;
 		line-height: 20px;
+		height: 40px;
 		margin-bottom: 20px;
+		display: -webkit-box;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		// white-space: nowrap;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 2;
+		word-wrap:break-word; 
+		word-break:break-all; 
 	}
 	.itemInfo{
 		margin-bottom: 10px;

@@ -55,7 +55,6 @@ export default class PlanTable extends Component {
 				message.error('最少必须有一条任务！')
 			}
 		}else{
-			
 			planDetailTask.splice(index, 1);
 	        this.setState({
 	        	planDetailTask
@@ -111,6 +110,7 @@ export default class PlanTable extends Component {
 					</thead>
 					<tbody>
 						{
+							planDetailTask?
 							planDetailTask.map((item,index)=>(
 								<tr key={index}>
 									<td>{index+1}</td>
@@ -129,7 +129,7 @@ export default class PlanTable extends Component {
 									
 									<td>
 										<span className={styles.tableItem}>
-											<Select defaultValue={item.returnType} style={{ width: 140, height: 32 }} onChange={(value)=>this.handleChange(value, 'returnType', index)}
+											<Select value={item.returnType} style={{ width: 140, height: 32 }} onChange={(value)=>this.handleChange(value, 'returnType', index)}
 												>
 										      	{dictionary['RETURN_WAY']?
 												    dictionary['RETURN_WAY'].map(item1 => (
@@ -142,7 +142,7 @@ export default class PlanTable extends Component {
 										<span className={styles.tableItem}>
 											<Select 
 											  labelInValue
-											  defaultValue={{key: item.scaleId}} style={{ width: 140, height: 32 }} 
+											  value={{key: item.scaleId}} style={{ width: 140, height: 32 }} 
 											  onChange={(value)=>this.handleChange(value, 'scaleId', index)}
 											  allowClear>						
 										      	{scaleList.map(item1 => (
@@ -161,6 +161,7 @@ export default class PlanTable extends Component {
 									</td>
 								</tr>
 							))
+							:''
 						}
 						
 					</tbody>

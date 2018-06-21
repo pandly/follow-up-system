@@ -103,8 +103,8 @@ class Satisfaction extends PureComponent {
   		const startTime = dateString[0]
   		const endTime = dateString[1]
   		this.setState({
-  			dischargeStartTime: moment(startTime),
-  			dischargeEndTime: moment(endTime)
+  			dischargeStartTime: startTime===''?null:moment(startTime),
+  			dischargeEndTime: endTime===''?null:moment(endTime)
   		}, ()=>{
   			this.getData(0)
   		})
@@ -113,8 +113,8 @@ class Satisfaction extends PureComponent {
   		const startTime = dateString[0]
   		const endTime = dateString[1]
   		this.setState({
-  			followStartTime: moment(startTime),
-  			followEndTime: moment(endTime)
+  			followStartTime: startTime===''?null:moment(startTime),
+  			followEndTime: endTime===''?null:moment(endTime)
   		}, ()=>{
   			this.getData(0)
   		})

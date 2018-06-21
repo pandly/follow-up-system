@@ -83,7 +83,8 @@ class MissionProfile extends Component {
 		choosedPlanId: '',
 		toggleAnswer: true,
 		canPlanEdit: true,
-		entireScaleInfo: []
+		entireScaleInfo: [],
+		endStatus: 0
 	}
 
 	hideIdCard=(id)=>{
@@ -179,7 +180,7 @@ class MissionProfile extends Component {
 		this.props.form.validateFields((err, values) => {
 			if(!err){
 				const param = {
-					planId: this.props.patientDetail.todayDetail.tasks[0].planId,
+					planId: this.props.patientDetail.todayDetail.planId,
 					reason: values.reason,
 					description: values.desc
 				}
@@ -339,6 +340,11 @@ class MissionProfile extends Component {
 				}
 			})
 			this.scaleId = this.props.patientDetail.todayDetail.tasks[0].scaleId
+			if(this.props.patientDetail.todayDetail.tasks.length>0){				
+				this.setState({
+					endStatus: this.props.patientDetail.todayDetail.tasks[0].endStatus
+				})
+			}
 			this.getEditor(this.scaleId);
 			this.setState({
 				status:status,
@@ -470,7 +476,8 @@ class MissionProfile extends Component {
 			planTaskList,
 			choosedPlanId,
 			toggleAnswer,
-			canPlanEdit
+			canPlanEdit,
+			endStatus
 		} = this.state
 		const {
 			todayDetail,
@@ -540,7 +547,7 @@ class MissionProfile extends Component {
 
 				</EditSelectCell>
 				:
-				<span>{text.label?text.label:'暂无'}</span>
+				<span className={`${styles.tableName} text-hidden`}>{text.label?text.label:'暂无'}</span>
 			)
 		},{
 			title: '操作',
@@ -648,9 +655,17 @@ class MissionProfile extends Component {
 											<div className={`${styles.btnItem} aLink`} onClick={this.showEditPlan}>
 												<i className={`iconfont icon-grey_bianji`}></i><span>编辑计划</span>
 											</div>
-											<div className={`${styles.btnItem} aLink`} onClick={this.showStopPlan}>
-												<i className={`iconfont icon-jieshu`}></i><span>手动结案</span>
-											</div>
+											{
+												endStatus===0?
+												<div className={`${styles.btnItem} aLink`} onClick={this.showStopPlan}>
+													<i className={`iconfont icon-jieshu`}></i><span>手动结案</span>
+												</div>
+												:
+												<div className={`${styles.btnItem} aLink`}>
+													<i className={`iconfont icon-jieshu`}></i><span>已结案</span>
+												</div>
+											}
+											
 										</div>
 									</div>
 									

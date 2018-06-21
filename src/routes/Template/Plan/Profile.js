@@ -21,17 +21,17 @@ class PlanProfile extends PureComponent {
 		illDisable: false,
 		haveIllDisable: false,
 	}
-	handleChange=(value,name,index)=>{
-        const planDetailTaskObj = {...this.state.planDetailTask[index]};
-        let newplanDetailTaskObj
-		newplanDetailTaskObj = {...planDetailTaskObj, [name]: value};
+	// handleChange=(value,name,index)=>{
+ //        const planDetailTaskObj = {...this.state.planDetailTask[index]};
+ //        let newplanDetailTaskObj
+	// 	newplanDetailTaskObj = {...planDetailTaskObj, [name]: value};
         
-        let planDetailTask = [...this.state.planDetailTask];
-        planDetailTask.splice(index, 1, newplanDetailTaskObj);
-        this.setState({
-        	planDetailTask
-        })
-	}
+ //        let planDetailTask = [...this.state.planDetailTask];
+ //        planDetailTask.splice(index, 1, newplanDetailTaskObj);
+ //        this.setState({
+ //        	planDetailTask
+ //        })
+	// }
 	
   	//删除
 	sureDelete = ()=> {
@@ -157,7 +157,7 @@ class PlanProfile extends PureComponent {
 						illness: values.illness?JSON.stringify(values.illness):JSON.stringify([])
 
 					},
-					taskTemplates: this.table
+					taskTemplates: this.table?this.table:this.state.planDetailTask
 				}
 
 				if(this.props.match.params.id==='add'){
@@ -173,31 +173,45 @@ class PlanProfile extends PureComponent {
 					})
 				}else{
 					param.planTemplate.planTemplateId = this.state.planDetail.planTemplateId
-					this.setState({
-						planDetailTask: this.table
-					},()=>{
-						this.props.dispatch({
-						type: 'plan/updatePlan',
-						payload: {
-							update: param,
-							planTemplateId: this.props.match.params.id
-						}
-					}).then(()=>{
-						this.initData(()=>{
-							message.success('修改成功！')
-							this.setState({
+					if(this.table){
+						this.setState({
+							planDetailTask: this.table
+						},()=>{
+							this.props.dispatch({
+							type: 'plan/updatePlan',
+							payload: {
+								update: param,
 								planTemplateId: this.props.match.params.id
+							}
+						}).then(()=>{
+							this.initData(()=>{
+								message.success('修改成功！')
+								this.setState({
+									planTemplateId: this.props.match.params.id
+									})
+								})
+							
+							
+							
+							})
+						})
+					}else{
+						this.props.dispatch({
+							type: 'plan/updatePlan',
+							payload: {
+								update: param,
+								planTemplateId: this.props.match.params.id
+							}
+						}).then(()=>{
+							this.initData(()=>{
+								message.success('修改成功！')
+								this.setState({
+									planTemplateId: this.props.match.params.id
 								})
 							})
-						
-						
-						
 						})
-					})
-					
-					
+					}
 				}
-				
 			}
 		})
 	}
@@ -365,7 +379,7 @@ class PlanProfile extends PureComponent {
 			title: '量表',
 			key: 'table',
 			render: (text, record) => (
-				<span>{record.scaleName}</span>
+				<span className={`${styles.tableName} text-hidden`}>{record.scaleName}</span>
 			)
 		},{
 			title: '',

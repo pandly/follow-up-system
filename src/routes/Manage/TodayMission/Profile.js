@@ -1,7 +1,7 @@
 import { Component } from 'react'
 import styles from './Profile.less'
 import patientInfo from '../../../assets/patient.png'
-import { Select, Table, Input, Button, Breadcrumb, Form, message } from 'antd';
+import { Select, Table, Input, Button, Breadcrumb, Form, message, Spin } from 'antd';
 import { connect } from 'dva'
 import moment from 'moment'
 import { routerRedux } from 'dva/router'
@@ -83,7 +83,8 @@ class MissionProfile extends Component {
 		choosedPlanId: '',
 		toggleAnswer: true,
 		canPlanEdit: true,
-		entireScaleInfo: []
+		entireScaleInfo: [],
+		editorLoading: true
 	}
 
 	hideIdCard=(id)=>{
@@ -312,6 +313,9 @@ class MissionProfile extends Component {
 		        	data.answer.radio = JSON.parse(data.answer.radio);
 		        }
 	        })
+	        this.setState({
+	        	editorLoading: false
+	        })
 		})
     }
   	getData=(func)=>{
@@ -357,7 +361,21 @@ class MissionProfile extends Component {
   	}
     
     submitAnswer = () => {
-    	let answers = [];
+  //   	let x = this.temp.some(data => {
+		// 	console.log(data)
+		// 	let y = false;
+		// 	for(let value of Object.values(data.answer)) {
+		// 		if(value !== '' || value.length !== 0) {
+		// 			y = true;
+		// 		}
+		// 	}
+		// 	return data.required && y
+		// })
+		// if(x) {
+		// 	message.warming('请完成必填项')
+		// 	return ;
+		// }
+		let answers = [];
     	this.entireScaleInfoTemp.forEach(data => {
     		answers.push({
     			"answerId": uuid(),
@@ -372,30 +390,44 @@ class MissionProfile extends Component {
     		})
     	})
     	//console.log(answers)
-		// let x = this.temp.some(data => {
-		// 	console.log(data)
-		// 	let y = false;
-		// 	for(let value of Object.values(data.answer)) {
-		// 		if(value !== '' || value.length !== 0) {
-		// 			y = true;
-		// 		}
-		// 	}
-		// 	return data.required && y
-		// })
-		// if(x) {
-		// 	message.warming('请完成必填项')
-		// }
 		this.props.dispatch({
   			type: 'scale/saveAnswer',
   			payload: {
   				answers
   			}
+  		}).then(() => {
+  			this.setState({
+	        	toggleAnswer: false
+	        })
+	        message.success('提交成功！')
   		})
-        this.setState({
-        	toggleAnswer: false
-        })
     }
     
+    save = () => {
+    	let answers = [];
+    	this.entireScaleInfoTemp.forEach(data => {
+    		answers.push({
+    			"answerId": uuid(),
+			    "checkbox": JSON.stringify(data.answer.checkbox),
+			    "dropdown": data.answer.dropdown,
+			    "input": data.answer.input,
+			    "questionId": data.questionId,
+			    "radio": JSON.stringify(data.answer.radio),
+			    "scaleId": data.scaleId,
+			    "text": data.answer.text,
+			    "textarea": data.answer.textarea
+    		})
+    	})
+		this.props.dispatch({
+  			type: 'scale/saveAnswer',
+  			payload: {
+  				answers
+  			}
+  		}).then(() => {
+  			message.success('保存成功！')
+  		})
+    }
+
     editAnswer = () => {
     	this.props.dispatch({
 			type: 'scale/getEntireScale',
@@ -456,7 +488,6 @@ class MissionProfile extends Component {
 	}
 
 	render(){
-		console.log(this.entireScaleInfoTemp, '123123')
 		const { 
 			status, 
 			editPlanShow,
@@ -470,7 +501,8 @@ class MissionProfile extends Component {
 			planTaskList,
 			choosedPlanId,
 			toggleAnswer,
-			canPlanEdit
+			canPlanEdit,
+			editorLoading
 		} = this.state
 		const {
 			todayDetail,
@@ -722,43 +754,45 @@ class MissionProfile extends Component {
 										<i className={`iconfont icon-tongyongbiaotiicon ${styles.titleIcon}`}></i><span>随访内容</span>
 										{!toggleAnswer && <span className={`${styles.text} aLink`} style={{ marginLeft: 10 }} onClick={this.editAnswer}>编辑</span>}
 									</div>
-									<div style={{ display: toggleAnswer ? 'block' : 'none'}}>
-										{
-											this.entireScaleInfoTemp.map((editor, index) => {
-												return (
-													<QuestionnairEditor
-													  onAnswer={this.handleAnswer}
-													  acitveEditor={true}
-													  key={editor.questionId}
-													  index={index}
-													  editor={editor}
-												    />
-												)
-											})
-										}
-									</div>
-									<div style={{ display: toggleAnswer ? 'none' : 'block'}}>
-										{
-											this.entireScaleInfoTemp.map((data, index) => {
-		                                    	return (
-		                                    		<div key={index} style={{ minHeight: 60 }}>
-														<div style={{ color: '#666' }}>{`${index + 1}.${data.type === 'input' ? data.completionForwards : data.title + ':'}`}</div>
-														<div style={{ paddingLeft: 12, color: '#151515' }}>{typeof data.answer[data.type] !== 'string' ? (
-															typeof data.answer[data.type].optionValue !== 'string' ? (
-																data.answer[data.type].optionValue.map((item, index) => {
-																	return (
-																		<span key={index} style={{ marginRight: 15 }}>{item}</span>
-																	)
-																})
-															) : data.answer[data.type].optionValue
-														) : data.answer[data.type]}</div>
-													</div>
-		                                    	)
-	                                        })
-										}
-									</div>
+									<Spin spinning={editorLoading} size="large">
+										<div style={{ display: toggleAnswer ? 'block' : 'none'}}>
+											{
+												this.entireScaleInfoTemp.map((editor, index) => {
+													return (
+														<QuestionnairEditor
+														  onAnswer={this.handleAnswer}
+														  acitveEditor={true}
+														  key={editor.questionId}
+														  index={index}
+														  editor={editor}
+													    />
+													)
+												})
+											}
+										</div>
+										<div style={{ display: toggleAnswer ? 'none' : 'block'}}>
+											{
+												this.entireScaleInfoTemp.map((data, index) => {
+			                                    	return (
+			                                    		<div key={index} style={{ minHeight: 60 }}>
+															<div style={{ color: '#666' }}>{`${index + 1}.${data.type === 'input' ? data.completionForwards : data.title + ':'}`}</div>
+															<div style={{ paddingLeft: 12, color: '#151515' }}>{typeof data.answer[data.type] !== 'string' ? (
+																typeof data.answer[data.type].optionValue !== 'string' ? (
+																	data.answer[data.type].optionValue.map((item, index) => {
+																		return (
+																			<span key={index} style={{ marginRight: 15 }}>{item}</span>
+																		)
+																	})
+																) : data.answer[data.type].optionValue
+															) : data.answer[data.type]}</div>
+														</div>
+			                                    	)
+		                                        })
+											}
+										</div>
+									</Spin>
 								</div>
-								{toggleAnswer && (
+								{!editorLoading && toggleAnswer && (
 									<div>
 									    <Button type="primary" onClick={this.save}>暂存草稿</Button>
 									    <span style={{

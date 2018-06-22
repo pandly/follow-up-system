@@ -315,7 +315,10 @@ class Satisfaction extends PureComponent {
 		},{
 			title: '出院科室',
 			dataIndex: 'hospitalizationDepartment',
-			key: 'hospitalizationDepartment'
+			key: 'hospitalizationDepartment',
+			render: (text, record) => (
+				<span className={`${styles.deptHidden} text-hidden`}>{text}</span>
+			)
 		},{
 			title: '随访人员',
 			dataIndex: 'resident',
@@ -323,13 +326,16 @@ class Satisfaction extends PureComponent {
 		},{
 			title: '出院诊断',
 			dataIndex: 'dischargeDiagnosis',
-			key: 'dischargeDiagnosis'
+			key: 'dischargeDiagnosis',
+			render: (text, record) => (
+				<span className={`${styles.textHidden} text-hidden`}>{text}</span>
+			)
 		},{
 			title: '出院日期',
 			dataIndex: 'dischargeTime',
 			key: 'dischargeTime'
 		},{
-			title: '状态',
+			title: '随访状态',
 			key: 'status',
 			render: (text, record) => statusDom(text, record)
 		},{
@@ -360,7 +366,10 @@ class Satisfaction extends PureComponent {
 		},{
 			title: '出院科室',
 			dataIndex: 'hospitalizationDepartment',
-			key: 'hospitalizationDepartment'
+			key: 'hospitalizationDepartment',
+			render: (text, record) => (
+				<span className={`${styles.deptHidden} text-hidden`}>{text}</span>
+			)
 		},{
 			title: '回访人员',
 			dataIndex: 'resident',
@@ -375,7 +384,10 @@ class Satisfaction extends PureComponent {
 		},{
 			title: '出院诊断',
 			dataIndex: 'dischargeDiagnosis',
-			key: 'dischargeDiagnosis'
+			key: 'dischargeDiagnosis',
+			render: (text, record) => (
+				<span className={`${styles.textHidden} text-hidden`}>{text}</span>
+			)
 		},{
 			title: '出院日期',
 			dataIndex: 'dischargeTime',

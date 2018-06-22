@@ -266,11 +266,17 @@ class OutPatient extends PureComponent {
 		},{
 			title: '科室',
 			dataIndex: 'hospitalizationDepartment',
-			key: 'hospitalizationDepartment'
+			key: 'hospitalizationDepartment',
+			render: (text, record) => (
+				<span className={`${styles.deptHidden} text-hidden`}>{text}</span>
+			)
 		},{
 			title: '出院诊断',
 			dataIndex: 'dischargeDiagnosis',
-			key: 'dischargeDiagnosis'
+			key: 'dischargeDiagnosis',
+			render: (text, record) => (
+				<span className={`${styles.textHidden} text-hidden`}>{text}</span>
+			)
 		},{
 			title: '主管医生',
 			dataIndex: 'resident',
@@ -312,11 +318,17 @@ class OutPatient extends PureComponent {
 		},{
 			title: '科室',
 			dataIndex: 'hospitalizationDepartment',
-			key: 'hospitalizationDepartment'
+			key: 'hospitalizationDepartment',
+			render: (text, record) => (
+				<span className={`${styles.deptHidden} text-hidden`}>{text}</span>
+			)
 		},{
 			title: '出院诊断',
 			dataIndex: 'dischargeDiagnosis',
-			key: 'dischargeDiagnosis'
+			key: 'dischargeDiagnosis',
+			render: (text, record) => (
+				<span className={`${styles.textHidden} text-hidden`}>{text}</span>
+			)
 		},{
 			title: '主管医生',
 			dataIndex: 'resident',

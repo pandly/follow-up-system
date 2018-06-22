@@ -74,7 +74,8 @@ class OutPatientProfile extends Component {
 		stopReason: '',
 		stopDes: '',
 		choosedPlanId: '',
-		canPlanEdit: true
+		canPlanEdit: true,
+		endStatus: 0
 	}
 	
 	hideIdCard=(id)=>{
@@ -179,7 +180,8 @@ class OutPatientProfile extends Component {
 					this.setState({
 						stopReason: values.reason,
 						stopDes: values.desc,
-						stopPlanShow: false
+						stopPlanShow: false,
+						endStatus: 1
 					})
 					message.success('结案成功！')
 				})
@@ -296,6 +298,11 @@ class OutPatientProfile extends Component {
 					status = item.taskId
 				}
 			})
+			if(this.props.patientDetail.todayDetail.tasks.length>0){				
+				this.setState({
+					endStatus: this.props.patientDetail.todayDetail.tasks[0].endStatus
+				})
+			}
 			this.setState({
 				status:status,
 				planTaskList: list,
@@ -367,7 +374,8 @@ class OutPatientProfile extends Component {
 			stopDes,
 			planTaskList,
 			choosedPlanId,
-			canPlanEdit
+			canPlanEdit,
+			endStatus
 		} = this.state
 		const {
 			outDetail,
@@ -545,9 +553,16 @@ class OutPatientProfile extends Component {
 											<div className={`${styles.btnItem} aLink`} onClick={this.showEditPlan}>
 												<i className={`iconfont icon-grey_bianji`}></i><span>编辑计划</span>
 											</div>
-											<div className={`${styles.btnItem} aLink`} onClick={this.showStopPlan}>
-												<i className={`iconfont icon-jieshu`}></i><span>手动结案</span>
-											</div>
+											{
+												endStatus===0?
+												<div className={`${styles.btnItem} aLink`} onClick={this.showStopPlan}>
+													<i className={`iconfont icon-jieshu`}></i><span>手动结案</span>
+												</div>
+												:
+												<div className={`${styles.btnItem}`}>
+													<i className={`iconfont icon-jieshu`}></i><span>已结案</span>
+												</div>
+											}
 										</div>
 									</div>
 									

@@ -64,7 +64,8 @@ const statusDom = (text, record) => {
 class MissionProfile extends Component {
 	constructor(props) {
 		super(props)
-		this.entireScaleInfoTemp = []
+		this.entireScaleInfoTemp = [],
+		this.editorsEl = []
 	}
 
 	state = {
@@ -370,21 +371,36 @@ class MissionProfile extends Component {
   	}
     
     submitAnswer = () => {
-  //   	let x = this.temp.some(data => {
-		// 	console.log(data)
-		// 	let y = false;
-		// 	for(let value of Object.values(data.answer)) {
-		// 		if(value !== '' || value.length !== 0) {
-		// 			y = true;
-		// 		}
-		// 	}
-		// 	return data.required && y
-		// })
-		// if(x) {
-		// 	message.warming('请完成必填项')
-		// 	return ;
-		// }
-		let answers = [];
+    	const infoHeight = this.infoEl.scrollHeight + 20;
+    	const x = this.entireScaleInfoTemp.some((data, index) => {
+    		if(data.required) {
+    			switch(data.type) {
+    				case 'checkbox': 
+    					if(data.answer[data.type].optionValue.length === 0) {
+    						message.warning(`第${index + 1}题为必填题，请完成必填题！`)
+    						this.mainEl.scrollTo(0, this.editorsEl[index].offsetTop + infoHeight)
+    						return true;
+    					}
+    				case 'radio': 
+    				    if(data.answer[data.type].optionValue === '') {
+    						message.warning(`第${index + 1}题为必填题，请完成必填题！`)
+    						this.mainEl.scrollTo(0, this.editorsEl[index].offsetTop + infoHeight)
+    						return true;
+    					}
+    				default: 
+    				    if(data.answer[data.type] === '') {
+    				    	console.log(this.editorsEl[index], this.editorsEl[index].offsetTop)
+    						message.warning(`第${index + 1}题为必填题，请完成必填题！`)
+    						this.mainEl.scrollTo(0, this.editorsEl[index].offsetTop + infoHeight)
+    						return true;
+    					}
+    			}
+    		}
+    	})
+    	if(x) {
+    		return ;
+    	}
+    	let answers = [];
     	this.entireScaleInfoTemp.forEach(data => {
     		answers.push({
     			"answerId": uuid(),
@@ -398,7 +414,6 @@ class MissionProfile extends Component {
 			    "textarea": data.answer.textarea
     		})
     	})
-    	//console.log(answers)
 		this.props.dispatch({
   			type: 'scale/saveAnswer',
   			payload: {
@@ -674,7 +689,7 @@ class MissionProfile extends Component {
 							<div className={styles.text}>拨打电话</div>
 						</div>*/}
 					</div>
-					<div className={styles.mainInfoWrap}>
+					<div className={styles.mainInfoWrap} ref={el => this.mainEl = el}>
 						<div className={styles.overFlow}>
 							<div className={styles.menuList}>
 								<div className={styles.specialItem}>
@@ -708,7 +723,7 @@ class MissionProfile extends Component {
 								<PlanMenu dictionary={dictionary} listData={planTaskList} status={status} changeStatus={this.changeId}></PlanMenu>
 							</div>
 							<div className={styles.mainInfo}>
-								<div className={styles.info}>
+								<div className={styles.info} ref={el => this.infoEl = el}>
 									<div className={styles.title}>
 										<i className={`iconfont icon-tongyongbiaotiicon ${styles.titleIcon}`}></i><span>患者信息</span>
 									</div>
@@ -777,13 +792,16 @@ class MissionProfile extends Component {
 											{
 												this.entireScaleInfoTemp.map((editor, index) => {
 													return (
-														<QuestionnairEditor
-														  onAnswer={this.handleAnswer}
-														  acitveEditor={true}
-														  key={editor.questionId}
-														  index={index}
-														  editor={editor}
-													    />
+														<div
+														  ref={el => this.editorsEl[index] = el}
+														  key={editor.questionId}>
+															<QuestionnairEditor
+															  onAnswer={this.handleAnswer}
+															  acitveEditor={true}
+															  index={index}
+															  editor={editor}
+														    />
+													    </div>
 													)
 												})
 											}
@@ -799,7 +817,7 @@ class MissionProfile extends Component {
 																	typeof data.answer[data.type].optionValue !== 'string' ? (
 																		data.answer[data.type].optionValue.map((item, index) => {
 																			return (
-																				<span key={index} style={{ marginRight: 15 }}>{item}</span>
+																				item && <span key={index} style={{ marginRight: 15 }}>{item}</span>
 																			)
 																		})
 																	) : data.answer[data.type].optionValue

@@ -10,7 +10,7 @@ export default class ContentEditable extends React.Component {
   }
 
   render() {
-    var { tagName, name, html, style, ...otherProps } = this.props;
+    var { tagName, name, html, style, onKeyPress, ...otherProps } = this.props;
 
     return (
     // React.createElement(
@@ -29,7 +29,8 @@ export default class ContentEditable extends React.Component {
           style={style}
           data-name={name} 
           ref={(e) => this.htmlEl = e}
-          onInput={this.emitChange} 
+          onInput={this.emitChange}
+          onKeyPress={onKeyPress} 
           //onBlur={this.props.onBlur || this.emitChange}
           contentEditable={!this.props.disabled}
           dangerouslySetInnerHTML={{__html: html}}>

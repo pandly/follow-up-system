@@ -192,7 +192,8 @@ class MissionProfile extends Component {
 					this.setState({
 						stopReason: values.reason,
 						stopDes: values.desc,
-						stopPlanShow: false
+						stopPlanShow: false,
+						endStatus: 1
 					})
 					message.success('结案成功！')
 				})
@@ -695,7 +696,7 @@ class MissionProfile extends Component {
 													<i className={`iconfont icon-jieshu`}></i><span>手动结案</span>
 												</div>
 												:
-												<div className={`${styles.btnItem} aLink`}>
+												<div className={`${styles.btnItem}`}>
 													<i className={`iconfont icon-jieshu`}></i><span>已结案</span>
 												</div>
 											}

@@ -90,8 +90,8 @@ class TodayMission extends PureComponent {
   		const startTime = dateString[0]
   		const endTime = dateString[1]
   		this.setState({
-  			startTime: moment(startTime),
-  			endTime: moment(endTime)
+  			startTime: startTime===''?null:moment(startTime),
+  			endTime: endTime===''?null:moment(endTime)
   		}, ()=>{
   			this.getData(0)
   		})
@@ -137,10 +137,10 @@ class TodayMission extends PureComponent {
 		this.getData(current)
 	}
 
-	getData(start){
-		if(this.state.missionType==='wait'){
+	getData(start, type){
+		if(type&&type==='init'){
 			this.props.dispatch({
-				type: 'todayMission/fetchStay',
+				type: 'todayMission/fetchInit',
 				payload: {
 					startIndex: start,
 					resident: this.state.doctorChoosed,
@@ -149,18 +149,32 @@ class TodayMission extends PureComponent {
 					dischargeEndTime: this.state.endTime==null?'':this.state.endTime
 				}
 			})
-		}else if(this.state.missionType==='already'){
-			this.props.dispatch({
-				type: 'todayMission/fetchAlready',
-				payload: {
-					startIndex: start,
-					resident: this.state.doctorChoosed,
-					department: this.state.deptChoosed,
-					dischargeStartTime: this.state.startTime==null?'':this.state.startTime,
-					dischargeEndTime: this.state.endTime==null?'':this.state.endTime
-				}
-			})
+		}else{
+			if(this.state.missionType==='wait'){
+				this.props.dispatch({
+					type: 'todayMission/fetchStay',
+					payload: {
+						startIndex: start,
+						resident: this.state.doctorChoosed,
+						department: this.state.deptChoosed,
+						dischargeStartTime: this.state.startTime==null?'':this.state.startTime,
+						dischargeEndTime: this.state.endTime==null?'':this.state.endTime
+					}
+				})
+			}else if(this.state.missionType==='already'){
+				this.props.dispatch({
+					type: 'todayMission/fetchAlready',
+					payload: {
+						startIndex: start,
+						resident: this.state.doctorChoosed,
+						department: this.state.deptChoosed,
+						dischargeStartTime: this.state.startTime==null?'':this.state.startTime,
+						dischargeEndTime: this.state.endTime==null?'':this.state.endTime
+					}
+				})
+			}
 		}
+		
 		
 	}
 
@@ -175,7 +189,7 @@ class TodayMission extends PureComponent {
 		this.props.dispatch({
 			type: 'global/fetchDoctors'
 		})
-		this.getData(0)
+		this.getData(0, 'init')
 	}
 	
 	render() {
@@ -188,7 +202,14 @@ class TodayMission extends PureComponent {
 			startTime,
 			endTime
 		} = this.state
-		const {stayFollow, alreadyFollow, loading, pageTotal} = this.props.todayMission
+		const {
+			stayFollow, 
+			alreadyFollow, 
+			loading, 
+			pageTotal,
+			stayFollowTotal,
+        	alreadyFollowTotal,
+		} = this.props.todayMission
 		const {departmentList, doctorList} = this.props.global
 		const columns = [{
 			title: '姓名',
@@ -246,12 +267,12 @@ class TodayMission extends PureComponent {
 							<div className={`${styles.tabItem} ${missionType==='wait'?styles.tabItemChoosed:''}`} onClick={() => this.changeTab('wait')}>
 								<i className={`iconfont icon-daisuifang-icon-green ${styles.tabIcon}`}></i>
 								<span className={styles.text}>待随访</span>
-								<span className={styles.number}>30</span>
+								<span className={styles.number}>{stayFollowTotal}</span>
 							</div>
 							<div className={`${styles.tabItem} ${missionType==='already'?styles.tabItemChoosed:''}`} onClick={() => this.changeTab('already')}>
 								<i className={`iconfont icon-yisuifang-icon-green ${styles.tabIcon}`}></i>
 								<span className={styles.text}>已随访</span>
-								<span className={styles.number}>8</span>
+								<span className={styles.number}>{alreadyFollowTotal}</span>
 							</div>
 						</div>
 						<div className={styles.selectWrap}>

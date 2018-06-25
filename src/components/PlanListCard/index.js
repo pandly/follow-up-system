@@ -48,10 +48,11 @@ export default class PlanListCard extends Component {
 	      				}
 					</span>
 				</div>
-				<div className={`${styles.itemInfo} ${listData.department?'':styles.itemInfoHidden}`}>
+				<div className={`${styles.itemInfo}`}>
 					<span className={styles.label}>科室：</span>
 					<span className={styles.text}>
 						{
+							listData.department===''?'全部':
 							departmentList.map(item => (
 								listData.department===item.departmentId?item.departmentName:''
 					      	))
@@ -62,17 +63,32 @@ export default class PlanListCard extends Component {
 					<span className={styles.label}>病区：</span>
 					<span className={`${styles.text} text-hidden`}>{listData.inpatientWard}</span>
 				</div>
-				<div className={`${styles.itemInfo} ${listData.illness.length!==0?'':styles.itemInfoHidden}`}>
-					<span className={styles.label}>疾病诊断：</span>
-					<span className={`${styles.text} text-hidden`}>
-						{
-							listData.illness&&listData.illness.length!==0?listData.illness.map((ill,index)=>(
-								index===listData.illness.length-1?
-							      	ill:ill+'，'
-							)):'暂无'
-	      				}
-					</span>
-				</div>
+				{
+					listData.haveIllness!=='RESTRICT'?
+						<div className={`${styles.itemInfo}`}>
+							<span className={styles.label}>
+								疾病诊断
+								{
+									listData.haveIllness==='HAVE'?'包含':'不包含'
+								}
+								：
+							</span>
+							<span className={`${styles.text} text-hidden`}>
+								{
+									listData.illness&&listData.illness.length!==0?listData.illness.map((ill,index)=>(
+										index===listData.illness.length-1?
+									      	ill:ill+'，'
+									)):'暂无'
+			      				}
+							</span>
+						</div>
+					:
+					<div className={`${styles.itemInfo}`}>
+						<span className={styles.label}>疾病诊断：</span>
+						<span className={`${styles.text} text-hidden`}>无限制</span>
+					</div>
+				}
+				
 				<div className={`${styles.hoverInfo} ${isHover&&!listData.isUse?'':styles.itemInfoHidden}`}>
 					<div className={styles.hoverTitle}>
 						<i className={`iconfont icon-sanjiaoxingjinggao ${styles.hoverIcon}`}></i><span>此模板已暂停使用</span>

@@ -44,10 +44,11 @@ export default class ListCard extends Component {
 	    });
 	}
 	hideBtn = ()=>{
-		this.setState({
-	      	isBtnShow: false,
-	      	isPopDeleteHide: false,
-	    });
+		if(!this.state.isPopDeleteHide){
+			this.setState({
+		      	isBtnShow: false,
+		    });
+		}
 	}
 	sureDelete = (item)=> {
 		this.props.sureDelete()

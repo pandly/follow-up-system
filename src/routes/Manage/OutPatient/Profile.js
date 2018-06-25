@@ -168,7 +168,7 @@ class OutPatientProfile extends Component {
 		this.props.form.validateFields((err, values) => {
 			if(!err){
 				const param = {
-					planId: this.props.patientDetail.outDetail.tasks[0].planId,
+					planId: this.props.patientDetail.outDetail.planId,
 					reason: values.reason,
 					description: values.desc
 				}
@@ -437,7 +437,7 @@ class OutPatientProfile extends Component {
 
 				</EditSelectCell>
 				:
-				<span>{text.label?text.label:'暂无'}</span>
+				<span className={`${styles.tableName} text-hidden`}>{text.label?text.label:'暂无'}</span>
 			)
 		},{
 			title: '操作',

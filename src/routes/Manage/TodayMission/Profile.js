@@ -84,7 +84,8 @@ class MissionProfile extends Component {
 		toggleAnswer: true,
 		canPlanEdit: true,
 		entireScaleInfo: [],
-		editorLoading: true
+		editorLoading: true,
+		endStatus: 0
 	}
 
 	hideIdCard=(id)=>{
@@ -180,7 +181,7 @@ class MissionProfile extends Component {
 		this.props.form.validateFields((err, values) => {
 			if(!err){
 				const param = {
-					planId: this.props.patientDetail.todayDetail.tasks[0].planId,
+					planId: this.props.patientDetail.todayDetail.planId,
 					reason: values.reason,
 					description: values.desc
 				}
@@ -293,25 +294,27 @@ class MissionProfile extends Component {
 			const { entireScaleInfo } = this.props.scale;
 			this.entireScaleInfoTemp = entireScaleInfo ? JSON.parse(JSON.stringify(entireScaleInfo)) : [];
 	        this.entireScaleInfoTemp.map(data => {
-				if(data.answer.checkbox === '') {
-					data.answer.checkbox = {
-		        		optionValue: [],
-		        		optionIndex: [],
-		        		otherOptionValue: ''
-		        	}
-				}else {
-					data.answer.checkbox = JSON.parse(data.answer.checkbox);
+				if(data.answer) {
+					if(data.answer.checkbox === '') {
+						data.answer.checkbox = {
+			        		optionValue: [],
+			        		optionIndex: [],
+			        		otherOptionValue: ''
+			        	}
+					}else {
+						data.answer.checkbox = JSON.parse(data.answer.checkbox);
+					}
+					if(data.answer.radio === ''){
+			        	data.answer.radio = {
+			        		optionValue: '',
+			        		optionIndex: '',
+			        		otherOptionValue: ''
+			        	}
+			        }
+			        else {
+			        	data.answer.radio = JSON.parse(data.answer.radio);
+			        }
 				}
-				if(data.answer.radio === ''){
-		        	data.answer.radio = {
-		        		optionValue: '',
-		        		optionIndex: '',
-		        		otherOptionValue: ''
-		        	}
-		        }
-		        else {
-		        	data.answer.radio = JSON.parse(data.answer.radio);
-		        }
 	        })
 	        this.setState({
 	        	editorLoading: false
@@ -343,6 +346,11 @@ class MissionProfile extends Component {
 				}
 			})
 			this.scaleId = this.props.patientDetail.todayDetail.tasks[0].scaleId
+			if(this.props.patientDetail.todayDetail.tasks.length>0){				
+				this.setState({
+					endStatus: this.props.patientDetail.todayDetail.tasks[0].endStatus
+				})
+			}
 			this.getEditor(this.scaleId);
 			this.setState({
 				status:status,
@@ -502,7 +510,8 @@ class MissionProfile extends Component {
 			choosedPlanId,
 			toggleAnswer,
 			canPlanEdit,
-			editorLoading
+			editorLoading,
+			endStatus
 		} = this.state
 		const {
 			todayDetail,
@@ -572,7 +581,7 @@ class MissionProfile extends Component {
 
 				</EditSelectCell>
 				:
-				<span>{text.label?text.label:'暂无'}</span>
+				<span className={`${styles.tableName} text-hidden`}>{text.label?text.label:'暂无'}</span>
 			)
 		},{
 			title: '操作',
@@ -680,9 +689,17 @@ class MissionProfile extends Component {
 											<div className={`${styles.btnItem} aLink`} onClick={this.showEditPlan}>
 												<i className={`iconfont icon-grey_bianji`}></i><span>编辑计划</span>
 											</div>
-											<div className={`${styles.btnItem} aLink`} onClick={this.showStopPlan}>
-												<i className={`iconfont icon-jieshu`}></i><span>手动结案</span>
-											</div>
+											{
+												endStatus===0?
+												<div className={`${styles.btnItem} aLink`} onClick={this.showStopPlan}>
+													<i className={`iconfont icon-jieshu`}></i><span>手动结案</span>
+												</div>
+												:
+												<div className={`${styles.btnItem} aLink`}>
+													<i className={`iconfont icon-jieshu`}></i><span>已结案</span>
+												</div>
+											}
+											
 										</div>
 									</div>
 									
@@ -774,18 +791,20 @@ class MissionProfile extends Component {
 											{
 												this.entireScaleInfoTemp.map((data, index) => {
 			                                    	return (
-			                                    		<div key={index} style={{ minHeight: 60 }}>
-															<div style={{ color: '#666' }}>{`${index + 1}.${data.type === 'input' ? data.completionForwards : data.title + ':'}`}</div>
-															<div style={{ paddingLeft: 12, color: '#151515' }}>{typeof data.answer[data.type] !== 'string' ? (
-																typeof data.answer[data.type].optionValue !== 'string' ? (
-																	data.answer[data.type].optionValue.map((item, index) => {
-																		return (
-																			<span key={index} style={{ marginRight: 15 }}>{item}</span>
-																		)
-																	})
-																) : data.answer[data.type].optionValue
-															) : data.answer[data.type]}</div>
-														</div>
+			                                    		data.answer && (
+			                                    			<div key={index} style={{ minHeight: 60 }}>
+																<div style={{ color: '#666' }}>{`${index + 1}.${data.type === 'input' ? data.completionForwards : data.title + ':'}`}</div>
+																<div style={{ paddingLeft: 12, color: '#151515' }}>{typeof data.answer[data.type] !== 'string' ? (
+																	typeof data.answer[data.type].optionValue !== 'string' ? (
+																		data.answer[data.type].optionValue.map((item, index) => {
+																			return (
+																				<span key={index} style={{ marginRight: 15 }}>{item}</span>
+																			)
+																		})
+																	) : data.answer[data.type].optionValue
+																) : data.answer[data.type]}</div>
+															</div>
+														)
 			                                    	)
 		                                        })
 											}

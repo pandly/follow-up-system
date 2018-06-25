@@ -88,6 +88,9 @@ class QuestionnairEditor extends PureComponent {
     	if(key === 'required' || key === 'remark') {
     		value = checked;
     	}
+    	if(key === 'maxLength') {
+    		value = parseInt(value)
+    	}
 		this.setState(prevState => ({
 			editor: { ...prevState.editor, [key]:value }
 		}))
@@ -532,8 +535,8 @@ class QuestionnairEditor extends PureComponent {
 			  })}
 			</select>
 		)
-		//填写状态下的单行文本、多行文本
 		const optionsEl = type === 'dropdown' ? subDropdownEl : (type === 'radio' ? subRadioEl : subCheckboxEl)
+        //填写状态下的单行文本、多行文本
         const subTextEl = (
 			<input
 			  defaultValue={ answer && this.answer[type] }

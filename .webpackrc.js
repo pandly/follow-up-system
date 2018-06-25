@@ -9,7 +9,11 @@ export default {
   env: {
     development: {
       extraBabelPlugins: ['dva-hmr'],
+      NODE_ENV: '"development"'
     },
+    production: {
+      NODE_ENV: '"production"'
+    }
   },
   alias: {
     'components': path.resolve(__dirname, 'src/components/'),

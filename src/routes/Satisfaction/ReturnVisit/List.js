@@ -67,6 +67,7 @@ class Satisfaction extends PureComponent {
 
 	changeType=(key)=> {
   		if(key!=='search'){
+  			this.getDeptAndDoc(key)
   			const now = new Date()
 			if(now.getDate()>7){
 				this.setState({
@@ -151,7 +152,32 @@ class Satisfaction extends PureComponent {
   		}
   		
 	}
+
+	getDeptAndDoc(type){
+		if(type=='init'||type=='wait'){
+			this.props.dispatch({
+				type: 'global/fetchDepartment',
+				payload: 'satisfyStay'
+			})
+			this.props.dispatch({
+				type: 'global/fetchDoctors',
+				payload: 'satisfyStay'
+			})
+		}else if(type=='already'){
+			this.props.dispatch({
+				type: 'global/fetchDepartment',
+				payload: 'satisfyAlready'
+			})
+			this.props.dispatch({
+				type: 'global/fetchDoctors',
+				payload: 'satisfyAlready'
+			})
+		}
+		
+	}
+
 	getData(start, type){
+		
 		if(type&&type==='page'){
 			if(this.state.tabType==='wait'){
 				this.props.dispatch({
@@ -210,7 +236,7 @@ class Satisfaction extends PureComponent {
 		this.setState({
 			alreadyCurrentPage: page.current
 		})
-		this.getData(current)
+		this.getData(current,'page')
 	}
 	searchPatient=(value)=>{		
 		const panes = this.state.tabPanes
@@ -254,12 +280,7 @@ class Satisfaction extends PureComponent {
 
 
 	componentDidMount( ){
-		this.props.dispatch({
-			type: 'global/fetchDepartment'
-		})
-		this.props.dispatch({
-			type: 'global/fetchDoctors'
-		})
+		this.getDeptAndDoc('init')
 		const now = new Date()
 		if(now.getDate()>7){
 			this.setState({

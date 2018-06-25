@@ -74,6 +74,7 @@ class TodayMission extends PureComponent {
 	}
 
 	changeTab(type){
+		this.getDeptAndDoc(type)
 		this.setState({
 			missionType: type,
 			deptChoosed: '',
@@ -138,6 +139,7 @@ class TodayMission extends PureComponent {
 	}
 
 	getData(start, type){
+		// this.getDeptAndDoc(type)
 		if(type&&type==='init'){
 			this.props.dispatch({
 				type: 'todayMission/fetchInit',
@@ -178,17 +180,35 @@ class TodayMission extends PureComponent {
 		
 	}
 
+	getDeptAndDoc(type){
+		if(type=='init'||type=='wait'){
+			this.props.dispatch({
+				type: 'global/fetchDepartment',
+				payload: 'todayStay'
+			})
+			this.props.dispatch({
+				type: 'global/fetchDoctors',
+				payload: 'todayStay'
+			})
+		}else if(type=='already'){
+			this.props.dispatch({
+				type: 'global/fetchDepartment',
+				payload: 'todayAlready'
+			})
+			this.props.dispatch({
+				type: 'global/fetchDoctors',
+				payload: 'todayAlready'
+			})
+		}
+		
+	}
+
 	disabledDate(current){
 		return current && current>moment().endOf('day')
 	}
 
 	componentDidMount( ){
-		this.props.dispatch({
-			type: 'global/fetchDepartment'
-		})
-		this.props.dispatch({
-			type: 'global/fetchDoctors'
-		})
+		this.getDeptAndDoc('init')
 		this.getData(0, 'init')
 	}
 	

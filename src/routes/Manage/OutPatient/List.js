@@ -7,7 +7,6 @@ import moment from 'moment'
 
 import Empty from 'components/Empty'
 
-
 const TabPane = Tabs.TabPane;
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
@@ -58,6 +57,7 @@ class OutPatient extends PureComponent {
   	}
   	changeType=(key)=> {
   		if(key!=='search'){
+  			this.getDeptAndDoc(key)
   			this.setState({
 		  		tabType: key,
 		  		deptChoosed: '',
@@ -128,7 +128,31 @@ class OutPatient extends PureComponent {
   		
 	}
 
+	getDeptAndDoc(type){
+		if(type=='init'||type=='wait'){
+			this.props.dispatch({
+				type: 'global/fetchDepartment',
+				payload: 'dischargeStay'
+			})
+			this.props.dispatch({
+				type: 'global/fetchDoctors',
+				payload: 'dischargeStay'
+			})
+		}else if(type=='already'){
+			this.props.dispatch({
+				type: 'global/fetchDepartment',
+				payload: 'dischargeAlready'
+			})
+			this.props.dispatch({
+				type: 'global/fetchDoctors',
+				payload: 'dischargeAlready'
+			})
+		}
+		
+	}
+
 	getData(start){
+		// this.getDeptAndDoc(this.state.tabType)
 		if(this.state.tabType==='wait'){
 			this.props.dispatch({
 				type: 'outPatient/fetchStay',
@@ -216,12 +240,7 @@ class OutPatient extends PureComponent {
 
 
 	componentDidMount( ){
-		this.props.dispatch({
-			type: 'global/fetchDepartment'
-		})
-		this.props.dispatch({
-			type: 'global/fetchDoctors'
-		})
+		this.getDeptAndDoc('init')
 		this.getData(0)
 	}
 

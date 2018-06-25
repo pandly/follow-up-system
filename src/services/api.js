@@ -5,16 +5,12 @@ const baseUrl = process.env.NODE_ENV === 'development' ? '/api' : ''
 
 //POST  获取科室列表
 export async function getDepartments(params){
-	return request(`${baseUrl}/v1/department/get_department`,{
-		method: 'POST'
-	})
+	return request(`${baseUrl}/v1/department/get_department?type=${params}`)
 }
 
 //POST  获取主治医生
 export async function getDoctors(params){
-	return request(`${baseUrl}/v1/resident/get_resident`,{
-		method: 'POST'
-	})
+	return request(`${baseUrl}/v1/resident/get_resident?type=${params}`)
 }
 
 //get 字典查找

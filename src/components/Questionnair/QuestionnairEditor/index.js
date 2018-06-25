@@ -394,6 +394,7 @@ class QuestionnairEditor extends PureComponent {
 							name={'otherOptionForwards'}
 							html={otherOptionForwards}
 							onChange={this.handleChange}
+							onKeyPress={this.disableEnter}
 						/>
 						<div className="other-fill">
 							<div className="other-fill-inner">____</div>
@@ -403,6 +404,7 @@ class QuestionnairEditor extends PureComponent {
 							name={'otherOptionBackwards'}
 							html={otherOptionBackwards}
 							onChange={this.handleChange}
+							onKeyPress={this.disableEnter}
 						/>
 			        </div>
 				</div>
@@ -419,6 +421,7 @@ class QuestionnairEditor extends PureComponent {
 							name={'completionForwards'}
 							html={completionForwards}
 							onChange={this.handleChange}
+							onKeyPress={this.disableEnter}
 						/>
 						<div className="other-fill">
 							<div className="other-fill-inner">____</div>
@@ -428,6 +431,7 @@ class QuestionnairEditor extends PureComponent {
 							name={'completionBackwards'}
 							html={completionBackwards}
 							onChange={this.handleChange}
+							onKeyPress={this.disableEnter}
 						/>
 			        </div>
 				</div>
@@ -485,6 +489,7 @@ class QuestionnairEditor extends PureComponent {
 				<div
 				  className='other-option-input'
 				  onInput={this.handleOtherOptionInputChange}
+				  onKeyPress={this.disableEnter}
 				  contentEditable
 				  dangerouslySetInnerHTML={{ __html: this.otherOptionInput }}>
 				</div>
@@ -518,6 +523,7 @@ class QuestionnairEditor extends PureComponent {
 											  data-index={index}
 											  className='other-option-input'
 											  onInput={this.handleOtherOptionInputChange}
+											  onKeyPress={this.disableEnter}
 											  contentEditable
 											  dangerouslySetInnerHTML={{ __html: this.otherOptionValue }}>
 											</div>
@@ -555,6 +561,7 @@ class QuestionnairEditor extends PureComponent {
 												  data-index={index}
 												  className='other-option-input'
 												  onInput={this.handleOtherOptionInputChange}
+												  onKeyPress={this.disableEnter}
 												  contentEditable
 												  dangerouslySetInnerHTML={{ __html: this.otherOptionValue }}>
 												</div>

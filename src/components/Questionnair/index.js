@@ -46,6 +46,15 @@ class Questionnair extends PureComponent {
     }
 
     updateEditors = () => {
+    	this.state.editors.some((data, index) => {
+    		if(data.isFirst && data.isEditor) {
+    			this.state.editors.splice(index, 1)
+    			return true;
+    		}else if(!data.isFirst && data.isEditor){
+				data.isEditor = false;
+				return true;
+    		}
+    	})
 		this.props.dispatch({
         	type: 'scale/saveScale',
         	payload: {

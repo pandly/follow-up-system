@@ -2,7 +2,7 @@ import request from '../utils/request';
 
 //区分开发环境和正式环境
 const baseUrl = process.env.NODE_ENV === 'development' ? '/api' : ''
-
+const xsrfToken = document.cookie;
 //POST  获取科室列表
 export async function getDepartments(params){
 	return request(`${baseUrl}/v1/department/get_department?type=${params}`)
@@ -101,7 +101,8 @@ export async function stopPlan(params){
 export async function getSatisfySearch(params){
 	return request(`${baseUrl}/v1/satisfy/search`,{
 		method: 'POST',
-		body: params
+		body: params,
+		//'x-xsrf-token': xsrfToken
 	})
 }
 

@@ -30,16 +30,16 @@ export default {
             yield put({ 
                 type: 'changeScaleListLoading',
                 payload: true
-                });
+            });
             const result = yield call(getScaleList, payload)
             yield put({ 
                 type: 'saveScaleList',
                 payload: result.results
-                });            
+            });            
             yield put({ 
                 type: 'changeScaleListLoading',
                 payload: false
-                });
+            });
         },
         *deleteScale({ payload }, { call, put }){
             yield call(deleteScale, payload)

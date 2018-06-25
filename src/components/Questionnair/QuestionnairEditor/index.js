@@ -28,6 +28,8 @@ class QuestionnairEditor extends PureComponent {
 		editor: {...this.props.editor},
 		hover: false,
 		inputShake: false,
+		optionShake: [],
+		hasOption: [],
 		hasTitle: true,
 		dialogVisible: false,
 		mutiOption: '',
@@ -76,14 +78,21 @@ class QuestionnairEditor extends PureComponent {
     	let key = e.target.name;
     	let checked = e.target.checked;
     	if(key === 'title' && value) {
+    		//控制题目input边框颜色
     		this.setState({
     			hasTitle: true
     		})
     	}
     	if(key === 'options') {
-    		const options = this.state.editor.options.concat();
-    		options[index] = value;
-    		value = options;
+    		let { options } = this.state.editor;
+    		let { hasOption } = this.state;
+    		hasOption[index] = true;
+    		this.setState({
+				hasOption: [...hasOption]
+    		})
+    		let optionsTemp = options.concat();
+    		optionsTemp[index] = value;
+    		value = optionsTemp;
     	}
     	if(key === 'required' || key === 'remark') {
     		value = checked;
@@ -199,6 +208,25 @@ class QuestionnairEditor extends PureComponent {
     		}))
     		return ;
     	}
+    	//判断选项是否为空
+    	if(['radio', 'checkbox', 'dropdown'].includes(editor.type)) {
+    		let empty = editor.options.some((item, index) => {
+	        	if(item === '') {
+	        		this.setState(prevState => {
+	        			prevState.optionShake[index] =! prevState.optionShake[index];
+	        			prevState.hasOption[index] = false;
+	        			return {
+	        				optionShake: [...prevState.optionShake],
+	        				hasOption: [...prevState.hasOption]
+	        			}
+		    		})
+		    		return true;
+	        	}
+	        })
+	        if(empty) {
+	        	return ;
+	        }
+    	}
     	const newEditor = {...editor, isEditor: false, isFirst: false};
     	if(handleConfirm) {
     		handleConfirm(index, newEditor)
@@ -253,13 +281,23 @@ class QuestionnairEditor extends PureComponent {
 	    	})
     	}
     }
+    disableEnter = (event) => {
+    	console.log(event.which)
+		if (event.which == 13) {
+			event.cancelBubble=true;
+			event.preventDefault();
+			event.stopPropagation();
+		}
+    }
 	render() {
 		const { index, curMoveItem, drag, acitveEditor } = this.props;
 		const { 
 			toggleMutiOption, 
 			editor, 
 			hover, 
-			inputShake, 
+			inputShake,
+			optionShake,
+			hasOption,
 			hasTitle,
 			dialogVisible,
 			mutiOption,
@@ -285,7 +323,6 @@ class QuestionnairEditor extends PureComponent {
         } = editor;
         this.answer = answer && JSON.parse(JSON.stringify(answer));
         this.otherOptionValue = answer && this.answer[type].otherOptionValue;
-        console.log(this.answer)
         /*
          * 
          * 以下元素为编辑状态下的元素
@@ -317,12 +354,17 @@ class QuestionnairEditor extends PureComponent {
 						<i className="iconfont icon-xuanxiangicon"></i>
 				    </label>	        
 				    <div className="editor-row-content">
-						<Input
-						  index={index}
-						  name={'options'}
-						  value={option}
-						  onChange={this.handleChange}
-						/>
+				        <ShakeTransition shake={optionShake[index]}>
+							<Input
+							  index={index}
+							  name={'options'}
+							  value={option}
+							  onChange={this.handleChange}
+							  style={{
+							  	borderColor: hasOption[index] === false ? 'red' : ''  
+							  }}
+							/>
+						</ShakeTransition>
 					</div>
 					<i className="iconfont icon-chachaicon" onClick={() => this.deleteOption(index)}></i>
 				</div>
@@ -429,6 +471,7 @@ class QuestionnairEditor extends PureComponent {
 				<div
 				  className='other-option-input'
 				  onInput={this.handleOtherOptionInputChange}
+				  onKeyPress={this.disableEnter}
 				  contentEditable
 				  dangerouslySetInnerHTML={{ __html: answer && this.answer[type] }}>
 				</div>
@@ -436,7 +479,6 @@ class QuestionnairEditor extends PureComponent {
 			</div>
 		)
 		//填写状态下的单选、多选其他选项
-
         const subOtherOptionsEl = (
 			<div className="subject-other-option">
 				<span>{otherOptionForwards}</span>

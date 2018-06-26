@@ -1,9 +1,10 @@
 import { PureComponent } from 'react'
 import styles from './Profile.less'
 import patientInfo from '../../../assets/patient.png'
-import { Select, Table, Input, Button, Breadcrumb, Form, message } from 'antd';
+import { Select, Table, Input, Button, Breadcrumb, Form, message, Spin } from 'antd';
 import { connect } from 'dva'
 import { routerRedux } from 'dva/router'
+import QuestionnairEditor from 'components/Questionnair/QuestionnairEditor'
 
 import Modal from 'components/Modal'
 
@@ -26,6 +27,9 @@ class SatisfactionDetail extends PureComponent {
 		medicineResident: '',
 		remarkReason: '',
 		remarkDes: '',
+		scale: [],
+		toggleAnswer: true,
+		editorLoading: true,
 	}
 	
 	hideIdCard=(id)=>{
@@ -84,7 +88,6 @@ class SatisfactionDetail extends PureComponent {
 		e.preventDefault();
 		this.props.form.validateFields((err, values) => {
 			if(!err){
-				console.log('wwww', values)
 				const param = {
 					taskId: this.props.patientDetail.satisfyDetail.satisfyTask.taskId,
 					remarkReason: values.reason,
@@ -146,7 +149,9 @@ class SatisfactionDetail extends PureComponent {
 			this.setState({
 				remarkShow: this.props.patientDetail.satisfyDetail.satisfyTask.remarkReason?true:false,
 				remarkReason: this.props.patientDetail.satisfyDetail.satisfyTask.remarkReason,
-				remarkDes: this.props.patientDetail.satisfyDetail.satisfyTask.remarkDes
+				remarkDes: this.props.patientDetail.satisfyDetail.satisfyTask.remarkDes,
+				scale: JSON.parse(JSON.stringify(this.props.patientDetail.satisfyDetail.satisfyQuestionVOs)),
+				editorLoading: false
 			})
 		})		
 	}
@@ -162,7 +167,10 @@ class SatisfactionDetail extends PureComponent {
 			remarkReason,
 			remarkDes,
 			medicineSquareTime,
-			medicineResident
+			medicineResident,
+			scale,
+			toggleAnswer,
+			editorLoading
 		} = this.state
 
 		const {
@@ -340,6 +348,50 @@ class SatisfactionDetail extends PureComponent {
 										</div>
 									</div>
 								</div>
+								<div className={styles.scale}>
+									<Spin spinning={editorLoading} size="large">
+										<div style={{ display: toggleAnswer ? 'block' : 'none'}}>
+											{
+												scale.map((editor, index) => {
+													return (
+														<div
+														  ref={el => this.editorsEl[index] = el}
+														  key={editor.questionId}>
+															<QuestionnairEditor
+															  onAnswer={this.handleAnswer}
+															  acitveEditor={true}
+															  index={index}
+															  editor={editor}
+														    />
+													    </div>
+													)
+												})
+											}
+										</div>
+										{/*<div style={{ display: toggleAnswer ? 'none' : 'block'}}>
+											{
+												scale.map((data, index) => {
+			                                    	return (
+			                                    		data.answer && (
+			                                    			<div key={index} style={{ minHeight: 60 }}>
+																<div style={{ color: '#666' }}>{`${index + 1}.${data.type === 'input' ? data.completionForwards : data.title + ':'}`}</div>
+																<div style={{ paddingLeft: 12, color: '#151515' }}>{typeof data.answer[data.type] !== 'string' ? (
+																	typeof data.answer[data.type].optionValue !== 'string' ? (
+																		data.answer[data.type].optionValue.map((item, index) => {
+																			return (
+																				item && <span key={index} style={{ marginRight: 15 }}>{item}</span>
+																			)
+																		})
+																	) : data.answer[data.type].optionValue
+																) : data.answer[data.type]}</div>
+															</div>
+														)
+			                                    	)
+		                                        })
+											}
+										</div>*/}
+									</Spin>
+								</div>
 							</div>
 							<Modal title="添加备注" closable={false} visible={commentShow} type="small"
 								 onCancel={this.hideComment}>
@@ -386,7 +438,6 @@ class SatisfactionDetail extends PureComponent {
 											<Button onClick={this.hideComment}>取消</Button>								
 										</div>
 								</Form>
-								
 							</Modal>
 							<Modal title="出院小结" closable={true} visible={conclusionShow} onCancel={this.hideConclusion}>
 								<div className={styles.conclusionTitle}>

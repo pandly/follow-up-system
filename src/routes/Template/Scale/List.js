@@ -56,8 +56,13 @@ class Scale extends PureComponent {
 		}
 		
 	}
-	copyTable(item){
-		console.log(item,'copy')
+	copyTable(id){
+		this.props.dispatch({
+			type: 'scale/copyScale',
+			payload: id
+		}).then(() => {
+			this.getData();
+		})
 	}
 	componentDidMount(){
 		this.getData()
@@ -103,7 +108,7 @@ class Scale extends PureComponent {
 												listData={item} 
 												onClick={() => this.updateTemplate(item.scaleId)}
 												sureDelete={()=>this.sureDelete(item)}
-												copyTable={()=>this.copyTable(item)}></TableListCard>
+												copyTable={()=>this.copyTable(item.scaleId)}></TableListCard>
 										))					    					
 								}
 							</div>

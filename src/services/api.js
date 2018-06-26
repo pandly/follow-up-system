@@ -219,7 +219,10 @@ export async function getFollowScale(id){
 export async function getEntireScale(id){
 	return request(`${baseUrl}/v1/scale/${id}`)
 }
-
+//get 复制量表
+export async function copyScale(id){
+	return request(`${baseUrl}/v1/scale/copy/${id}`)
+}
 //post 保存答案
 export async function saveAnswer(params){
 	return request(`${baseUrl}/v1/scale/answer`, {

@@ -5,7 +5,8 @@ import {
     saveScale,
     getFollowScale,
     getEntireScale,
-    saveAnswer
+    saveAnswer,
+    copyScale
 } from '../services/api.js'
 export default {
 
@@ -58,6 +59,10 @@ export default {
                 type: 'updateScaleInfo',
                 payload: result.results
             });
+        },
+        *copyScale({ payload }, { call, put }) {
+            console.log(payload)
+            yield call(copyScale, payload)
         },
         *getFollowScale({ payload }, { call, put }) {
             const result = yield call(getFollowScale, payload)

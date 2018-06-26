@@ -282,7 +282,6 @@ class QuestionnairEditor extends PureComponent {
     	}
     }
     disableEnter = (event) => {
-    	console.log(event.which)
 		if (event.which == 13) {
 			event.cancelBubble=true;
 			event.preventDefault();

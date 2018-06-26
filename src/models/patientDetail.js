@@ -47,7 +47,7 @@ export default {
             yield put({ 
                 type: 'saveOut',
                 payload: result.results
-                });
+            });
             
         },
         *fetchSatisfy({ payload }, { call, put }) {  // eslint-disable-lin

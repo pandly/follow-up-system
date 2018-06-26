@@ -1,7 +1,7 @@
 import { Component } from 'react'
 import styles from './Profile.less'
 import patientInfo from '../../../assets/patient.png'
-import { Select, Table, Input, Button, Breadcrumb, Form, message } from 'antd';
+import { Select, Table, Input, Button, Breadcrumb, Form, message, Spin } from 'antd';
 import { connect } from 'dva'
 import moment from 'moment'
 import { routerRedux } from 'dva/router'
@@ -11,6 +11,8 @@ import Modal from 'components/Modal'
 import PopoverSure from 'components/PopoverSure'
 import EditDateCell from 'components/EditTableCell/EditDateCell.js'
 import EditSelectCell from 'components/EditTableCell/EditSelectCell.js'
+import QuestionnairEditor from 'components/Questionnair/QuestionnairEditor'
+import uuid from 'utils/utils'
 
 const Option = Select.Option;
 const { TextArea } = Input;
@@ -60,6 +62,11 @@ const statusDom = (text, record) => {
 @Form.create()
 
 class OutPatientProfile extends Component {
+	constructor(props) {
+		super(props)
+		this.entireScaleInfoTemp = [],
+		this.editorsEl = []
+	}
 	state = {
 		planTaskList: [],
 		status: '',
@@ -75,7 +82,9 @@ class OutPatientProfile extends Component {
 		stopDes: '',
 		choosedPlanId: '',
 		canPlanEdit: true,
-		endStatus: 0
+		endStatus: 0,
+		editorLoading: true,
+		toggleAnswer: true,
 	}
 	
 	hideIdCard=(id)=>{
@@ -91,11 +100,24 @@ class OutPatientProfile extends Component {
 		}
 	}
 	
-	changeId=(id)=>{
+	changeId=(taskId, scaleId, status)=>{
 		this.setState({
-			status: id
+			status: taskId,
+			editorLoading: true
 		})
+        this.props.dispatch({
+        	type: 'scale/getEntireScale',
+        	payload: scaleId
+        }).then(() => {
+			this.entireScaleInfoTemp = JSON.parse(JSON.stringify(this.props.scale.entireScaleInfo))
+			this.transformData(this.entireScaleInfoTemp)
+			this.setState({
+				editorLoading: false,
+				toggleAnswer: status !== 'COMPLETE'
+			})
+        })
 	}
+
 	showConclusion=()=>{
 		this.setState({
 			conclusionShow: true
@@ -273,7 +295,31 @@ class OutPatientProfile extends Component {
 		})
   		this.hideEditPlan()
   	}
-
+    transformData = (arr) => {
+		arr.map(data => {
+			if(data.answer) {
+				if(data.answer.checkbox === '') {
+					data.answer.checkbox = {
+		        		optionValue: [],
+		        		optionIndex: [],
+		        		otherOptionValue: ''
+		        	}
+				}else {
+					data.answer.checkbox = JSON.parse(data.answer.checkbox);
+				}
+				if(data.answer.radio === ''){
+		        	data.answer.radio = {
+		        		optionValue: '',
+		        		optionIndex: '',
+		        		otherOptionValue: ''
+		        	}
+		        }
+		        else {
+		        	data.answer.radio = JSON.parse(data.answer.radio);
+		        }
+			}
+        })
+    }
   	getData=(func)=>{
 		this.props.dispatch({
 			type: 'patientDetail/fetchOut',
@@ -298,15 +344,19 @@ class OutPatientProfile extends Component {
 					status = item.taskId
 				}
 			})
-			if(this.props.patientDetail.todayDetail.tasks.length>0){				
+			this.entireScaleInfoTemp = JSON.parse(JSON.stringify(this.props.patientDetail.outDetail.questionPatientVOs))
+            this.transformData(this.entireScaleInfoTemp);
+			if(this.props.patientDetail.outDetail.tasks.length>0){				
 				this.setState({
-					endStatus: this.props.patientDetail.todayDetail.tasks[0].endStatus
+					endStatus: this.props.patientDetail.outDetail.tasks[0].endStatus,
+					toggleAnswer: this.props.patientDetail.outDetail.tasks[0].status !== 'COMPLETE'
 				})
 			}
 			this.setState({
 				status:status,
 				planTaskList: list,
-				choosedPlanId: this.props.patientDetail.outDetail.planTemplateId
+				choosedPlanId: this.props.patientDetail.outDetail.planTemplateId,
+				editorLoading: false
 			})
 			if(func){
 				func()
@@ -317,6 +367,99 @@ class OutPatientProfile extends Component {
 	goList=()=>{
   		this.props.dispatch(routerRedux.push(`/manage/outPatient/list`));
   	}
+    
+    handleAnswer = (obj, index) => {
+        this.entireScaleInfoTemp.splice(index, 1, obj)
+  	}
+    
+    submitAnswer = () => {
+    	const infoHeight = this.infoEl.scrollHeight + 20;
+    	const x = this.entireScaleInfoTemp.some((data, index) => {
+    		if(data.required) {
+    			switch(data.type) {
+    				case 'checkbox': 
+    					if(data.answer[data.type].optionValue.length === 0) {
+    						message.warning(`第${index + 1}题为必填题，请完成必填题！`)
+    						this.mainEl.scrollTo(0, this.editorsEl[index].offsetTop + infoHeight)
+    						return true;
+    					}
+    				case 'radio': 
+    				    if(data.answer[data.type].optionValue === '') {
+    						message.warning(`第${index + 1}题为必填题，请完成必填题！`)
+    						this.mainEl.scrollTo(0, this.editorsEl[index].offsetTop + infoHeight)
+    						return true;
+    					}
+    				default: 
+    				    if(data.answer[data.type] === '') {
+    				    	console.log(this.editorsEl[index], this.editorsEl[index].offsetTop)
+    						message.warning(`第${index + 1}题为必填题，请完成必填题！`)
+    						this.mainEl.scrollTo(0, this.editorsEl[index].offsetTop + infoHeight)
+    						return true;
+    					}
+    			}
+    		}
+    	})
+    	if(x) {
+    		return ;
+    	}
+    	let answers = [];
+    	this.entireScaleInfoTemp.forEach(data => {
+    		answers.push({
+    			"answerId": uuid(),
+			    "checkbox": JSON.stringify(data.answer.checkbox),
+			    "dropdown": data.answer.dropdown,
+			    "input": data.answer.input,
+			    "questionId": data.questionId,
+			    "radio": JSON.stringify(data.answer.radio),
+			    "scaleId": data.scaleId,
+			    "text": data.answer.text,
+			    "textarea": data.answer.textarea
+    		})
+    	})
+		this.props.dispatch({
+  			type: 'patientDetail/submitTaskAnswer',
+  			payload: {
+  				answers
+  			}
+  		}).then(() => {
+  			this.setState({
+	        	toggleAnswer: false
+	        })
+	        this.getData();
+	        message.success('提交成功！')
+  		})
+    }
+    
+    save = () => {
+    	let answers = [];
+    	this.entireScaleInfoTemp.forEach(data => {
+    		answers.push({
+    			"answerId": uuid(),
+			    "checkbox": JSON.stringify(data.answer.checkbox),
+			    "dropdown": data.answer.dropdown,
+			    "input": data.answer.input,
+			    "questionId": data.questionId,
+			    "radio": JSON.stringify(data.answer.radio),
+			    "scaleId": data.scaleId,
+			    "text": data.answer.text,
+			    "textarea": data.answer.textarea
+    		})
+    	})
+		this.props.dispatch({
+  			type: 'scale/saveAnswer',
+  			payload: {
+  				answers
+  			}
+  		}).then(() => {
+  			message.success('保存成功！')
+  		})
+    }
+
+    editAnswer = () => {
+    	this.setState({
+        	toggleAnswer: true
+        })
+    }
 
 	componentDidMount( ){
 		this.props.dispatch({
@@ -375,7 +518,9 @@ class OutPatientProfile extends Component {
 			planTaskList,
 			choosedPlanId,
 			canPlanEdit,
-			endStatus
+			endStatus,
+			editorLoading,
+			toggleAnswer
 		} = this.state
 		const {
 			outDetail,
@@ -570,7 +715,7 @@ class OutPatientProfile extends Component {
 								<PlanMenu dictionary={dictionary} listData={planTaskList} status={status} changeStatus={this.changeId}></PlanMenu>
 							</div>
 							<div className={styles.mainInfo}>
-								<div className={styles.info}>
+								<div className={styles.info} ref={el => this.infoEl = el}>
 									<div className={styles.title}>
 										<i className={`iconfont icon-tongyongbiaotiicon ${styles.titleIcon}`}></i><span>患者信息</span>
 									</div>
@@ -629,9 +774,65 @@ class OutPatientProfile extends Component {
 										</div>
 									</div>
 								</div>
-								<div>
-									status：{status}
+								<div className={styles.info}>
+								    <div className={styles.title}>
+										<i className={`iconfont icon-tongyongbiaotiicon ${styles.titleIcon}`}></i><span>随访内容</span>
+										{!toggleAnswer && <span className={`${styles.text} aLink`} style={{ marginLeft: 10 }} onClick={this.editAnswer}>编辑</span>}
+									</div>
+									<Spin spinning={editorLoading} size="large">
+										<div style={{ display: toggleAnswer ? 'block' : 'none'}}>
+											{
+												this.entireScaleInfoTemp.map((editor, index) => {
+													return (
+														<div
+														  ref={el => this.editorsEl[index] = el}
+														  key={editor.questionId}>
+															<QuestionnairEditor
+															  onAnswer={this.handleAnswer}
+															  acitveEditor={true}
+															  index={index}
+															  editor={editor}
+														    />
+													    </div>
+													)
+												})
+											}
+										</div>
+										<div style={{ display: toggleAnswer ? 'none' : 'block'}}>
+											{
+												this.entireScaleInfoTemp.map((data, index) => {
+			                                    	return (
+			                                    		data.answer && (
+			                                    			<div key={index} style={{ minHeight: 60 }}>
+																<div style={{ color: '#666' }}>{`${index + 1}.${data.type === 'input' ? data.completionForwards : data.title + ':'}`}</div>
+																<div style={{ paddingLeft: 12, color: '#151515' }}>{typeof data.answer[data.type] !== 'string' ? (
+																	typeof data.answer[data.type].optionValue !== 'string' ? (
+																		data.answer[data.type].optionValue.map((item, index) => {
+																			return (
+																				item && <span key={index} style={{ marginRight: 15 }}>{item}</span>
+																			)
+																		})
+																	) : data.answer[data.type].optionValue
+																) : data.answer[data.type]}</div>
+															</div>
+														)
+			                                    	)
+		                                        })
+											}
+										</div>
+									</Spin>
 								</div>
+								{!editorLoading && toggleAnswer && (
+									<div>
+									    <Button type="primary" onClick={this.save}>暂存草稿</Button>
+									    <span style={{
+									    	display: 'inline-block',
+									    	width: 20,
+									    	height: 10
+									    }}></span>
+										<Button type="primary" onClick={this.submitAnswer}>提交</Button>
+									</div>
+								)}
 							</div>
 							<Modal title="编辑随访计划" closable={false} visible={editPlanShow} onCancel={this.hideEditPlan}>
 								<div className={styles.planName}>

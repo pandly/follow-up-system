@@ -1,4 +1,9 @@
-import {getSatisfyStayFollow, getSatisfyAlreadyFollow, getSatisfySearch} from '../services/api.js'
+import {
+    getSatisfyStayFollow, 
+    getSatisfyAlreadyFollow, 
+    getSatisfySearch,
+    submitSatisfyAnswer
+} from '../services/api.js'
 export default {
 
     namespace: 'satisfaction',
@@ -117,6 +122,9 @@ export default {
                 type: 'saveSearch',
                 payload: result.results
                 });
+        },
+        *submitSatisfyAnswer({ payload }, { call, put }){
+            yield call(submitSatisfyAnswer, payload)
         }
     },
 

@@ -103,11 +103,23 @@ class MissionProfile extends Component {
 	}
 
 	
-	changeId=(taskId, scaleId)=>{
+	changeId=(taskId, scaleId, status)=>{
+		console.log(status)
 		this.setState({
-			status: taskId
+			status: taskId,
+			editorLoading: true
 		})
-        this.getEditor(scaleId);
+        this.props.dispatch({
+        	type: 'scale/getEntireScale',
+        	payload: scaleId
+        }).then(() => {
+			this.entireScaleInfoTemp = JSON.parse(JSON.stringify(this.props.scale.entireScaleInfo))
+			this.transformData(this.entireScaleInfoTemp)
+			this.setState({
+				editorLoading: false,
+				toggleAnswer: status !== 'COMPLETE'
+			})
+        })
 	}
 	showConclusion=()=>{
 		this.setState({
@@ -288,40 +300,30 @@ class MissionProfile extends Component {
   		this.hideEditPlan()
   	}
     
-    getEditor = (id) => {
-    	this.props.dispatch({
-			type: 'scale/getEntireScale',
-			payload: id
-		}).then(() => {
-			const { entireScaleInfo } = this.props.scale;
-			this.entireScaleInfoTemp = entireScaleInfo ? JSON.parse(JSON.stringify(entireScaleInfo)) : [];
-	        this.entireScaleInfoTemp.map(data => {
-				if(data.answer) {
-					if(data.answer.checkbox === '') {
-						data.answer.checkbox = {
-			        		optionValue: [],
-			        		optionIndex: [],
-			        		otherOptionValue: ''
-			        	}
-					}else {
-						data.answer.checkbox = JSON.parse(data.answer.checkbox);
-					}
-					if(data.answer.radio === ''){
-			        	data.answer.radio = {
-			        		optionValue: '',
-			        		optionIndex: '',
-			        		otherOptionValue: ''
-			        	}
-			        }
-			        else {
-			        	data.answer.radio = JSON.parse(data.answer.radio);
-			        }
+    transformData = (arr) => {
+		arr.map(data => {
+			if(data.answer) {
+				if(data.answer.checkbox === '') {
+					data.answer.checkbox = {
+		        		optionValue: [],
+		        		optionIndex: [],
+		        		otherOptionValue: ''
+		        	}
+				}else {
+					data.answer.checkbox = JSON.parse(data.answer.checkbox);
 				}
-	        })
-	        this.setState({
-	        	editorLoading: false
-	        })
-		})
+				if(data.answer.radio === ''){
+		        	data.answer.radio = {
+		        		optionValue: '',
+		        		optionIndex: '',
+		        		otherOptionValue: ''
+		        	}
+		        }
+		        else {
+		        	data.answer.radio = JSON.parse(data.answer.radio);
+		        }
+			}
+        })
     }
   	getData=(func)=>{
 		this.props.dispatch({
@@ -347,17 +349,19 @@ class MissionProfile extends Component {
 					status = item.taskId
 				}
 			})
-			this.scaleId = this.props.patientDetail.todayDetail.tasks[0].scaleId
+			this.entireScaleInfoTemp = JSON.parse(JSON.stringify(this.props.patientDetail.todayDetail.questionPatientVOs))
+            this.transformData(this.entireScaleInfoTemp);
 			if(this.props.patientDetail.todayDetail.tasks.length>0){				
 				this.setState({
-					endStatus: this.props.patientDetail.todayDetail.tasks[0].endStatus
+					endStatus: this.props.patientDetail.todayDetail.tasks[0].endStatus,
+					toggleAnswer: this.props.patientDetail.todayDetail.tasks[0].status !== 'COMPLETE'
 				})
 			}
-			this.getEditor(this.scaleId);
 			this.setState({
 				status:status,
 				planTaskList: list,
-				choosedPlanId: this.props.patientDetail.todayDetail.planTemplateId
+				choosedPlanId: this.props.patientDetail.todayDetail.planTemplateId,
+				editorLoading: false
 			})
 			if(func){
 				func()
@@ -367,7 +371,6 @@ class MissionProfile extends Component {
 
   	handleAnswer = (obj, index) => {
         this.entireScaleInfoTemp.splice(index, 1, obj)
-        console.log(this.entireScaleInfoTemp)
   	}
     
     submitAnswer = () => {
@@ -415,7 +418,7 @@ class MissionProfile extends Component {
     		})
     	})
 		this.props.dispatch({
-  			type: 'scale/saveAnswer',
+  			type: 'patientDetail/submitTaskAnswer',
   			payload: {
   				answers
   			}
@@ -423,6 +426,7 @@ class MissionProfile extends Component {
   			this.setState({
 	        	toggleAnswer: false
 	        })
+	        this.getData();
 	        message.success('提交成功！')
   		})
     }
@@ -453,14 +457,9 @@ class MissionProfile extends Component {
     }
 
     editAnswer = () => {
-    	this.props.dispatch({
-			type: 'scale/getEntireScale',
-			payload: this.scaleId
-		}).then(() => {
-			this.setState({
-	        	toggleAnswer: true
-	        })
-		})
+    	this.setState({
+        	toggleAnswer: true
+        })
     }
 
   	goList=()=>{
@@ -534,13 +533,13 @@ class MissionProfile extends Component {
 			outSummary,
 			outMedicine
 		} = this.props.patientDetail
-
+        
 		const {dictionary} = this.props.global
 
 		const {planTwoList} = this.props.plan
 
-		const { scaleList, entireScaleInfo } = this.props.scale
-        
+		const { scaleList } = this.props.scale
+		
 		const {
 			getFieldDecorator
 		} = this.props.form

@@ -139,15 +139,15 @@ class QuestionnairEditor extends PureComponent {
 		if(type === 'checkbox') {
 			const length = this.answer.checkbox.optionValue.length;
 			this.answer.checkbox.optionValue[length - 1] = this.answer.checkbox.optionValue[length - 1] === null ? null : this.allValue;
-    		this.answer.checkbox.otherOptionValue = this.otherOptionValue;
+    		this.answer.checkbox.otherOptionValue = this.allValue;
 		}else if(type === 'radio'){
 			this.answer[type] = {
 				optionValue: this.allValue,
     			optionIndex: this.optionIndex,
-    			otherOptionValue: this.otherOptionValue
+    			otherOptionValue: this.allValue
 			};
 		}else {
-			this.answer[type] = this.otherOptionValue;
+			this.answer[type] = this.allValue;
 		}
 		const answerEditor = { ...this.state.editor, answer: this.answer }
         this.props.onAnswer(answerEditor, this.props.index)
@@ -549,7 +549,7 @@ class QuestionnairEditor extends PureComponent {
 							  name="checkbox"
 							  value={data}
 							  data-index={index}
-							  defaultChecked={answer && this.answer.checkbox.optionIndex.includes(index+'')}
+							  defaultChecked={this.answer.checkbox !== '' && this.answer.checkbox.optionIndex.includes(index+'')}
 							  onChange={this.handleAnswerChange}
 							  style={{ display: 'none' }}/>
 								<span className="wowjoy-checkbox__inner"></span>

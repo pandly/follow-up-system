@@ -42,10 +42,10 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, ['satisfaction', 'global'], () => import('../routes/Satisfaction/ReturnVisit')),
     },
     '/satisfaction/returnVisit/list': {
-      component: dynamicWrapper(app, ['satisfaction'], () => import('../routes/Satisfaction/ReturnVisit/List')),
+      component: dynamicWrapper(app, ['satisfaction', 'scale'], () => import('../routes/Satisfaction/ReturnVisit/List')),
     },
     '/satisfaction/returnVisit/profile/:id': {
-      component: dynamicWrapper(app, ['satisfaction','patientDetail','global'], () => import('../routes/Satisfaction/ReturnVisit/Profile')),
+      component: dynamicWrapper(app, ['satisfaction','patientDetail','global', 'scale'], () => import('../routes/Satisfaction/ReturnVisit/Profile')),
     },
     '/template/scale': {
       component: dynamicWrapper(app, ['scale'], () => import('../routes/Template/Scale')),

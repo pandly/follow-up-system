@@ -223,13 +223,28 @@ export async function getEntireScale(id){
 export async function copyScale(id){
 	return request(`${baseUrl}/v1/scale/copy/${id}`)
 }
-//post 保存答案
+//post 答案暂存，所有的回访类型答案暂存都调用这个接口
 export async function saveAnswer(params){
 	return request(`${baseUrl}/v1/scale/answer`, {
 		method: 'POST',
 		body: params
 	})
 }
+//post 今日任务答案提交
+export async function submitTaskAnswer(params){
+	return request(`${baseUrl}/v1/task/save_scale`, {
+		method: 'POST',
+		body: params
+	})
+}
+//post 满意度回访答案提交
+export async function submitSatisfyAnswer(params){
+	return request(`${baseUrl}/v1/satisfy/save`, {
+		method: 'POST',
+		body: params
+	})
+}
+
 
 
 

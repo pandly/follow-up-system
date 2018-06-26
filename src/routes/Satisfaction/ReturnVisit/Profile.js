@@ -5,6 +5,7 @@ import { Select, Table, Input, Button, Breadcrumb, Form, message, Spin } from 'a
 import { connect } from 'dva'
 import { routerRedux } from 'dva/router'
 import QuestionnairEditor from 'components/Questionnair/QuestionnairEditor'
+import uuid from 'utils/utils'
 
 import Modal from 'components/Modal'
 
@@ -15,6 +16,12 @@ const FormItem = Form.Item
 @Form.create()
 
 class SatisfactionDetail extends PureComponent {
+	constructor(props) {
+		super(props)
+		this.editorsEl = [],
+		this.satisfyQuestionVOs = []
+	}
+
 	state = {
 		conclusionShow: false,
 		medicineShow: false,
@@ -115,6 +122,93 @@ class SatisfactionDetail extends PureComponent {
   		this.props.dispatch(routerRedux.push(`/satisfaction/returnVisit/list`));
   	}
 
+    handleAnswer = (obj, index) => {
+        this.satisfyQuestionVOs.splice(index, 1, obj)
+        console.log(this.satisfyQuestionVOs)
+    }
+    
+    submitAnswer = () => {
+    	const infoHeight = this.infoEl.scrollHeight + 20;
+    	const x = this.satisfyQuestionVOs.some((data, index) => {
+    		if(data.required) {
+    			switch(data.type) {
+    				case 'checkbox': 
+    					if(data.answer[data.type].optionValue.length === 0) {
+    						message.warning(`第${index + 1}题为必填题，请完成必填题！`)
+    						this.mainEl.scrollTo(0, this.editorsEl[index].offsetTop + infoHeight)
+    						return true;
+    					}
+    				case 'radio': 
+    				    if(data.answer[data.type].optionValue === '') {
+    						message.warning(`第${index + 1}题为必填题，请完成必填题！`)
+    						this.mainEl.scrollTo(0, this.editorsEl[index].offsetTop + infoHeight)
+    						return true;
+    					}
+    				default: 
+    				    if(data.answer[data.type] === '') {
+    				    	console.log(this.editorsEl[index], this.editorsEl[index].offsetTop)
+    						message.warning(`第${index + 1}题为必填题，请完成必填题！`)
+    						this.mainEl.scrollTo(0, this.editorsEl[index].offsetTop + infoHeight)
+    						return true;
+    					}
+    			}
+    		}
+    	})
+    	if(x) {
+    		return ;
+    	}
+    	let answers = [];
+    	this.satisfyQuestionVOs.forEach(data => {
+    		answers.push({
+    			"answerId": uuid(),
+			    "checkbox": data.answer.checkbox !== '' ? JSON.stringify(data.answer.checkbox) : data.answer.checkbox,
+			    "dropdown": data.answer.dropdown,
+			    "input": data.answer.input,
+			    "questionId": data.questionId,
+			    "radio": data.answer.radio !== '' ? JSON.stringify(data.answer.radio) : data.answer.radio,
+			    "scaleId": data.scaleId,
+			    "text": data.answer.text,
+			    "textarea": data.answer.textarea
+    		})
+    	})
+		this.props.dispatch({
+  			type: 'satisfaction/submitSatisfyAnswer',
+  			payload: {
+  				answers
+  			}
+  		}).then(() => {
+  			this.setState({
+	        	toggleAnswer: false
+	        })
+	        message.success('提交成功！')
+  		})
+    }
+
+    save = () => {
+    	let answers = [];
+    	this.satisfyQuestionVOs.forEach(data => {
+    		answers.push({
+    			"answerId": uuid(),
+			    "checkbox": data.answer.checkbox !== '' ? JSON.stringify(data.answer.checkbox) : '',
+			    "dropdown": data.answer.dropdown,
+			    "input": data.answer.input,
+			    "questionId": data.questionId,
+			    "radio": data.answer.radio !== '' ? JSON.stringify(data.answer.radio) : '',
+			    "scaleId": data.scaleId,
+			    "text": data.answer.text,
+			    "textarea": data.answer.textarea
+    		})
+    	})
+		this.props.dispatch({
+  			type: 'scale/saveAnswer',
+  			payload: {
+  				answers
+  			}
+  		}).then(() => {
+  			message.success('保存成功！')
+  		})
+    }
+
 	componentDidMount( ){
 		this.props.dispatch({
 			type: 'global/fetchDict'
@@ -146,16 +240,45 @@ class SatisfactionDetail extends PureComponent {
 				// scaleId: this.state.scaleId
 			}
 		}).then(()=>{
+			this.satisfyQuestionVOs = JSON.parse(JSON.stringify(this.props.patientDetail.satisfyDetail.satisfyQuestionVOs))
+			this.satisfyQuestionVOs.map(data => {
+				if(data.answer) {
+					if(data.answer.checkbox === '') {
+						data.answer.checkbox = {
+			        		optionValue: [],
+			        		optionIndex: [],
+			        		otherOptionValue: ''
+			        	}
+					}else {
+						data.answer.checkbox = JSON.parse(data.answer.checkbox);
+					}
+					if(data.answer.radio === ''){
+			        	data.answer.radio = {
+			        		optionValue: '',
+			        		optionIndex: '',
+			        		otherOptionValue: ''
+			        	}
+			        }
+			        else {
+			        	data.answer.radio = JSON.parse(data.answer.radio);
+			        }
+				}
+	        })
 			this.setState({
 				remarkShow: this.props.patientDetail.satisfyDetail.satisfyTask.remarkReason?true:false,
 				remarkReason: this.props.patientDetail.satisfyDetail.satisfyTask.remarkReason,
 				remarkDes: this.props.patientDetail.satisfyDetail.satisfyTask.remarkDes,
-				scale: JSON.parse(JSON.stringify(this.props.patientDetail.satisfyDetail.satisfyQuestionVOs)),
-				editorLoading: false
+				editorLoading: false,
+				toggleAnswer: this.props.patientDetail.satisfyDetail.task.status !== 'COMPLETE'
 			})
 		})		
 	}
-
+    
+    editAnswer = () => {
+    	this.setState({
+        	toggleAnswer: true
+        })
+    }
 
 	render(){
 		const { 
@@ -178,7 +301,7 @@ class SatisfactionDetail extends PureComponent {
 			outSummary,
 			outMedicine
 		} = this.props.patientDetail
-
+        
 		const {dictionary} = this.props.global
 
 		const {
@@ -260,13 +383,13 @@ class SatisfactionDetail extends PureComponent {
 							<div className={styles.text}>拨打电话</div>
 						</div>
 					</div>
-					<div className={styles.mainInfo}>
+					<div className={styles.mainInfo} ref={el => this.infoEl = el}>
 						<div className={styles.overFlow}>
 							<div className={styles.info}>
 								<div className={styles.title}>
 									<i className={`iconfont icon-tongyongbiaotiicon ${styles.titleIcon}`}></i><span>患者信息</span>
 								</div>
-								<div className={styles.content}>
+								<div className={styles.content} style={{ marginBottom: 20 }}>
 									<div className={styles.line}>
 										<div className={styles.infoItem}>
 											<span className={styles.label}>住院科室：</span>
@@ -348,11 +471,15 @@ class SatisfactionDetail extends PureComponent {
 										</div>
 									</div>
 								</div>
+								<div className={styles.title}>
+									<i className={`iconfont icon-tongyongbiaotiicon ${styles.titleIcon}`}></i><span>满意度内容</span>
+									{!toggleAnswer && <span className={`${styles.text} aLink`} style={{ marginLeft: 10 }} onClick={this.editAnswer}>编辑</span>}
+								</div>
 								<div className={styles.scale}>
 									<Spin spinning={editorLoading} size="large">
 										<div style={{ display: toggleAnswer ? 'block' : 'none'}}>
 											{
-												scale.map((editor, index) => {
+												this.satisfyQuestionVOs.map((editor, index) => {
 													return (
 														<div
 														  ref={el => this.editorsEl[index] = el}
@@ -368,9 +495,9 @@ class SatisfactionDetail extends PureComponent {
 												})
 											}
 										</div>
-										{/*<div style={{ display: toggleAnswer ? 'none' : 'block'}}>
+										<div style={{ display: toggleAnswer ? 'none' : 'block'}}>
 											{
-												scale.map((data, index) => {
+												this.satisfyQuestionVOs.map((data, index) => {
 			                                    	return (
 			                                    		data.answer && (
 			                                    			<div key={index} style={{ minHeight: 60 }}>
@@ -389,8 +516,19 @@ class SatisfactionDetail extends PureComponent {
 			                                    	)
 		                                        })
 											}
-										</div>*/}
+										</div>
 									</Spin>
+									{!editorLoading && toggleAnswer && (
+										<div>
+										    <Button type="primary" onClick={this.save}>暂存草稿</Button>
+										    <span style={{
+										    	display: 'inline-block',
+										    	width: 20,
+										    	height: 10
+										    }}></span>
+											<Button type="primary" onClick={this.submitAnswer}>提交</Button>
+										</div>
+									)}
 								</div>
 							</div>
 							<Modal title="添加备注" closable={false} visible={commentShow} type="small"
@@ -520,6 +658,6 @@ class SatisfactionDetail extends PureComponent {
 	}
 }
 
-export default connect(({ patientDetail, global }) => ({
-  patientDetail, global
+export default connect(({ patientDetail, global, satisfaction, scale }) => ({
+  patientDetail, global, satisfaction, scale
 }))(SatisfactionDetail);

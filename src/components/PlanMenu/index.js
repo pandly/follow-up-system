@@ -6,7 +6,7 @@ export default class PlanMenu extends Component {
 		// status: '1'
 	}
 	colorChange(type){
-		if(type==='FINISH'){
+		if(type==='COMPLETE'){
 			return styles.grey
 		}else if(type==='OVERDUE'){
 			return styles.red
@@ -19,7 +19,7 @@ export default class PlanMenu extends Component {
 		}
 	}
 	iconChange(type){
-		if(type==='FINISH'){
+		if(type==='COMPLETE'){
 			return 'yisuifang-icon-color'
 		}else if(type==='OVERDUE'){
 			return 'suifangyuqi-icon-color'
@@ -32,7 +32,7 @@ export default class PlanMenu extends Component {
 		}
 	}
 	typeChangeText(type){
-		if(type==='FINISH'){
+		if(type==='COMPLETE'){
 			return '已随访'
 		}else if(type==='OVERDUE'){
 			return '随访逾期'
@@ -51,7 +51,7 @@ export default class PlanMenu extends Component {
 				{listData?
 					listData.map(item => (
 					<div key={item.taskId} className={`${styles.menuItemWrap} ${this.colorChange(item.status)} ${status==item.taskId?styles.menuItemChoosed:''}`}
-						onClick={() => this.props.changeStatus(item.taskId, item.scaleId)}>
+						onClick={() => this.props.changeStatus(item.taskId, item.scaleId, item.status)}>
 						<div className={styles.menuItem}>
 							<i className={`iconfont icon-${this.iconChange(item.status)} ${styles.itemIcon}`}></i>
 							<div className={styles.content}>

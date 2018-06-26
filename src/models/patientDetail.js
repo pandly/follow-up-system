@@ -7,6 +7,7 @@ import {
     addRemark,
     stopPlan,
     getPlanTask,
+    submitTaskAnswer
 } from '../services/api.js'
 
 export default {
@@ -91,7 +92,10 @@ export default {
                 type: 'changePlanTaskLoading',
                 payload: false
                 });
-        }
+        },
+        *submitTaskAnswer({ payload }, { call, put }){
+            yield call(submitTaskAnswer, payload)
+        },
     },
 
     reducers: {

@@ -31,12 +31,18 @@ class QuestionnairContent extends PureComponent {
 		}else {
 			this.scrollTo = false;
 		}
+		this.setState({
+			mark: nextProps.sign
+		})
     }
 
 	handleMark = () => {
+	   const { onChangeSign } = this.props;
        this.setState(prevState => ({
        	 mark: !prevState.mark
-       }))
+       }), () => {
+       	onChangeSign(this.state.mark)
+       })
 	}
 
 	render () {
@@ -58,7 +64,7 @@ class QuestionnairContent extends PureComponent {
 					{this.props.children[1] || (
 						<div className={styles['questionnair-page-default']}>
 							<img src={Default} style={{ width: 130 }}/>
-							<div className={styles['page-default-text']}>您好没有添加题目哦，请点击左侧控件开始出题吧</div>
+							<div className={styles['page-default-text']}>您还没有添加题目哦，请点击左侧控件开始出题吧</div>
 						</div>
 					)}
 				</div>

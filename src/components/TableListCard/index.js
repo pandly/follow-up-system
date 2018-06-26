@@ -82,14 +82,12 @@ export default class ListCard extends Component {
 						
 					</div>
 				</div>
-				<PopoverSure title="您确定要取消标记吗？"
-					text="若要恢复标记，可在内页进行操作。"
-					sureFunction={()=>this.sureSign(listData)}>
-					<Tooltip placement="top" title={'量表尚未制作完成，请及时完善；若已完成该模版，可点击取消草稿标记。'}
-		        		overlayClassName="signTooltip">
-				        <i className={`iconfont icon-dengpao ${styles.dengIcon}`} style={{display: listData.sign?'inline-block':'none'}}></i>
-				    </Tooltip>
-				</PopoverSure>
+				<Tooltip 
+				  placement="top" 
+				  title={'量表尚未制作完成，请及时完善；若已完成该模版，可点击取消草稿标记。'}
+		          overlayClassName="signTooltip">
+			        <i className={`iconfont icon-dengpao ${styles.dengIcon}`} style={{display: listData.sign?'inline-block':'none'}}></i>
+			    </Tooltip>
 		      	<div className={styles.tableBtn} style={{display: isBtnShow?'inline-block':'none'}}  
 					onClick={this.showBtn} onMouseOver={this.showBtn}>
 					<Tooltip placement="top" title={'复制'} >

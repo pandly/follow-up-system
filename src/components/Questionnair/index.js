@@ -16,6 +16,7 @@ class Questionnair extends PureComponent {
 		super(props)
 		this.editorsEl = [];
 		this.scaleId = '';
+		this.sign = false;
 	}
 
     state = {
@@ -35,12 +36,13 @@ class Questionnair extends PureComponent {
 	        	type: 'scale/getScale',
 	        	payload: id
 	        }).then(() => {
-	        	const { questions, title, scaleId } = this.props.scale.scaleInfo;
+	        	const { questions, title, scaleId, sign } = this.props.scale.scaleInfo;
+	        	this.scaleId = scaleId;
+	        	this.sign = sign;
 	        	this.setState({
 	        		editors: questions,
 	        		questionnairTitle: title
 	        	})
-	        	this.scaleId = scaleId;
 	        })
     	}
     }
@@ -60,9 +62,10 @@ class Questionnair extends PureComponent {
         	payload: {
         		questions: this.state.editors,
         		scaleId: this.scaleId,
-        		title: this.state.questionnairTitle
+        		title: this.state.questionnairTitle,
+        		sign: this.sign
         	}
-        }).then((a, b)=>{
+        }).then(()=>{
 			message.success('修改成功！')
 		})
     }
@@ -198,6 +201,11 @@ class Questionnair extends PureComponent {
 			questionnairTitle: value
         })
     }
+    
+    handleSgin = (sign) => {
+		this.sign = sign;
+        this.updateEditors();
+    }
 
 	render() {
 		const { editors, drag, editorShake, scrollTo, questionnairTitle } = this.state;
@@ -254,7 +262,8 @@ class Questionnair extends PureComponent {
 				<QuestionnairContent
 				  isFirst={isFirst}
                   scrollTo={scrollTo}
-				  onChangeTitle={this.handleTitle}>
+                  sign={this.sign}
+                  onChangeSign={this.handleSgin}>
 				    {titleEl}
 				    {editorsEl.length !== 0 && (
 						<DragSort

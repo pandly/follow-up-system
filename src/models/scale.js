@@ -17,7 +17,8 @@ export default {
         scaleInfo: {},
         followScaleInfo: [],
         entireScaleInfo: [],
-        whetherSuccessfullySaved: ''
+        whetherSuccessfullySaved: '',
+        scaleId: ''
     },
 
     subscriptions: {
@@ -45,7 +46,11 @@ export default {
             yield call(deleteScale, payload)
         },
         *saveScale({ payload }, { call, put }) {
-            yield call(saveScale, payload)
+            const result = yield call(saveScale, payload)
+            yield put({
+                type: 'newScaleId',
+                playload: result.results
+            })
         },
         *getScale({ payload }, { call, put }) {
             const result = yield call(getScale, payload)
@@ -89,6 +94,9 @@ export default {
         updateEntireScaleInfo(state, action){
             return { ...state, entireScaleInfo: action.payload}
         },
+        newScaleId(state, action) {
+            return { ...state, scaleId: action.playload}
+        }
     },
 
 };

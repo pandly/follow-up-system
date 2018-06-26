@@ -67,7 +67,6 @@ class Scale extends PureComponent {
 			scaleList,
         	scaleListLoading
 		} = this.props.scale
-        console.log(scaleList)
 		return (
 			<div>
 				<div className={styles.content}>

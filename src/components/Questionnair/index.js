@@ -65,8 +65,10 @@ class Questionnair extends PureComponent {
         		title: this.state.questionnairTitle,
         		sign: this.sign
         	}
-        }).then(()=>{
+        }).then((a)=>{
+        	this.scaleId = this.props.scale.scaleId;
 			message.success('修改成功！')
+
 		})
     }
     /* 

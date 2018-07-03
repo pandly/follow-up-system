@@ -336,54 +336,55 @@ class SatisfactionDetail extends PureComponent {
 					    <Breadcrumb.Item onClick={this.goList}>
 					    	<a>满意度回访</a>
 					    </Breadcrumb.Item>
-					    <Breadcrumb.Item>开始回访</Breadcrumb.Item>
+					    <Breadcrumb.Item>{satisfyDetail.patientName}</Breadcrumb.Item>
 				  	</Breadcrumb>
-					<div className={`${styles.patientInfo} clearfix`}>
-						<div className={styles.infoWrap}>
-							<div className={styles.img}>
-								<img src={patientInfo} alt="头像"/>
+				  	<div className={styles.mainInfo} ref={el => this.infoEl = el}>
+						<div className={`${styles.patientInfo} clearfix`}>
+							<div className={styles.infoWrap}>
+								<div className={styles.img}>
+									<img src={patientInfo} alt="头像"/>
+								</div>
+								<div className={styles.info}>
+									<div className={styles.infoItemWrap}>
+										<div className={styles.infoItem}>
+											<span className={styles.basicInfo}>{satisfyDetail.patientName}</span>
+											<span className={styles.basicInfo}>{satisfyDetail.sex}</span>
+											<span className={styles.basicInfo}>{satisfyDetail.age}岁</span>
+										</div>
+										<div className={styles.infoItem}>
+											<span className={styles.label}>身份证号：</span>
+											<span className={styles.text}>{this.hideIdCard(satisfyDetail.cardNo)}</span>
+										</div>
+									</div>
+									<div className={styles.infoItemWrap}>									
+										<div className={styles.infoItem}>
+											<span className={styles.label}>联系人：</span>
+											<span className={styles.text}>{satisfyDetail.patientRelationship} {satisfyDetail.contactPeople}</span>
+										</div>
+										<div className={styles.infoItem}>
+											<span className={styles.label}>费用类型：</span>
+											<span className={styles.text}>{satisfyDetail.costType}</span>
+										</div>
+										
+									</div>
+									<div className={styles.infoItemWrap}>
+										<div className={styles.infoItem}>
+											<span className={styles.label}>联系电话：</span>
+											<span className={styles.text}>{satisfyDetail.contactPhone}</span>
+										</div>
+										<div className={styles.infoItem}>
+											<span className={styles.label}>家庭住址：</span>
+											<span className={`${styles.text} text-hidden`}>{satisfyDetail.contactAddress}</span>
+										</div>
+									</div>
+								</div>
 							</div>
-							<div className={styles.info}>
-								<div className={styles.infoItemWrap}>
-									<div className={styles.infoItem}>
-										<span className={styles.basicInfo}>{satisfyDetail.patientName}</span>
-										<span className={styles.basicInfo}>{satisfyDetail.sex}</span>
-										<span className={styles.basicInfo}>{satisfyDetail.age}岁</span>
-									</div>
-									<div className={styles.infoItem}>
-										<span className={styles.label}>身份证号：</span>
-										<span className={styles.text}>{this.hideIdCard(satisfyDetail.cardNo)}</span>
-									</div>
-								</div>
-								<div className={styles.infoItemWrap}>									
-									<div className={styles.infoItem}>
-										<span className={styles.label}>联系人：</span>
-										<span className={styles.text}>{satisfyDetail.patientRelationship} {satisfyDetail.contactPeople}</span>
-									</div>
-									<div className={styles.infoItem}>
-										<span className={styles.label}>费用类型：</span>
-										<span className={styles.text}>{satisfyDetail.costType}</span>
-									</div>
-									
-								</div>
-								<div className={styles.infoItemWrap}>
-									<div className={styles.infoItem}>
-										<span className={styles.label}>联系电话：</span>
-										<span className={styles.text}>{satisfyDetail.contactPhone}</span>
-									</div>
-									<div className={styles.infoItem}>
-										<span className={styles.label}>家庭住址：</span>
-										<span className={`${styles.text} text-hidden`}>{satisfyDetail.contactAddress}</span>
-									</div>
-								</div>
-							</div>
+							{/*<div className={styles.call}>
+								<i className={`iconfont icon-red_phone ${styles.callIcon}`}></i>
+								<div className={styles.text}>拨打电话</div>
+							</div>*/}
 						</div>
-						<div className={styles.call}>
-							<i className={`iconfont icon-red_phone ${styles.callIcon}`}></i>
-							<div className={styles.text}>拨打电话</div>
-						</div>
-					</div>
-					<div className={styles.mainInfo} ref={el => this.infoEl = el}>
+					
 						<div className={styles.overFlow}>
 							<div className={styles.info}>
 								<div className={styles.title}>

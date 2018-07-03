@@ -514,7 +514,7 @@ class Satisfaction extends PureComponent {
 							    				>{rate}%</span>
 							    		</div>
 							    		<Tooltip placement="top" title={`${rate>10?'您已完成回访率指标':'您尚未达到回访率指标，请尽快完成'}`}
-					        				overlayClassName="signTooltip">
+					        				overlayClassName={`${rate>10?'alreadySignTooltip':'signTooltip'}`}>
 							        		<i className={`iconfont icon-information ${styles.infoIcon}`}></i>
 							    		</Tooltip>
 							    	</div>

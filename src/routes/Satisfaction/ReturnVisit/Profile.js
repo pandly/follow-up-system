@@ -400,8 +400,8 @@ class SatisfactionDetail extends PureComponent {
 											<span className={`${styles.text} text-hidden`}>{satisfyDetail.physicalCondition}</span>
 										</div>
 										<div className={styles.infoItem}>
-											<span className={styles.label}>出院带药：</span>
-											<span className={`${styles.text} aLink`} onClick={this.showMedicine}>点击查看</span>
+											<span className={styles.label}>出院小结：</span>
+											<span className={`${styles.text} aLink`} onClick={this.showConclusion}>点击查看</span>
 										</div>
 									</div>
 									<div className={styles.line}>
@@ -414,12 +414,10 @@ class SatisfactionDetail extends PureComponent {
 											<span className={styles.text}>{satisfyDetail.dischargeTime}</span>
 										</div>
 										<div className={styles.infoItem}>
-											<span className={styles.label}>随访：</span>
-											<span className={styles.text}>
-												<span className="aLink">已随访</span>
-												<span style={{display: 'none'}}>未随访</span>
-											</span>
-										</div>	
+											<span className={styles.label}>出院带药：</span>
+											<span className={`${styles.text} aLink`} onClick={this.showMedicine}>点击查看</span>
+										</div>
+										
 									</div>
 									<div className={styles.line}>
 										<div className={styles.infoItem}>
@@ -429,6 +427,24 @@ class SatisfactionDetail extends PureComponent {
 										<div className={styles.infoItem}>
 											<span className={styles.label}>住院天数：</span>
 											<span className={styles.text}>{satisfyDetail.hospitalizationDays}天</span>
+										</div>
+										<div className={styles.infoItem}>
+											<span className={styles.label}>随访：</span>
+											<span className={styles.text}>
+												<span className="aLink">已随访</span>
+												<span style={{display: 'none'}}>未随访</span>
+											</span>
+										</div>	
+																	
+									</div>
+									<div className={styles.line}>
+										<div className={styles.infoItem}>
+											<span className={styles.label}>住院号：</span>
+											<span className={`${styles.text} text-hidden`}>{satisfyDetail.inhospitalId}</span>
+										</div>
+										<div className={styles.infoItem}>
+											<span className={styles.label}>出院诊断：</span>
+											<span className={`${styles.text} text-hidden`}>{satisfyDetail.dischargeDiagnosis}</span>
 										</div>
 										<div className={styles.infoItem}>
 											<span className={styles.label}>随访备注：</span>
@@ -447,29 +463,14 @@ class SatisfactionDetail extends PureComponent {
 													<span className="aLink" onClick={this.showComment}>点击查看</span>
 												</span>
 											</span>
-										</div>								
-									</div>
-									<div className={styles.line}>
-										<div className={styles.infoItem}>
-											<span className={styles.label}>住院号：</span>
-											<span className={`${styles.text} text-hidden`}>{satisfyDetail.inhospitalId}</span>
-										</div>
-										<div className={styles.infoItem}>
-											<span className={styles.label}>出院诊断：</span>
-											<span className={`${styles.text} text-hidden`}>{satisfyDetail.dischargeDiagnosis}</span>
-										</div>
-										
+										</div>	
 									</div>
 									<div className={styles.line}>
 										<div className={styles.infoItem}>
 											<span className={styles.label}>主管医生：</span>
 											<span className={styles.text}>{satisfyDetail.resident}</span>
 										</div>
-										<div className={styles.infoItem}>
-											<span className={styles.label}>出院小结：</span>
-											<span className={`${styles.text} aLink`} onClick={this.showConclusion}>点击查看</span>
-										</div>
-									</div>
+									</div>	
 								</div>
 								<div className={styles.title}>
 									<i className={`iconfont icon-tongyongbiaotiicon ${styles.titleIcon}`}></i><span>满意度内容</span>

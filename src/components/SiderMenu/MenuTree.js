@@ -8,7 +8,7 @@ class MenuTree extends PureComponent {
     constructor(props) {
     	super(props)
     	this.state = {
-    		spread: false  //默认所有菜单收起
+    		spread: true  //默认所有菜单展开
     	}
     }
 
@@ -55,7 +55,7 @@ class MenuTree extends PureComponent {
 						    {currentNode.icon && <i className={`iconfont ${currentNode.icon} menu-icon`}></i>}
 							<span className="bold">{currentNode.name}</span>
 						</span>
-						<Icon type="down" className={ `${styles['subMenu-icon-arrow']} ${spread && styles['subMenu-icon-arrow-up']}`}/>
+						{/*<Icon type="down" className={ `${styles['subMenu-icon-arrow']} ${spread && styles['subMenu-icon-arrow-up']}`}/>*/}
 					</div>
 					<CollapseTransition isSpread={spread} >
 						<ul className={ styles['menu-inline'] }>

@@ -38,7 +38,7 @@ export default class EditDateCell extends Component {
                     editable ?
                         <div>
                             <DatePicker onChange={this.handleChange} 
-                                placeholder="YYYY-MM-DD"
+                                placeholder="yyyy-mm-dd"
                                 value={value}
                                 showToday={false} style={{width: 140}} allowClear={false}
                                 disabledDate={haveDisabled?this.disabledDate:null}/>

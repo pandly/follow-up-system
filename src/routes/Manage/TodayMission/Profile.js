@@ -641,7 +641,7 @@ class MissionProfile extends Component {
 					    <Breadcrumb.Item onClick={this.goList}>
 					    	<a>今日任务</a>
 					    </Breadcrumb.Item>
-					    <Breadcrumb.Item>开始随访</Breadcrumb.Item>
+					    <Breadcrumb.Item>{todayDetail.patientName}</Breadcrumb.Item>
 				  	</Breadcrumb>
 					<div className={`${styles.patientInfo} clearfix`}>
 						<div className={styles.infoWrap}>

@@ -16,7 +16,7 @@ export default {
     state: {
         planList: [],
         planTwoList: [],
-        planListLoading: true,
+        planListLoading: true,   
         planDetail: [],
         planDetailTask: [],
         planDetailLoading: true

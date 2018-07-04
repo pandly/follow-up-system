@@ -20,6 +20,11 @@ export default class EditSelectCell extends Component {
          });
         
     }
+    handleSelect = (value) => {
+        if(this.props.dataSource.length===1){
+            this.setState({ editable: false });
+        }
+    }
     edit = () => {
         this.setState({ editable: true });
     }
@@ -65,7 +70,8 @@ export default class EditSelectCell extends Component {
                             <Select defaultValue={value} style={styleObj} 
                                 onChange={this.handleChange}
                                 labelInValue={labelInValue}
-                                allowClear={allowClear}>
+                                allowClear={allowClear}
+                                onSelect={this.handleSelect}>
                                 {
                                     dataSource.map(item=>(
                                         <Option key={item[valueType.code]} value={item[valueType.code]}>{item[valueType.value]}</Option>

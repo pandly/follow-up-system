@@ -146,7 +146,8 @@ export default class PlanTable extends Component {
 											  onChange={(value)=>this.handleChange(value, 'scaleId', index)}
 											  allowClear>						
 										      	{scaleList.map(item1 => (
-										      		<Option key={item1.scaleId} value={item1.scaleId}>{item1.title}</Option>
+										      		<Option key={item1.scaleId} value={item1.scaleId}
+										      			title={item1.title}>{item1.title}</Option>
 										      	))}
 										    </Select>
 										</span>

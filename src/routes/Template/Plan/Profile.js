@@ -148,70 +148,75 @@ class PlanProfile extends PureComponent {
 		e.preventDefault();
 		this.props.form.validateFields((err, values) => {
 			if(!err){
-				let param = {
-					planTemplate: {						
-						department: values.department==='all'?'':values.department,
-						haveIllness: values.haveIllness,
-						title: values.title,
-						type: values.type,
-						illness: values.illness?JSON.stringify(values.illness):JSON.stringify([])
-
-					},
-					taskTemplates: this.table?this.table:this.state.planDetailTask
-				}
-
-				if(this.props.match.params.id==='add'){
-					this.table.forEach(item=>{
-						delete item.taskTemplateId
-					})
-					this.props.dispatch({
-						type: 'plan/addPlan',
-						payload: param
-					}).then(()=>{
-						message.success('添加成功！')
-						this.props.dispatch(routerRedux.push('/template/plan/list'));
-					})
+				if(this.table&&(this.table[this.table.length-1].time===''||this.table[this.table.length-1].timeType==='')){
+					message.error('请填写完整随访任务列表！')
 				}else{
-					param.planTemplate.planTemplateId = this.state.planDetail.planTemplateId
-					if(this.table){
-						this.setState({
-							planDetailTask: this.table
-						},()=>{
-							this.props.dispatch({
-							type: 'plan/updatePlan',
-							payload: {
-								update: param,
-								planTemplateId: this.props.match.params.id
-							}
+					let param = {
+						planTemplate: {						
+							department: values.department==='all'?'':values.department,
+							haveIllness: values.haveIllness,
+							title: values.title,
+							type: values.type,
+							illness: values.illness?JSON.stringify(values.illness):JSON.stringify([])
+
+						},
+						taskTemplates: this.table?this.table:this.state.planDetailTask
+					}
+
+					if(this.props.match.params.id==='add'){
+						this.table.forEach(item=>{
+							delete item.taskTemplateId
+						})
+						this.props.dispatch({
+							type: 'plan/addPlan',
+							payload: param
 						}).then(()=>{
-							this.initData(()=>{
-								message.success('修改成功！')
-								this.setState({
-									planTemplateId: this.props.match.params.id
-									})
-								})
-							
-							
-							
-							})
+							message.success('添加成功！')
+							this.props.dispatch(routerRedux.push('/template/plan/list'));
 						})
 					}else{
-						this.props.dispatch({
-							type: 'plan/updatePlan',
-							payload: {
-								update: param,
-								planTemplateId: this.props.match.params.id
-							}
-						}).then(()=>{
-							this.initData(()=>{
-								message.success('修改成功！')
-								this.setState({
+						param.planTemplate.planTemplateId = this.state.planDetail.planTemplateId
+						if(this.table){
+							this.setState({
+								planDetailTask: this.table
+							},()=>{
+								this.props.dispatch({
+								type: 'plan/updatePlan',
+								payload: {
+									update: param,
 									planTemplateId: this.props.match.params.id
+								}
+							}).then(()=>{
+								this.initData(()=>{
+									message.success('修改成功！')
+									this.setState({
+										planTemplateId: this.props.match.params.id
+										})
+									})
+								
+								
+								
 								})
 							})
-						})
+						}else{
+							this.props.dispatch({
+								type: 'plan/updatePlan',
+								payload: {
+									update: param,
+									planTemplateId: this.props.match.params.id
+								}
+							}).then(()=>{
+								this.initData(()=>{
+									message.success('修改成功！')
+									this.setState({
+										planTemplateId: this.props.match.params.id
+									})
+								})
+							})
+						}
 					}
 				}
+				
 			}
 		})
 	}

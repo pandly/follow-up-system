@@ -641,54 +641,55 @@ class MissionProfile extends Component {
 					    <Breadcrumb.Item onClick={this.goList}>
 					    	<a>今日任务</a>
 					    </Breadcrumb.Item>
-					    <Breadcrumb.Item>开始随访</Breadcrumb.Item>
+					    <Breadcrumb.Item>{todayDetail.patientName}</Breadcrumb.Item>
 				  	</Breadcrumb>
-					<div className={`${styles.patientInfo} clearfix`}>
-						<div className={styles.infoWrap}>
-							<div className={styles.img}>
-								<img src={patientInfo} alt="头像"/>
+				  	<div className={styles.mainInfoWrap} ref={el => this.mainEl = el}>
+						<div className={`${styles.patientInfo} clearfix`}>
+							<div className={styles.infoWrap}>
+								<div className={styles.img}>
+									<img src={patientInfo} alt="头像"/>
+								</div>
+								<div className={styles.info}>
+									<div className={styles.infoItemWrap}>
+										<div className={styles.infoItem}>
+											<span className={styles.basicInfo}>{todayDetail.patientName}</span>
+											<span className={styles.basicInfo}>{todayDetail.sex}</span>
+											<span className={styles.basicInfo}>{todayDetail.age}岁</span>
+										</div>
+										<div className={styles.infoItem}>
+											<span className={styles.label}>身份证号：</span>
+											<span className={styles.text}>{this.hideIdCard(todayDetail.cardNo)}</span>
+										</div>
+									</div>
+									<div className={styles.infoItemWrap}>									
+										<div className={styles.infoItem}>
+											<span className={styles.label}>联系人：</span>
+											<span className={styles.text}>{todayDetail.patientRelationship} {todayDetail.contactPeople}</span>
+										</div>
+										<div className={styles.infoItem}>
+											<span className={styles.label}>费用类型：</span>
+											<span className={styles.text}>{todayDetail.costType}</span>
+										</div>
+										
+									</div>
+									<div className={styles.infoItemWrap}>
+										<div className={styles.infoItem}>
+											<span className={styles.label}>联系电话：</span>
+											<span className={styles.text}>{todayDetail.contactPhone}</span>
+										</div>
+										<div className={styles.infoItem}>
+											<span className={styles.label}>家庭住址：</span>
+											<span className={`${styles.text} text-hidden`}>{todayDetail.contactAddress}</span>
+										</div>
+									</div>
+								</div>
 							</div>
-							<div className={styles.info}>
-								<div className={styles.infoItemWrap}>
-									<div className={styles.infoItem}>
-										<span className={styles.basicInfo}>{todayDetail.patientName}</span>
-										<span className={styles.basicInfo}>{todayDetail.sex}</span>
-										<span className={styles.basicInfo}>{todayDetail.age}岁</span>
-									</div>
-									<div className={styles.infoItem}>
-										<span className={styles.label}>身份证号：</span>
-										<span className={styles.text}>{this.hideIdCard(todayDetail.cardNo)}</span>
-									</div>
-								</div>
-								<div className={styles.infoItemWrap}>									
-									<div className={styles.infoItem}>
-										<span className={styles.label}>联系人：</span>
-										<span className={styles.text}>{todayDetail.patientRelationship} {todayDetail.contactPeople}</span>
-									</div>
-									<div className={styles.infoItem}>
-										<span className={styles.label}>费用类型：</span>
-										<span className={styles.text}>{todayDetail.costType}</span>
-									</div>
-									
-								</div>
-								<div className={styles.infoItemWrap}>
-									<div className={styles.infoItem}>
-										<span className={styles.label}>联系电话：</span>
-										<span className={styles.text}>{todayDetail.contactPhone}</span>
-									</div>
-									<div className={styles.infoItem}>
-										<span className={styles.label}>家庭住址：</span>
-										<span className={`${styles.text} text-hidden`}>{todayDetail.contactAddress}</span>
-									</div>
-								</div>
-							</div>
+							{/*<div className={styles.call}>
+								<i className={`iconfont icon-red_phone ${styles.callIcon}`}></i>
+								<div className={styles.text}>拨打电话</div>
+							</div>*/}
 						</div>
-						{/*<div className={styles.call}>
-							<i className={`iconfont icon-red_phone ${styles.callIcon}`}></i>
-							<div className={styles.text}>拨打电话</div>
-						</div>*/}
-					</div>
-					<div className={styles.mainInfoWrap} ref={el => this.mainEl = el}>
+					
 						<div className={styles.overFlow}>
 							<div className={styles.menuList}>
 								<div className={styles.specialItem}>
@@ -850,7 +851,8 @@ class MissionProfile extends Component {
 										onChange={this.planChange}>
 								      	{
 								      		planTwoList.map(item => (
-									      		<Option key={item.planTemplateId} value={item.planTemplateId}>{item.title}</Option>
+									      		<Option key={item.planTemplateId} value={item.planTemplateId}
+									      			title={item.title}>{item.title}</Option>
 									      	))
 					      				}
 								    </Select>

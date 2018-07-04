@@ -8,7 +8,8 @@
 	.patientInfo{
 		background-color: #fff;
 		box-shadow: 0 1px 4px 0 rgba(202,202,202,0.50);
-		margin: 20px 0 0 20px;
+		// margin: 20px 0 0 20px;
+		margin-bottom: 20px;
 		padding: 18px 50px 18px 30px;
 		.infoWrap{
 			float: left;
@@ -75,11 +76,11 @@
 		}
 	}
 	.mainInfo{
-		background-color: #fff;
+		background-color: #F4F5F6;
 		box-shadow: 0 1px 4px 0 rgba(202,202,202,0.50);
 		margin: 20px 0 20px 20px;
 		position: absolute;
-		top: 170px;
+		top: 30px;
 		bottom: 0;
 		left: 0;
 		right: 0;
@@ -88,6 +89,7 @@
 			padding: 20px;
 			min-height: 100%;
 			position: relative;
+			background-color: #fff;
 		}
 		.info{
 			.title{
@@ -122,28 +124,37 @@
 						}
 					}
 				}
+				.specialInfoItem{
+					.text{
+						margin-right: 60px;
+						&:last-child{
+							margin-right: 0;
+						}
+					}
+				}
 				.line{
 					display: inline-block;
 					vertical-align: top;
+					width: 200px;
 					&:first-child{
-						margin-right: 50px;
+						// margin-right: 60px;
 						.text{
 							max-width: 100px;
 						}
 					}
 					&:nth-child(2){
-						margin-right: 50px;
+						// margin-right: 60px;
 						.text{
 							// max-width: 100px;
 						}
 					}
 					&:nth-child(3){
-						margin-right: 43px;
+						// margin-right: 60px;
 					}
 					&:nth-child(4){
-						margin-right: 43px;
+						// margin-right: 60px;
 						.text{
-							max-width: 151px;
+							max-width: 130px;
 						}
 					}
 				}

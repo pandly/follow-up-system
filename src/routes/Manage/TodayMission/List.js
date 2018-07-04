@@ -274,8 +274,57 @@ class TodayMission extends PureComponent {
 			title: '操作',
 			key: 'action',
 			render: (text, record) => (
-				<a className="aLink" onClick={()=>this.checkProfile(record)}>查看随访</a>
+				<a className="aLink" onClick={()=>this.checkProfile(record)}>开始随访</a>
 			)
+		}]
+
+		const columns2 = [{
+			title: '姓名',
+			dataIndex: 'patientName',
+			key: 'patientName'
+		},{
+			title: '基本信息',
+			key: 'info',
+			render: (text, record) => (
+				<span>{record.sex}/{record.age}岁</span>
+			)
+		},{
+			title: '科室',
+			dataIndex: 'hospitalizationDepartment',
+			key: 'hospitalizationDepartment',
+			render: (text, record) => (
+				<span className={`${styles.deptHidden} text-hidden`}>{text}</span>
+			)
+		},{
+			title: '出院诊断',
+			dataIndex: 'dischargeDiagnosis',
+			key: 'dischargeDiagnosis',
+			render: (text, record) => (
+				<span className={`${styles.textHidden} text-hidden`}>{text}</span>
+			)
+		},{
+			title: '主管医生',
+			dataIndex: 'resident',
+			key: 'resident'
+		},{
+			title: '离院天数',
+			dataIndex: 'dischargeDays',
+			key: 'dischargeDays',
+			render: (text, record) => (
+				<span>{text}天</span>
+			)
+		},{
+			title: '状态',
+			key: 'status',
+			render: (text, record) => statusDom(text, record)
+		},{
+			title: '操作',
+			key: 'action',
+			render: (text, record) => 
+				(
+					<a className="aLink" onClick={()=>this.checkProfile(record)}>查看随访</a>
+				)
+			
 		}]
 		
 		return (
@@ -357,7 +406,7 @@ class TodayMission extends PureComponent {
 												<div className={styles.text}>非常抱歉，当前页面暂无内容...</div>
 											</div>
 											:
-											<Table dataSource={alreadyFollow} columns={columns} 
+											<Table dataSource={alreadyFollow} columns={columns2} 
 												pagination={{
 													current: currentPage,
 													pageSize: pageSize,

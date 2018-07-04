@@ -520,7 +520,7 @@ class SatisfactionDetail extends PureComponent {
 									</Spin>
 									{!editorLoading && toggleAnswer && (
 										<div>
-										    <Button type="primary" onClick={this.save}>暂存草稿</Button>
+										    <Button type="primary" onClick={this.save}>暂存</Button>
 										    <span style={{
 										    	display: 'inline-block',
 										    	width: 20,

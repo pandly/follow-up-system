@@ -548,7 +548,7 @@ class QuestionnairEditor extends PureComponent {
 							  name="checkbox"
 							  value={data}
 							  data-index={index}
-							  defaultChecked={this.answer.checkbox !== '' && this.answer.checkbox.optionIndex.includes(index+'')}
+							  defaultChecked={answer && this.answer.checkbox !== '' && this.answer.checkbox.optionIndex.includes(index+'')}
 							  onChange={this.handleAnswerChange}
 							  style={{ display: 'none' }}/>
 								<span className="wowjoy-checkbox__inner"></span>

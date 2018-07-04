@@ -16,10 +16,10 @@ export default {
     state: {
         planList: [],
         planTwoList: [],
-        planListLoading: false,
+        planListLoading: true,
         planDetail: [],
         planDetailTask: [],
-        planDetailLoading: false
+        planDetailLoading: true
     },
 
     subscriptions: {

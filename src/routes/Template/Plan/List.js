@@ -117,12 +117,20 @@ class Plan extends PureComponent {
 
 	componentDidMount(){
 		this.props.dispatch({
-			type: 'global/fetchDict'
-		})
-		this.props.dispatch({
 			type: 'global/fetchDepartment'
 		})
-		this.getData()
+		this.props.dispatch({
+			type: 'global/fetchDict'
+		}).then(()=>{
+			this.setState({
+				type: 'OUT_HOSPITAL'
+			}, ()=>{
+				this.getData()
+			})
+
+		})
+		
+		
 	}
 
 	render() {

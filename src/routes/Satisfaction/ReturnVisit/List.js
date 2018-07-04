@@ -121,18 +121,35 @@ class Satisfaction extends PureComponent {
   		})
 	}
 	handleDeptChange=(value)=> {
-  		if(value){
-  			this.setState({
-	  			deptChoosed: value
-	  		}, ()=>{
-  				this.getData(0)
-  			})
+		if(value){
+  			this.props.dispatch({
+				type: 'global/fetchDoctors',
+				payload: {
+					type: 'satisfyStay',
+					departmentId: value
+				}
+			}).then(()=>{
+				this.setState({
+		  			deptChoosed: value
+		  		}, ()=>{
+	  				this.getData(0)
+	  			})
+			})
+  			
   		}else{
-  			this.setState({
-	  			deptChoosed: ''
-	  		}, ()=>{
-	  			this.getData(0)
-	  		})
+  			this.props.dispatch({
+				type: 'global/fetchDoctors',
+				payload: {
+					type: 'satisfyStay',
+					departmentId: ''
+				}
+			}).then(()=>{
+				this.setState({
+		  			deptChoosed: ''
+		  		}, ()=>{
+	  				this.getData(0)
+	  			})
+			})
   		}
   		
 	}
@@ -159,19 +176,19 @@ class Satisfaction extends PureComponent {
 				type: 'global/fetchDepartment',
 				payload: 'satisfyStay'
 			})
-			this.props.dispatch({
-				type: 'global/fetchDoctors',
-				payload: 'satisfyStay'
-			})
+			// this.props.dispatch({
+			// 	type: 'global/fetchDoctors',
+			// 	payload: 'satisfyStay'
+			// })
 		}else if(type=='already'){
 			this.props.dispatch({
 				type: 'global/fetchDepartment',
 				payload: 'satisfyAlready'
 			})
-			this.props.dispatch({
-				type: 'global/fetchDoctors',
-				payload: 'satisfyAlready'
-			})
+			// this.props.dispatch({
+			// 	type: 'global/fetchDoctors',
+			// 	payload: 'satisfyAlready'
+			// })
 		}
 		
 	}
@@ -470,7 +487,8 @@ class Satisfaction extends PureComponent {
 												value={deptChoosed}>
 									      		<Option value="">全部</Option>
 										      	{departmentList.map(item => (
-										      		<Option key={item.departmentId} value={item.departmentName}>{item.departmentName}</Option>
+										      		<Option key={item.departmentId} value={item.departmentId}
+										      			title={item.departmentName}>{item.departmentName}</Option>
 										      	))}
 									    	</Select>
 							    		</div>
@@ -480,7 +498,7 @@ class Satisfaction extends PureComponent {
 												value={doctorChoosed}>
 										      	<Option value="">全部</Option>
 										      	{doctorList.map(item => (
-										      		<Option key={item.workerId} value={item.workerName}>{item.workerName}</Option>
+										      		<Option key={item.workerId} value={item.workerId}>{item.workerName}</Option>
 										      	))}
 										    </Select>
 							    		</div>

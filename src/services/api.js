@@ -10,7 +10,7 @@ export async function getDepartments(params){
 
 //POST  获取主治医生
 export async function getDoctors(params){
-	return request(`${baseUrl}/v1/resident/get_resident?type=${params}`)
+	return request(`${baseUrl}/v1/resident/get_resident?type=${params.type}&departmentId=${params.departmentId}`)
 }
 
 //get 字典查找

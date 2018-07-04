@@ -99,17 +99,34 @@ class TodayMission extends PureComponent {
 	}
 	handleDeptChange=(value)=> {
   		if(value){
-  			this.setState({
-	  			deptChoosed: value
-	  		}, ()=>{
-  				this.getData(0)
-  			})
+  			this.props.dispatch({
+				type: 'global/fetchDoctors',
+				payload: {
+					type: 'todayStay',
+					departmentId: value
+				}
+			}).then(()=>{
+				this.setState({
+		  			deptChoosed: value
+		  		}, ()=>{
+	  				this.getData(0)
+	  			})
+			})
+  			
   		}else{
-  			this.setState({
-	  			deptChoosed: ''
-	  		}, ()=>{
-	  			this.getData(0)
-	  		})
+  			this.props.dispatch({
+				type: 'global/fetchDoctors',
+				payload: {
+					type: 'todayStay',
+					departmentId: ''
+				}
+			}).then(()=>{
+				this.setState({
+		  			deptChoosed: ''
+		  		}, ()=>{
+	  				this.getData(0)
+	  			})
+			})
   		}
   		
 	}
@@ -186,19 +203,19 @@ class TodayMission extends PureComponent {
 				type: 'global/fetchDepartment',
 				payload: 'todayStay'
 			})
-			this.props.dispatch({
-				type: 'global/fetchDoctors',
-				payload: 'todayStay'
-			})
+			// this.props.dispatch({
+			// 	type: 'global/fetchDoctors',
+			// 	payload: 'todayStay'
+			// })
 		}else if(type=='already'){
 			this.props.dispatch({
 				type: 'global/fetchDepartment',
 				payload: 'todayAlready'
 			})
-			this.props.dispatch({
-				type: 'global/fetchDoctors',
-				payload: 'todayAlready'
-			})
+			// this.props.dispatch({
+			// 	type: 'global/fetchDoctors',
+			// 	payload: 'todayAlready'
+			// })
 		}
 		
 	}
@@ -356,7 +373,8 @@ class TodayMission extends PureComponent {
 								value={deptChoosed}>
 						      	<Option value="">全部</Option>
 						      	{departmentList.map(item => (
-						      		<Option key={item.departmentId} value={item.departmentName}>{item.departmentName}</Option>
+						      		<Option key={item.departmentId} value={item.departmentId}
+						      			title={item.departmentName}>{item.departmentName}</Option>
 						      	))}
 						    </Select>
 							<span className={styles.text}>主管医生</span>
@@ -364,7 +382,7 @@ class TodayMission extends PureComponent {
 								value={doctorChoosed}>
 						      	<Option value="">全部</Option>
 						      	{doctorList.map(item => (
-						      		<Option key={item.workerId} value={item.workerName}>{item.workerName}</Option>
+						      		<Option key={item.workerId} value={item.workerId}>{item.workerName}</Option>
 						      	))}
 						    </Select>
 						    <span className={styles.text}>出院日期</span>

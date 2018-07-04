@@ -72,6 +72,21 @@ li a {
 			}
 		}
 	}
+	.headerPop{
+		padding-top: 12px!important;
+		width: 200px!important;
+		.ant-popover-arrow{
+			display: none!important;
+		}
+		.ant-popover-inner{
+			border-radius: 0!important;
+			background-color: #F5F7F8!important;
+			box-shadow: 0 1px 4px 0 rgba(132,132,132,0.50)!important;
+			.ant-popover-inner-content{
+				padding: 0!important;
+			}
+		}
+	}
 }
 
 :global{
@@ -246,6 +261,7 @@ li a {
 	}
 	//下拉框
 	.ant-select-dropdown{
+		z-index: 2010!important;
 		// transform: translateY(-4px)!important;
 		&.ant-select-dropdown--multiple{
 			.ant-select-dropdown-menu-item-selected{

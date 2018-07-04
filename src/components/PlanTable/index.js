@@ -22,9 +22,9 @@ export default class PlanTable extends Component {
         const planDetailTaskObj = {...this.state.planDetailTask[index]};
         let newPlanDetailTaskObj;
         if(name === 'scaleId') {
-            newPlanDetailTaskObj = {...planDetailTaskObj, [name]: value.key, scaleName: value.label};
+            newPlanDetailTaskObj = {...planDetailTaskObj, [name]: value?value.key:'', scaleName: value?value.label:''};
         }else {
-        	newPlanDetailTaskObj = {...planDetailTaskObj, [name]: value};
+        	newPlanDetailTaskObj = {...planDetailTaskObj, [name]: value?value:''};
         } 
         let planDetailTask = [...this.state.planDetailTask];
         planDetailTask.splice(index, 1, newPlanDetailTaskObj);

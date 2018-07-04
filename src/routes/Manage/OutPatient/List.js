@@ -96,18 +96,35 @@ class OutPatient extends PureComponent {
   		})
 	}
 	handleDeptChange=(value)=> {
-  		if(value){
-  			this.setState({
-	  			deptChoosed: value
-	  		}, ()=>{
-  				this.getData(0)
-  			})
+		if(value){
+  			this.props.dispatch({
+				type: 'global/fetchDoctors',
+				payload: {
+					type: 'dischargeStay',
+					departmentId: value
+				}
+			}).then(()=>{
+				this.setState({
+		  			deptChoosed: value
+		  		}, ()=>{
+	  				this.getData(0)
+	  			})
+			})
+  			
   		}else{
-  			this.setState({
-	  			deptChoosed: ''
-	  		}, ()=>{
-	  			this.getData(0)
-	  		})
+  			this.props.dispatch({
+				type: 'global/fetchDoctors',
+				payload: {
+					type: 'dischargeStay',
+					departmentId: ''
+				}
+			}).then(()=>{
+				this.setState({
+		  			deptChoosed: ''
+		  		}, ()=>{
+	  				this.getData(0)
+	  			})
+			})
   		}
   		
 	}
@@ -134,19 +151,19 @@ class OutPatient extends PureComponent {
 				type: 'global/fetchDepartment',
 				payload: 'dischargeStay'
 			})
-			this.props.dispatch({
-				type: 'global/fetchDoctors',
-				payload: 'dischargeStay'
-			})
+			// this.props.dispatch({
+			// 	type: 'global/fetchDoctors',
+			// 	payload: 'dischargeStay'
+			// })
 		}else if(type=='already'){
 			this.props.dispatch({
 				type: 'global/fetchDepartment',
 				payload: 'dischargeAlready'
 			})
-			this.props.dispatch({
-				type: 'global/fetchDoctors',
-				payload: 'dischargeAlready'
-			})
+			// this.props.dispatch({
+			// 	type: 'global/fetchDoctors',
+			// 	payload: 'dischargeAlready'
+			// })
 		}
 		
 	}
@@ -416,7 +433,8 @@ class OutPatient extends PureComponent {
 											value={deptChoosed}>
 								      		<Option value="">全部</Option>
 									      	{departmentList.map(item => (
-									      		<Option key={item.departmentId} value={item.departmentName}>{item.departmentName}</Option>
+									      		<Option key={item.departmentId} value={item.departmentId}
+									      			title={item.departmentName}>{item.departmentName}</Option>
 									      	))}
 								    	</Select>
 						    		</div>
@@ -426,7 +444,7 @@ class OutPatient extends PureComponent {
 											value={doctorChoosed}>
 									      	<Option value="">全部</Option>
 									      	{doctorList.map(item => (
-									      		<Option key={item.workerId} value={item.workerName}>{item.workerName}</Option>
+									      		<Option key={item.workerId} value={item.workerId}>{item.workerName}</Option>
 									      	))}
 									    </Select>
 						    		</div>

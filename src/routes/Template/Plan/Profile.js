@@ -306,6 +306,7 @@ class PlanProfile extends PureComponent {
 				type: ''
 			}
 		}).then(()=>{
+			this.isSearch = 'init'
 			this.setState({
 				deptList: [...this.state.deptList,...this.props.global.departmentList]
 			})
@@ -329,7 +330,7 @@ class PlanProfile extends PureComponent {
 		}
 	}
 	handleDeptChange = (value, option) => {
-		if(this.isSearch&&this.isSearch!=value){
+		if(this.isSearch!=value){
 			this.props.dispatch({
 				type: 'global/fetchDepartment',
 				payload: {

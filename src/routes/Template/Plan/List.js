@@ -117,7 +117,10 @@ class Plan extends PureComponent {
 
 	componentDidMount(){
 		this.props.dispatch({
-			type: 'global/fetchDepartment'
+			type: 'global/fetchDepartment',
+			payload: {
+				type: ''
+			}
 		})
 		this.props.dispatch({
 			type: 'global/fetchDict'

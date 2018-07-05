@@ -149,7 +149,9 @@ class OutPatient extends PureComponent {
 		if(type=='init'||type=='wait'){
 			this.props.dispatch({
 				type: 'global/fetchDepartment',
-				payload: 'dischargeStay'
+				payload: {
+					type: 'dischargeStay'
+				}
 			})
 			// this.props.dispatch({
 			// 	type: 'global/fetchDoctors',
@@ -158,7 +160,9 @@ class OutPatient extends PureComponent {
 		}else if(type=='already'){
 			this.props.dispatch({
 				type: 'global/fetchDepartment',
-				payload: 'dischargeAlready'
+				payload: {
+					type: 'dischargeStay'
+				}
 			})
 			// this.props.dispatch({
 			// 	type: 'global/fetchDoctors',

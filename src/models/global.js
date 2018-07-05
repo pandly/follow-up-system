@@ -13,7 +13,6 @@ export default {
 	effects: {
 		*fetchDepartment({ payload }, { call, put }) { 
 			const result = yield call(getDepartments, payload)
-			console.log(result.results)
             yield put({ 
                 type: 'saveDepartment',
                 payload: result.results
@@ -21,7 +20,6 @@ export default {
 		},
 		*fetchDoctors({ payload }, { call, put }) { 
 			const result = yield call(getDoctors, payload)
-			console.log(result.results)
             yield put({ 
                 type: 'saveDoctors',
                 payload: result.results

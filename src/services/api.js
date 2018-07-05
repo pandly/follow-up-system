@@ -5,7 +5,12 @@ const baseUrl = process.env.NODE_ENV === 'development' ? '/api' : ''
 const xsrfToken = document.cookie;
 //POST  获取科室列表
 export async function getDepartments(params){
-	return request(`${baseUrl}/v1/department/get_department?type=${params}`)
+	if(params.abbreviate){
+		return request(`${baseUrl}/v1/department/get_department?type=${params.type}&abbreviate=${params.abbreviate}`)
+	}else{
+		return request(`${baseUrl}/v1/department/get_department?type=${params.type}`)
+	}
+	
 }
 
 //POST  获取主治医生

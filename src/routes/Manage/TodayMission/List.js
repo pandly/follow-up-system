@@ -97,7 +97,8 @@ class TodayMission extends PureComponent {
   			this.getData(0)
   		})
 	}
-	handleDeptChange=(value)=> {
+	handleDeptChange=(value,option)=> {
+		console.log(option,'option')
   		if(value){
   			this.props.dispatch({
 				type: 'global/fetchDoctors',
@@ -201,7 +202,9 @@ class TodayMission extends PureComponent {
 		if(type=='init'||type=='wait'){
 			this.props.dispatch({
 				type: 'global/fetchDepartment',
-				payload: 'todayStay'
+				payload: {
+					type: 'todayStay'
+				}
 			})
 			// this.props.dispatch({
 			// 	type: 'global/fetchDoctors',
@@ -210,7 +213,9 @@ class TodayMission extends PureComponent {
 		}else if(type=='already'){
 			this.props.dispatch({
 				type: 'global/fetchDepartment',
-				payload: 'todayAlready'
+				payload: {
+					type: 'todayStay'
+				}
 			})
 			// this.props.dispatch({
 			// 	type: 'global/fetchDoctors',

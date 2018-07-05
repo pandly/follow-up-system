@@ -174,7 +174,9 @@ class Satisfaction extends PureComponent {
 		if(type=='init'||type=='wait'){
 			this.props.dispatch({
 				type: 'global/fetchDepartment',
-				payload: 'satisfyStay'
+				payload: {
+					type: 'satisfyStay'
+				}
 			})
 			// this.props.dispatch({
 			// 	type: 'global/fetchDoctors',
@@ -183,7 +185,9 @@ class Satisfaction extends PureComponent {
 		}else if(type=='already'){
 			this.props.dispatch({
 				type: 'global/fetchDepartment',
-				payload: 'satisfyAlready'
+				payload: {
+					type: 'satisfyStay'
+				}
 			})
 			// this.props.dispatch({
 			// 	type: 'global/fetchDoctors',

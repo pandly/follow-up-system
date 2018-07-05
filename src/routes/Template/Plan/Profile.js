@@ -20,6 +20,10 @@ class PlanProfile extends PureComponent {
 		deptDisable: false,
 		illDisable: false,
 		haveIllDisable: false,
+		deptList: [{
+			departmentName:'全部', 
+			departmentId: 'all'
+		}],
 	}
 	// handleChange=(value,name,index)=>{
  //        const planDetailTaskObj = {...this.state.planDetailTask[index]};
@@ -297,7 +301,14 @@ class PlanProfile extends PureComponent {
 			type: 'global/fetchDict'
 		})
 		this.props.dispatch({
-			type: 'global/fetchDepartment'
+			type: 'global/fetchDepartment',
+			payload: {
+				type: ''
+			}
+		}).then(()=>{
+			this.setState({
+				deptList: [...this.state.deptList,...this.props.global.departmentList]
+			})
 		})
 		if(this.state.planTemplateId!=='add'){
 			this.getDetail()
@@ -317,6 +328,26 @@ class PlanProfile extends PureComponent {
 			})
 		}
 	}
+	handleDeptChange = (value, option) => {
+		if(this.isSearch&&this.isSearch!=value){
+			this.props.dispatch({
+				type: 'global/fetchDepartment',
+				payload: {
+					type: '',
+					abbreviate: value
+				}
+			}).then(()=>{
+				this.setState({ 
+					deptList: [...this.props.global.departmentList]
+				})
+			})
+		}
+		
+	}
+
+	handleDeptSelect = (value) => {
+		this.isSearch = value
+	}
 
 	componentWillUnmount(){
 		this.props.dispatch({
@@ -333,7 +364,8 @@ class PlanProfile extends PureComponent {
 			illDisable,
 			haveIllDisable,
 			planDetailTask,
-			planDetail
+			planDetail,
+			deptList
 		} = this.state
 		const {
         	planDetailLoading
@@ -393,6 +425,8 @@ class PlanProfile extends PureComponent {
 				<span> </span>
 			)
 		}]
+
+		const deptOptions = deptList.map(item => <Option key={item.departmentId} title={item.departmentName}>{item.departmentName}</Option>)
 
 		
 		
@@ -473,13 +507,20 @@ class PlanProfile extends PureComponent {
 												getFieldDecorator('department',{
 													initialValue: planDetail.department
 												})(
-													<Select style={{ width: 255 }}
-														placeholder="请选择" disabled={deptDisable}>
-												      	<Option value="all">全部</Option>
-											      		{departmentList.map(item => (
-												      		<Option key={item.departmentId} value={item.departmentId}>{item.departmentName}</Option>
-												      	))}
-												    </Select>
+													<Select
+												        mode="combobox"
+												        placeholder="请选择"
+												        style={{ width: 255 }}
+												        defaultActiveFirstOption={false}
+												        disabled={deptDisable}
+												        showArrow={false}
+												        filterOption={false}
+												        optionLabelProp='title'
+												        onChange={this.handleDeptChange}
+												        onSelect={this.handleDeptSelect}
+											      	>
+											        	{deptOptions}
+											      	</Select>
 												)
 											}										
 									    </FormItem>

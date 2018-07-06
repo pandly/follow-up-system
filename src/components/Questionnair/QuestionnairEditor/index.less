@@ -25,6 +25,11 @@
 		align-items: center;
 		margin: 15px 0;
 		position: relative;
+		.iconfont{
+			margin-left: 10px;
+			font-size: 12px;
+			color: #979797;
+		}
 	}
 	.editor-row-title {
 		position: absolute;
@@ -85,6 +90,9 @@
 		display: flex;
 		align-items: center;
 		cursor: pointer;
+		.iconfont{
+			margin: 0 8px 0 10px;
+		}
 	}
 	.options-control {
 		margin-left: 38px;
@@ -100,6 +108,14 @@
 	.editor-button {
 		width: 100%;
 		text-align: center;
+		.wowjoy-button{
+			width: 96px;
+			height: 36px;
+		}
+		.wowjoy-button__cancel{
+			background-color: #fff;
+			color: #06aea6;
+		}
 	}
 	.editor-adv {
 		width: 100%;
@@ -112,6 +128,9 @@
 		align-items: center;
 		margin-right: 60px;
 		font-size: 12px;
+		.wowjoy-select{
+			margin: 0 10px;
+		}
 	}
 	.editor-input-number {
 		width: 54px;
@@ -134,8 +153,14 @@
 		width: 700px;
 	}
 	.subject-row {
-		margin-bottom: 8px;
+		line-height: 14px;
 		width: 100%;
+	}
+	.subject-row-question{
+		margin-top: 20px;
+		select{
+			margin-bottom: 20px;
+		}
 	}
 	.subject-title-require {
 		color: red;
@@ -143,6 +168,7 @@
 		margin-left: 5px;
 	}
 	.subject-remarks {
+		margin-top: 10px;
 		font-size: 12px;
 		color: #999;
 	}

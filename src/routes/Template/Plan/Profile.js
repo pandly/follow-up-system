@@ -24,6 +24,7 @@ class PlanProfile extends PureComponent {
 			departmentName:'全部', 
 			departmentId: 'all'
 		}],
+		startTime: ''
 	}
 	// handleChange=(value,name,index)=>{
  //        const planDetailTaskObj = {...this.state.planDetailTask[index]};
@@ -292,13 +293,45 @@ class PlanProfile extends PureComponent {
 
 	componentDidMount(){
 		this.props.dispatch({
+			type: 'plan/changePlanDetailLoading',
+			payload: true
+		})
+		this.props.dispatch({
+			type: 'global/fetchDict'
+		}).then(()=>{
+			if(this.state.planTemplateId!=='add'){
+				this.getDetail()
+			}else{
+				this.setState({				
+					planDetailTask: [{
+						time: '',
+						timeType: '',
+						returnType: 'PHONE',
+						scaleName: '',
+						scaleId: ''
+					}],
+					planDetail: {
+						type: 'OUT_HOSPITAL',
+						haveIllness: 'RESTRICT', 
+						illness:[],
+						department: ''
+					},
+					deptDisable: false,
+					illDisable: true,
+					haveIllDisable: false,
+					startTime: 'OUT_HOSPITAL'
+				})
+				this.props.dispatch({
+					type: 'plan/changePlanDetailLoading',
+					payload: false
+				})
+			}
+		})
+		this.props.dispatch({
 			type: 'scale/fetchScaleList',
 			payload: {
 				title: ''
 			}
-		})
-		this.props.dispatch({
-			type: 'global/fetchDict'
 		})
 		this.props.dispatch({
 			type: 'global/fetchDepartment',
@@ -311,23 +344,7 @@ class PlanProfile extends PureComponent {
 				deptList: [...this.state.deptList,...this.props.global.departmentList]
 			})
 		})
-		if(this.state.planTemplateId!=='add'){
-			this.getDetail()
-		}else{
-			this.setState({				
-				planDetailTask: [{
-					time: '',
-					timeType: '',
-					returnType: 'PHONE',
-					scaleName: '',
-					scaleId: ''
-				}],
-				planDetail: {},
-				deptDisable: false,
-				illDisable: false,
-				haveIllDisable: false,
-			})
-		}
+		
 	}
 	handleDeptChange = (value, option) => {
 		if(this.isSearch!=value){
@@ -339,6 +356,7 @@ class PlanProfile extends PureComponent {
 				}
 			}).then(()=>{
 				this.setState({ 
+					
 					deptList: [...this.props.global.departmentList]
 				})
 			})
@@ -366,7 +384,8 @@ class PlanProfile extends PureComponent {
 			haveIllDisable,
 			planDetailTask,
 			planDetail,
-			deptList
+			deptList,
+			startTime
 		} = this.state
 		const {
         	planDetailLoading
@@ -447,162 +466,166 @@ class PlanProfile extends PureComponent {
 			  	</Breadcrumb>
 
 				<div className={`${styles.contentWrap} ${planTemplateId==='add'?'':styles.hidden}`}>
+					
 					<Form onSubmit={this.saveForm} layout="inline">
-						<div className={styles.main}>	
-							<div className={styles.contentItem}>
-								<div className={styles.title}>
-									<div className={styles.titleText}>
-										<i className={`iconfont icon-tongyongbiaotiicon ${styles.titleIcon}`}></i><span>模版属性</span>
+						<div className={styles.main}>
+							<Spin spinning={planDetailLoading} size="large">	
+								<div className={styles.contentItem}>
+									<div className={styles.title}>
+										<div className={styles.titleText}>
+											<i className={`iconfont icon-tongyongbiaotiicon ${styles.titleIcon}`}></i><span>模版属性</span>
+										</div>
+									</div>
+									<div className={styles.content}>
+										<div className={styles.item}>
+											<span className={styles.label}>模版类型</span>
+											<FormItem>
+												{
+													getFieldDecorator('type',{
+														initialValue: planDetail.type,
+														rules: [{ required: true, message: '请输入模版类型！'}]
+													})(
+														<Select style={{ width: 255}} allowClear 
+															onChange={this.changeType}>
+													      	{
+													      		dictionary['PLAN_TEMPLATE_TYPE']?
+															      	dictionary['PLAN_TEMPLATE_TYPE'].map(item => (
+															      		<Option key={item.code} value={item.code}>{item.value}</Option>
+															      	))
+													      		:''
+										      				}
+									    				</Select>
+													)
+												}										
+										    </FormItem>
+										</div>
+										<div className={styles.item}>
+											<span className={styles.label}>模版名称</span>
+											<FormItem>
+												{
+													getFieldDecorator('title',{
+														initialValue: planDetail.title,
+														rules: [{ required: true, message: '请输入模版名称！'}]
+													})(
+														<Input style={{ width: 622 }}/>
+													)
+												}										
+										    </FormItem>
+											
+										</div>
 									</div>
 								</div>
-								<div className={styles.content}>
-									<div className={styles.item}>
-										<span className={styles.label}>模版类型</span>
-										<FormItem>
+								<div className={styles.contentItem}>
+									<div className={styles.title}>
+										<div className={styles.titleText}>
+											<i className={`iconfont icon-tongyongbiaotiicon ${styles.titleIcon}`}></i><span>适用范围</span>
+										</div>
+									</div>
+									<div className={styles.content}>
+										<div className={styles.item}>
+											<span className={`${styles.label} ${styles.required}`}>科室</span>
+											<FormItem>
+												{
+													getFieldDecorator('department',{
+														initialValue: planDetail.department
+													})(
+														<Select
+													        mode="combobox"
+													        placeholder="请选择"
+													        style={{ width: 255 }}
+													        defaultActiveFirstOption={false}
+													        disabled={deptDisable}
+													        showArrow={false}
+													        filterOption={false}
+													        optionLabelProp='title'
+													        onChange={this.handleDeptChange}
+													        onSelect={this.handleDeptSelect}
+												      	>
+												        	{deptOptions}
+												      	</Select>
+													)
+												}										
+										    </FormItem>
+											
+										</div>
+										<div className={`${styles.item} ${styles.specialItem}`}>
+											<FormItem>
+												{
+													getFieldDecorator('haveIllness',{
+														initialValue: planDetail.haveIllness
+													})(
+														<Select style={{ width: 115 }}  disabled={haveIllDisable}
+															placeholder="请选择"
+															onChange={this.changeHaveIllness}>
+													      	{
+													      		dictionary['HAVE_ILLNESS']?
+															      	dictionary['HAVE_ILLNESS'].map(item => (
+															      		<Option key={item.code} value={item.code}>{item.value}</Option>
+															      	))
+													      		:''
+										      				}
+													    </Select>
+													)
+												}										
+										    </FormItem>
 											{
-												getFieldDecorator('type',{
-													initialValue: planDetail.type,
-													rules: [{ required: true, message: '请输入模版类型！'}]
-												})(
-													<Select style={{ width: 255}} allowClear 
-														onChange={this.changeType}>
-												      	{
-												      		dictionary['PLAN_TEMPLATE_TYPE']?
-														      	dictionary['PLAN_TEMPLATE_TYPE'].map(item => (
-														      		<Option key={item.code} value={item.code}>{item.value}</Option>
-														      	))
-												      		:''
-									      				}
-								    				</Select>
-												)
-											}										
-									    </FormItem>
-									</div>
-									<div className={styles.item}>
-										<span className={styles.label}>模版名称</span>
-										<FormItem>
-											{
-												getFieldDecorator('title',{
-													initialValue: planDetail.title,
-													rules: [{ required: true, message: '请输入模版名称！'}]
-												})(
-													<Input style={{ width: 622 }}/>
-												)
-											}										
-									    </FormItem>
-										
+												illDisable?'':
+												<div className={styles.inline}>
+													<span className={styles.label}>疾病诊断</span>
+													<FormItem>
+														{
+															getFieldDecorator('illness',{
+																initialValue: planDetail.illness
+															})(
+																<Select style={{ width: 422, position: 'absolute', left: 0, top: -13 }} 
+																	mode="tags" disabled={illDisable}
+																	allowClear placeholder="请填写（多填）"
+																	dropdownStyle={{display: 'none'}}>
+															    </Select>
+															)
+														}										
+												    </FormItem>
+												</div>
+											}
+											
+											
+										</div>
 									</div>
 								</div>
-							</div>
-							<div className={styles.contentItem}>
-								<div className={styles.title}>
-									<div className={styles.titleText}>
-										<i className={`iconfont icon-tongyongbiaotiicon ${styles.titleIcon}`}></i><span>适用范围</span>
+								<div className={styles.contentItem}>
+									<div className={styles.title}>
+										<div className={styles.titleText}>
+											<i className={`iconfont icon-tongyongbiaotiicon ${styles.titleIcon}`}></i><span>随访任务</span>
+										</div>
+									</div>
+									<div className={styles.content}>
+										<div className={styles.item}>
+											<span className={`${styles.label} ${styles.specialLabel}`}>随访开始时间</span>
+											<Select value={startTime} style={{ width: 255 }}
+												allowClear disabled>
+										      	{dictionary['START_TYPE']?
+															      	dictionary['START_TYPE'].map(item => (
+										      		<Option key={item.code} value={item.code}>{item.value}</Option>
+										      	)):''}
+										    </Select>
+										</div>
+										<PlanTable 
+										  planDetailTask={planDetailTask} 
+										  dictionary={dictionary}
+										  scaleList={scaleList}
+										  status={status}
+										  onChange={this.updateTable}
+										/>									
 									</div>
 								</div>
-								<div className={styles.content}>
-									<div className={styles.item}>
-										<span className={`${styles.label} ${styles.required}`}>科室</span>
-										<FormItem>
-											{
-												getFieldDecorator('department',{
-													initialValue: planDetail.department
-												})(
-													<Select
-												        mode="combobox"
-												        placeholder="请选择"
-												        style={{ width: 255 }}
-												        defaultActiveFirstOption={false}
-												        disabled={deptDisable}
-												        showArrow={false}
-												        filterOption={false}
-												        optionLabelProp='title'
-												        onChange={this.handleDeptChange}
-												        onSelect={this.handleDeptSelect}
-											      	>
-											        	{deptOptions}
-											      	</Select>
-												)
-											}										
-									    </FormItem>
-										
-									</div>
-									<div className={`${styles.item} ${styles.specialItem}`}>
-										<FormItem>
-											{
-												getFieldDecorator('haveIllness',{
-													initialValue: planDetail.haveIllness
-												})(
-													<Select style={{ width: 115 }}  disabled={haveIllDisable}
-														placeholder="请选择"
-														onChange={this.changeHaveIllness}>
-												      	{
-												      		dictionary['HAVE_ILLNESS']?
-														      	dictionary['HAVE_ILLNESS'].map(item => (
-														      		<Option key={item.code} value={item.code}>{item.value}</Option>
-														      	))
-												      		:''
-									      				}
-												    </Select>
-												)
-											}										
-									    </FormItem>
-										{
-											illDisable?'':
-											<div className={styles.inline}>
-												<span className={styles.label}>疾病诊断</span>
-												<FormItem>
-													{
-														getFieldDecorator('illness',{
-															initialValue: planDetail.illness
-														})(
-															<Select style={{ width: 422, position: 'absolute', left: 0, top: -13 }} 
-																mode="tags" disabled={illDisable}
-																allowClear placeholder="请填写（多填）"
-																dropdownStyle={{display: 'none'}}>
-														    </Select>
-														)
-													}										
-											    </FormItem>
-											</div>
-										}
-										
-										
-									</div>
-								</div>
-							</div>
-							<div className={styles.contentItem}>
-								<div className={styles.title}>
-									<div className={styles.titleText}>
-										<i className={`iconfont icon-tongyongbiaotiicon ${styles.titleIcon}`}></i><span>随访任务</span>
-									</div>
-								</div>
-								<div className={styles.content}>
-									<div className={styles.item}>
-										<span className={`${styles.label} ${styles.specialLabel}`}>随访开始时间</span>
-										<Select defaultValue="OUT_HOSPITAL" style={{ width: 255 }}
-											allowClear disabled>
-									      	{dictionary['START_TYPE']?
-														      	dictionary['START_TYPE'].map(item => (
-									      		<Option key={item.code} value={item.code}>{item.value}</Option>
-									      	)):''}
-									    </Select>
-									</div>
-									<PlanTable 
-									  planDetailTask={planDetailTask} 
-									  dictionary={dictionary}
-									  scaleList={scaleList}
-									  status={status}
-									  onChange={this.updateTable}
-									/>									
-								</div>
-							</div>
+							</Spin>
 						</div>
 						<div className={styles.footer}>
 							<Button onClick={this.cancelForm}>取消</Button>
 							<Button type="primary" onClick={this.saveForm}>保存</Button>
 						</div>
 					</Form>
+					
 				</div>
 				<div className={`${styles.checkContent} ${status==='stoped'?styles.stopContent:''} ${planTemplateId==='add'?styles.hidden:''}`}>
 					<div className={styles.main}>	
@@ -629,6 +652,8 @@ class PlanProfile extends PureComponent {
 									<div className={styles.item}>
 										<span className={styles.label}>模版名称：</span>
 										<span className={styles.text}>{planDetail.title}</span>
+										<span className={`${styles.label} ${styles.specialLabel}`}>更新时间：</span>
+										<span className={`${styles.text} ${styles.specialText}`}>{planDetail.updateTime}</span>
 									</div>
 								</div>
 							</div>

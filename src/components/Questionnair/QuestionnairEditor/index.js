@@ -503,7 +503,7 @@ class QuestionnairEditor extends PureComponent {
 					return (
 						<label 
 						  className="wowjoy-radio"
-						  style={{ width: `${100/parseInt(rows)}%`, marginBottom: 8 }}
+						  style={{ width: `${100/parseInt(rows)}%`, marginBottom: 20 }}
 						  key={uuid()}>
 							<input 
 							  type="radio"
@@ -542,7 +542,7 @@ class QuestionnairEditor extends PureComponent {
 						<label 
 						  className="wowjoy-checkbox"
 						  key={uuid()}
-						  style={{ width: `${100/parseInt(rows)}%`, marginBottom: 8 }}>
+						  style={{ width: `${100/parseInt(rows)}%`, marginBottom: 20 }}>
 							<input 
 							  type="checkbox"
 							  name="checkbox"
@@ -728,7 +728,7 @@ class QuestionnairEditor extends PureComponent {
 								{required && <span className="subject-title-require">*</span>}
 							</div>
 							{remark && <div className="subject-row subject-remarks">{remarkText}</div>}
-							<div className="subject-row">
+							<div className="subject-row subject-row-question">
 								{['radio', 'dropdown', 'checkbox'].includes(type) && optionsEl}
 								{type === 'text' && subTextEl}
 								{type === 'textarea' && subTextareaEl}

@@ -33,6 +33,7 @@ export default {
                 type: 'changePlanListLoading',
                 payload: true
                 });
+            console.log('ssssss')
             const result = yield call(getPlanList, payload)
             yield put({ 
                 type: 'savePlanList',
@@ -128,10 +129,10 @@ export default {
             return {
                 planList: [],
                 planTwoList: [],
-                planListLoading: false,
+                planListLoading: true,
                 planDetail: [],
                 planDetailTask: [],
-                planDetailLoading: false
+                planDetailLoading: true
             }
         }
     },

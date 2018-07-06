@@ -521,13 +521,8 @@ class SatisfactionDetail extends PureComponent {
 										</div>
 									</Spin>
 									{!editorLoading && toggleAnswer && (
-										<div>
-										    <Button type="primary" onClick={this.save}>暂存</Button>
-										    <span style={{
-										    	display: 'inline-block',
-										    	width: 20,
-										    	height: 10
-										    }}></span>
+										<div className={styles.questionBtnWrap}>
+										    <Button onClick={this.save}>暂存</Button>
 											<Button type="primary" onClick={this.submitAnswer}>提交</Button>
 										</div>
 									)}

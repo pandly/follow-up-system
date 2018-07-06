@@ -419,6 +419,30 @@
 		max-width: 110px;
 		display: inline-block;
 	}
+	:global{
+		.questionnair-item{
+			margin-bottom: 20px;
+		}
+		.questionnair-subject{
+			padding: 0;
+			min-height: auto;
+		}
+	}
+	.questionBtnWrap{
+		margin-left: 123px;
+		:global{
+			.ant-btn{
+				width: 96px;
+				height: 36px;
+				line-height: 36px;
+				text-align: center;
+				&:first-child{
+					margin-right: 20px;
+				}
+			}
+			
+		}
+	}
 }
 
 @media screen and(max-width: 1620px) {

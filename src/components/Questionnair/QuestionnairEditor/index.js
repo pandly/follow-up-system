@@ -336,6 +336,7 @@ class QuestionnairEditor extends PureComponent {
 						<Input
 						  name={'title'}
 						  value={title}
+						  placeHolder="请填写题目"
 						  onChange={this.handleChange}
 						  style={{
 						  	borderColor: hasTitle ? '' : 'red'
@@ -355,6 +356,7 @@ class QuestionnairEditor extends PureComponent {
 				    <div className="editor-row-content">
 				        <ShakeTransition shake={optionShake[index]}>
 							<Input
+								placeHolder="选项"
 							  index={index}
 							  name={'options'}
 							  value={option}

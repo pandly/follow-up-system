@@ -100,7 +100,7 @@ class Questionnair extends PureComponent {
         	required: false, //是否必填
         	remark: false, //是否有备注
 	        remarkText: '', //备注内容
-	        options: ['选项', '选项'], //选项(只有radio,checkbox,select有,其余尽量给个空数组)
+	        options: ['', ''], //选项(只有radio,checkbox,select有,其余尽量给个空数组)
 	        rows: 1, //选项占的行数
 	        textareaHeight: 3, //多行文本高度
 	        maxLength: 50, //单行文本限制的字数
@@ -239,6 +239,7 @@ class Questionnair extends PureComponent {
 	    const titleEl = (
 			<div className='title-inner'>
 				<Input
+					placeholder="模板标题"
                   value={questionnairTitle}
                   onChange={this.changeQuestionnairTitle}
                   onBlur={this.updateEditors}

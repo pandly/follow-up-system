@@ -4,7 +4,9 @@ export default {
   entry: 'src/index.js',
   extraBabelPlugins: [
     //'transform-decorators-legacy',
-    ['import', { libraryName: 'antd', libraryDirectory: 'es', style: true }],
+    ['import', 
+      { libraryName: 'antd', libraryDirectory: 'es', style: true },
+    ],
   ],
   env: {
     development: {
@@ -30,7 +32,7 @@ export default {
   hash: true,
   proxy: {
     '/api': {
-        target: "http://test-follow-up.rubikstack.com/",
+        target: "https://test-follow-up.rubikstack.com/",
         changeOrigin: true,
         pathRewrite: {
             "^/api": ""
@@ -38,7 +40,7 @@ export default {
         secure: false,
         headers: {
             "Host": "test-follow-up.rubikstack.com:443",
-            "Referer": "http://test-follow-up.rubikstack.com"
+            "Referer": "https://test-follow-up.rubikstack.com"
         }
     }
   }

@@ -5,7 +5,7 @@ import QuestionnairSiderbar from './QuestionnairSiderbar'
 import DragSort from '../DragSort'
 import ShakeTransition from 'components/Shake'
 import Input from 'components/Input'
-import { message } from 'antd';
+import { message, Alert } from 'antd';
 import uuid from 'utils/utils'
 import { connect } from 'dva'
 
@@ -21,7 +21,7 @@ class Questionnair extends PureComponent {
 
     state = {
     	editors: [],
-    	questionnairTitle: '模板标题',
+    	questionnairTitle: '',
     	curMoveItem: null,
     	drag: false,
     	scrollTo: 0,
@@ -47,7 +47,11 @@ class Questionnair extends PureComponent {
     	}
     }
 
-    updateEditors = () => {
+    updateEditors = (type) => {
+    	if(this.state.questionnairTitle==''){
+    		message.error('请输入模板标题！')
+    		return
+    	}
     	this.state.editors.some((data, index) => {
     		if(data.isFirst && data.isEditor) {
     			this.state.editors.splice(index, 1)
@@ -67,8 +71,11 @@ class Questionnair extends PureComponent {
         	}
         }).then((a)=>{
         	this.scaleId = this.props.scale.scaleId;
-			message.success('修改成功！')
-
+        	if(type&&type==='remove'){
+        		message.warning('删除成功！')
+        	}else{
+        		message.success('修改成功！')
+        	}
 		})
     }
     /* 
@@ -176,7 +183,7 @@ class Questionnair extends PureComponent {
         this.setState({
        	    editors
         }, () => {
-        	this.updateEditors();
+        	this.updateEditors('remove');
         })
     }
     
@@ -199,7 +206,7 @@ class Questionnair extends PureComponent {
     
     changeQuestionnairTitle = (e) => {
     	let value = e.target.value;
-        this.setState({
+		this.setState({
 			questionnairTitle: value
         })
     }

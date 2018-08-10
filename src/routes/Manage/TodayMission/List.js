@@ -214,7 +214,7 @@ class TodayMission extends PureComponent {
 			this.props.dispatch({
 				type: 'global/fetchDepartment',
 				payload: {
-					type: 'todayStay'
+					type: 'todayAlready'
 				}
 			})
 			// this.props.dispatch({

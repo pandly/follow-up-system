@@ -70,7 +70,7 @@ class OutPatient extends PureComponent {
 				this.getData(0)
 			})
   		}else{
-  			
+  			this.searchPatient(this.state.searchValue)
   		}
 	  	
 	}
@@ -161,7 +161,7 @@ class OutPatient extends PureComponent {
 			this.props.dispatch({
 				type: 'global/fetchDepartment',
 				payload: {
-					type: 'dischargeStay'
+					type: 'dischargeAlready'
 				}
 			})
 			// this.props.dispatch({

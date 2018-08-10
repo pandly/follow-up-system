@@ -67,7 +67,6 @@ export default class ListCard extends Component {
 	render(){
 		const { listData, onClick } = this.props
 		const { isPopDeleteHide, isBtnShow} = this.state
-		// console.log(this.props)
 		return (
 			<div className={styles.tableItemWrap} onMouseOver={this.showBtn} onMouseLeave={this.hideBtn} >
 				<div className={styles.tableItem} onClick={onClick}>
@@ -75,7 +74,7 @@ export default class ListCard extends Component {
 					<div className="clearfix">
 						<div className={styles.info}>
 							<span className={styles.label}>题量：</span>
-							<span className={styles.value}>{listData.questionAmount}</span>
+							<span className={styles.value}>{listData.questionAmount?listData.questionAmount:0}</span>
 							<span className={styles.label}>应用次数：</span>
 							<span className={styles.value}>{listData.useNumber}</span>
 						</div>

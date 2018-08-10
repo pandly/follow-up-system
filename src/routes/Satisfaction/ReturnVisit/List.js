@@ -95,7 +95,7 @@ class Satisfaction extends PureComponent {
 				})
 			}
   		}else{
-  			
+  			this.searchPatient(this.state.searchValue)
   		}
 	  	
 	}

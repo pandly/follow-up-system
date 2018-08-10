@@ -56,6 +56,9 @@ export const getRouterData = (app) => {
     '/template/scale/profile': {
       component: dynamicWrapper(app, ['scale'], () => import('../routes/Template/Scale/Profile')),
     },
+    '/template/scale/patientFill/:patientId': {
+      component: dynamicWrapper(app, ['scale', 'patientDetail'], () => import('../routes/Template/Scale/PatientFill')),
+    },
     '/template/plan': {
       component: dynamicWrapper(app, ['plan'], () => import('../routes/Template/Plan')),
     },

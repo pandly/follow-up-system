@@ -3,12 +3,16 @@ import Input from 'components/Input'
 import Checkbox from 'components/Checkbox'
 import Radio from 'components/Radio'
 import Dropdown from 'components/Dropdown'
+import InputNumber from 'components/InputNumber'
 import Button from 'components/Button'
 import ContentEditable from 'components/ContentEditable'
 import ShakeTransition from 'components/Shake'
 import Dialog from 'components/Dialog'
 import uuid from 'utils/utils'
 import styles from './index.less'
+import { Select } from 'antd';
+
+const Option = Select.Option;
 
 const rowOptions = [1,2,3,4]
 
@@ -34,7 +38,8 @@ class QuestionnairEditor extends PureComponent {
 		dialogVisible: false,
 		mutiOption: '',
 		otherOptionInput: '',
-		otherOptionForwards: ''
+		otherOptionForwards: '',
+		selectValue: ''
     }
     // shouldComponentUpdate() {
 
@@ -59,6 +64,17 @@ class QuestionnairEditor extends PureComponent {
 				editor: {...this.state.editor, ...nextProps.editor}
 			})
     	}
+
+    	//处理select ant的select默认值处理
+    	if(nextProps.editor.type=='dropdown'){
+			let temp =  nextProps.editor.answer&& JSON.parse(JSON.stringify(nextProps.editor.answer))
+	    	if(nextProps.editor.answer&&temp[nextProps.editor.type]){
+	    		this.setState({
+	    			selectValue: temp[nextProps.editor.type]
+	    		})
+	    	}
+    	}
+        
     }
 
     switchEditor = (type) => {
@@ -104,6 +120,17 @@ class QuestionnairEditor extends PureComponent {
 			editor: { ...prevState.editor, [key]:value }
 		}))
     }
+    //暂时用ant 下拉框
+    handleAnswerSelectChange = (value) => {
+    	this.setState({
+        	selectValue: value
+        })
+    	let { type } = this.state.editor;
+    	this.answer[type] = value;
+    	const answerEditor = { ...this.state.editor, answer: this.answer }
+        this.props.onAnswer(answerEditor, this.props.index)
+
+    }
     //填写答案时触发的事件
     handleAnswerChange = (e, index) => {
     	let { type } = this.state.editor;
@@ -147,7 +174,7 @@ class QuestionnairEditor extends PureComponent {
     			otherOptionValue: this.allValue
 			};
 		}else {
-			this.answer[type] = this.allValue;
+			this.answer[type] = this.otherOptionValue;
 		}
 		const answerEditor = { ...this.state.editor, answer: this.answer }
         this.props.onAnswer(answerEditor, this.props.index)
@@ -300,6 +327,7 @@ class QuestionnairEditor extends PureComponent {
 			hasTitle,
 			dialogVisible,
 			mutiOption,
+			selectValue
 		} = this.state;
         let { 
         	type, 
@@ -318,7 +346,8 @@ class QuestionnairEditor extends PureComponent {
         	completionForwards, 
         	completionBackwards,
         	editorShake,
-        	answer
+        	answer,
+        	questionId
         } = editor;
         this.answer = answer && JSON.parse(JSON.stringify(answer));
         this.otherOptionValue = answer && this.answer[type].otherOptionValue;
@@ -336,7 +365,7 @@ class QuestionnairEditor extends PureComponent {
 						<Input
 						  name={'title'}
 						  value={title}
-						  placeHolder="请填写题目"
+						  placeholder="请填写题目"
 						  onChange={this.handleChange}
 						  style={{
 						  	borderColor: hasTitle ? '' : 'red'
@@ -356,7 +385,7 @@ class QuestionnairEditor extends PureComponent {
 				    <div className="editor-row-content">
 				        <ShakeTransition shake={optionShake[index]}>
 							<Input
-								placeHolder="选项"
+								placeholder="选项"
 							  index={index}
 							  name={'options'}
 							  value={option}
@@ -509,7 +538,7 @@ class QuestionnairEditor extends PureComponent {
 						  key={uuid()}>
 							<input 
 							  type="radio"
-							  name="radio"
+							  name={`radio${questionId}`}
 							  data-index={index}
 							  value={data} 
 							  defaultChecked={answer && this.answer.radio.optionIndex === index+''}
@@ -547,7 +576,7 @@ class QuestionnairEditor extends PureComponent {
 						  style={{ width: `${100/parseInt(rows)}%`, marginBottom: 20 }}>
 							<input 
 							  type="checkbox"
-							  name="checkbox"
+							  name={`checkbox${questionId}`}
 							  value={data}
 							  data-index={index}
 							  defaultChecked={answer && this.answer.checkbox !== '' && this.answer.checkbox.optionIndex.includes(index+'')}
@@ -577,13 +606,21 @@ class QuestionnairEditor extends PureComponent {
 		)
         //填写状态下的下拉框
 		const subDropdownEl = (
-			<select 
+			<Select 
+				defaultValue={ answer && this.answer[type] }
+				value={ selectValue }
+				onChange={this.handleAnswerSelectChange}>
+				{options.map((option, index) => (
+			  		<Option key={index} value={option}>{option}</Option>
+			  	))}
+		    </Select>
+			/*<select 
               defaultValue={ answer && this.answer[type] }
 			  onChange={this.handleAnswerChange}>
 			  {options.map((option, index) => {
 			  	return <option key={index} value={option}>{option}</option>
 			  })}
-			</select>
+			</select>*/
 		)
 		const optionsEl = type === 'dropdown' ? subDropdownEl : (type === 'radio' ? subRadioEl : subCheckboxEl)
         //填写状态下的单行文本、多行文本
@@ -668,13 +705,10 @@ class QuestionnairEditor extends PureComponent {
 									<div className="editor-adv">
 										<span className="adv-option">
 											最多填写
-											<Input
-											  width={50}
-											  margin={'0 10px'} 
-											  type={"number"}
-											  name={'maxLength'}
-											  value={maxLength}
-											  onChange={this.handleChange} />
+											<InputNumber
+												name={'maxLength'}
+											  	value={maxLength}
+											  	onChange={this.handleChange}/>
 											字
 										</span>
 									</div>
@@ -683,13 +717,10 @@ class QuestionnairEditor extends PureComponent {
 									<div className="editor-adv">
 										<span className="adv-option">
 											文本框高度
-											<Input
-											  width={50}
-											  margin={'0 10px'}
-											  type={"number"}
-											  name={'textareaHeight'}
-											  value={textareaHeight}
-											  onChange={this.handleChange} />
+											<InputNumber
+												name={'textareaHeight'}
+											  	value={textareaHeight}
+											  	onChange={this.handleChange}/>
 											行
 										</span>
 									</div>
